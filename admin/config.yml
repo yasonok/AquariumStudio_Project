@@ -1,0 +1,27 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/products"
+public_folder: "/images/products"
+
+site_url: "https://your-username.github.io"
+display_url: "https://your-username.github.io/AquariumStudio_Project"
+
+collections:
+  - name: "products"
+    label: "商品"
+    folder: "."
+    create: true
+    slug: "{{year}}{{month}}{{day}}-{{slug}}"
+    fields:
+      - {label: "名稱", name: "name", widget: "string"}
+      - {label: "價格", name: "price", widget: "number"}
+      - {label: "庫存", name: "stock", widget: "number"}
+      - {label: "分類", name: "category", widget: "select", options: ["紅色系", "黑色系", "特殊系", "稀有系", "藍色系", "金色系", "其他"]}
+      - {label: "描述", name: "description", widget: "text"}
+      - {label: "圖片", name: "image", widget: "image", required: false}
+      - {label: "影片", name: "video", widget: "file", required: false, accept: "video/*"}
+      - {label: "熱門", name: "featured", widget: "boolean", default: false}
+    meta:
+      - {label: "發佈資訊", name: "publish_date", widget: "datetime"}

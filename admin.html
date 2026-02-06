@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品管理後台 - Aquarium Studio</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f6fa;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .container {
+            padding: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Stats Cards */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .action-btn {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .action-btn .icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
+        .action-btn .label {
+            font-size: 0.9rem;
+            color: #333;
+        }
+        
+        /* Product List */
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .product-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            gap: 15px;
+        }
+        
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        
+        .product-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #eee;
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .product-meta {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        
+        .btn-edit {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        /* FAB - Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .upload-area .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Preview */
+        .preview-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+        
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #eee;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>🎛️ 商品管理</h1>
+        <p>Aquarium Studio - WordPress 風格後台</p>
+    </header>
+    
+    <div class="container">
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalProducts">0</div>
+                <div class="stat-label">商品數量</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalStock">0</div>
+                <div class="stat-label">總庫存</div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="action-btn" onclick="showAddModal()">
+                <div class="icon">➕</div>
+                <div class="label">新增商品</div>
+            </button>
+            <button class="action-btn" onclick="syncWithGitHub()">
+                <div class="icon">🔄</div>
+                <div class="label">同步到 GitHub</div>
+            </button>
+        </div>
+        
+        <!-- Product List -->
+        <h2 class="section-title">📦 商品列表</h2>
+        <div class="product-list" id="productList">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FAB -->
+    <button class="fab" onclick="showAddModal()">+</button>
+    
+    <!-- Add/Edit Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">新增商品</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="productForm" onsubmit="saveProduct(event)">
+                <input type="hidden" id="productId">
+                <input type="hidden" id="originalImage">
+                <input type="hidden" id="originalVideo">
+                
+                <!-- Image Upload -->
+                <div class="form-group">
+                    <label>📷 商品圖片</label>
+                    <div class="upload-area" onclick="document.getElementById('productImage').click()">
+                        <div class="icon">📷</div>
+                        <p>點擊上傳圖片</p>
+                        <small>支援 JPG, PNG</small>
+                    </div>
+                    <input type="file" id="productImage" accept="image/*" style="display: none;" onchange="previewImage(this)">
+                    <img id="imagePreview" class="preview-image" alt="預覽">
+                </div>
+                
+                <!-- Video Upload -->
+                <div class="form-group">
+                    <label>🎬 商品影片（選填）</label>
+                    <div class="upload-area" onclick="document.getElementById('productVideo').click()">
+                        <div class="icon">🎥</div>
+                        <p>點擊上傳影片</p>
+                        <small>支援 MP4, MOV</small>
+                    </div>
+                    <input type="file" id="productVideo" accept="video/*" style="display: none;" onchange="previewVideo(this)">
+                    <p id="videoFileName" style="margin-top: 10px; font-size: 0.85rem; color: #666;"></p>
+                </div>
+                
+                <div class="form-group">
+                    <label>🐟 商品名稱 *</label>
+                    <input type="text" id="productName" required placeholder="例如：紅色草尾孔雀魚">
+                </div>
+                
+                <div class="form-group">
+                    <label>💰 價格 *</label>
+                    <input type="number" id="productPrice" required placeholder="200" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>📦 庫存數量 *</label>
+                    <input type="number" id="productStock" required placeholder="10" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>🏷️ 分類 *</label>
+                    <select id="productCategory" required>
+                        <option value="紅色系">🔴 紅色系</option>
+                        <option value="黑色系">⚫ 黑色系</option>
+                        <option value="特殊系">🌈 特殊系</option>
+                        <option value="稀有系">💎 稀有系</option>
+                        <option value="藍色系">🔵 藍色系</option>
+                        <option value="金色系">🟡 金色系</option>
+                        <option value="其他">📁 其他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>📝 商品描述</label>
+                    <textarea id="productDesc" rows="3" placeholder="輸入商品特色與說明"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit">💾 儲存商品</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Firebase Configuration (Replace with your own)
+        const firebaseConfig = {
+            // TODO: Add your Firebase config here
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        // Initialize Firebase (optional - for real-time sync)
+        let firebaseApp = null;
+        let database = null;
+        
+        try {
+            firebaseApp = firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+        } catch(e) {
+            console.log('Firebase not configured, using localStorage');
+        }
+        
+        // Products storage key
+        const STORAGE_KEY = 'aquarium_products';
+        
+        // Load products from localStorage
+        function loadProducts() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+        
+        // Save products to localStorage
+        function saveProducts(products) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+        }
+        
+        // Render product list
+        function renderProducts() {
+            const products = loadProducts();
+            const container = document.getElementById('productList');
+            
+            // Update stats
+            document.getElementById('totalProducts').textContent = products.length;
+            const totalStock = products.reduce((sum, p) => sum + (p.stock || 0), 0);
+            document.getElementById('totalStock').textContent = totalStock;
+            
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📦</div>
+                        <p>尚未新增商品</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">點擊下方 + 按鈕新增第一個商品！</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = products.map(product => `
+                <div class="product-item">
+                    <img src="${product.image || 'images/products/default-guppy.svg'}" 
+                         alt="${product.name}" 
+                         class="product-thumb"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'">
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-meta">
+                            $${product.price} • ${product.category} • 庫存: ${product.stock}
+                            ${product.video ? ' 🎬' : ''}
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-edit" onclick="editProduct('${product.id}')">✏️</button>
+                        <button class="btn btn-delete" onclick="deleteProduct('${product.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Show add modal
+        function showAddModal() {
+            document.getElementById('modalTitle').textContent = '新增商品';
+            document.getElementById('productId').value = '';
+            document.getElementById('productForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('videoFileName').textContent = '';
+            document.getElementById('productModal').classList.add('active');
+        }
+        
+        // Edit product
+        function editProduct(id) {
+            const products = loadProducts();
+            const product = products.find(p => p.id == id);
+            if (!product) return;
+            
+            document.getElementById('modalTitle').textContent = '編輯商品';
+            document.getElementById('productId').value = product.id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productStock').value = product.stock;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productDesc').value = product.description || '';
+            document.getElementById('originalImage').value = product.image || '';
+            document.getElementById('originalVideo').value = product.video || '';
+            
+            // Show image preview
+            if (product.image) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = product.image;
+                preview.style.display = 'block';
+            }
+            
+            // Show video name
+            if (product.video) {
+                document.getElementById('videoFileName').textContent = '✅ 已選擇影片';
+            }
+            
+            document.getElementById('productModal').classList.add('active');
+        }
+        
+        // Delete product
+        function deleteProduct(id) {
+            if (!confirm('確定要刪除這個商品嗎？')) return;
+            
+            let products = loadProducts();
+            products = products.filter(p => p.id != id);
+            saveProducts(products);
+            renderProducts();
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+        
+        // Preview image
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        // Preview video
+        function previewVideo(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('videoFileName').textContent = `✅ ${input.files[0].name}`;
+            }
+        }
+        
+        // Save product
+        function saveProduct(event) {
+            event.preventDefault();
+            
+            const products = loadProducts();
+            const id = document.getElementById('productId').value;
+            const imageFile = document.getElementById('productImage').files[0];
+            const videoFile = document.getElementById('productVideo').files[0];
+            
+            const productData = {
+                id: id ? parseInt(id) : Date.now(),
+                name: document.getElementById('productName').value,
+                price: parseInt(document.getElementById('productPrice').value),
+                stock: parseInt(document.getElementById('productStock').value),
+                category: document.getElementById('productCategory').value,
+                description: document.getElementById('productDesc').value,
+                featured: false,
+                updated_at: new Date().toISOString()
+            };
+            
+            // Handle image upload
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    productData.image = e.target.result;
+                    handleVideoUpload();
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                productData.image = document.getElementById('originalImage').value || 'images/products/default-guppy.svg';
+                handleVideoUpload();
+            }
+            
+            function handleVideoUpload() {
+                if (videoFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        productData.video = e.target.result;
+                        saveToProducts();
+                    };
+                    reader.readAsDataURL(videoFile);
+                } else {
+                    productData.video = document.getElementById('originalVideo').value || '';
+                    saveToProducts();
+                }
+            }
+            
+            function saveToProducts() {
+                if (id) {
+                    const index = products.findIndex(p => p.id == id);
+                    if (index !== -1) {
+                        productData.image = productData.image || products[index].image;
+                        productData.video = productData.video || products[index].video || '';
+                        products[index] = productData;
+                    }
+                } else {
+                    productData.image = productData.image || 'images/products/default-guppy.svg';
+                    productData.video = productData.video || '';
+                    products.push(productData);
+                }
+                
+                saveProducts(products);
+                closeModal();
+                renderProducts();
+                alert(id ? '✅ 商品已更新！' : '✅ 商品已新增！');
+            }
+        }
+        
+        // Sync with GitHub (placeholder)
+        function syncWithGitHub() {
+            alert('🔄 同步到 GitHub\n\n若要啟用此功能，需要設定 GitHub Personal Access Token。\n\n可在 https://github.com/settings/tokens 生成 token，然後聯絡我設定。');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            
+            // Close modal on outside click
+            document.getElementById('productModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

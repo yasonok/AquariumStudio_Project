@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#90e0ef"/>
+  <ellipse cx="100" cy="100" rx="60" ry="40" fill="#ff6b6b"/>
+  <circle cx="60" cy="90" r="8" fill="white"/>
+  <circle cx="62" cy="90" r="4" fill="#2d3436"/>
+  <path d="M140 100 Q170 80 180 100 Q170 120 140 100" fill="#ff6b6b"/>
+  <text x="100" y="170" text-anchor="middle" font-family="Arial" font-size="12" fill="#2d3436">紅色草尾孔雀魚</text>
+</svg>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商店 - Aquarium Studio</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="logo">
+          <span class="logo-icon">🐟</span>
+          <span class="logo-text">Aquarium <span>Studio</span></span>
+        </a>
+        
+        <div class="header-search">
+          <div class="search-box">
+            <input type="text" id="search-input" placeholder="搜尋孔雀魚品種..." onkeyup="handleSearch(event)">
+            <button onclick="performSearch()">🔍</button>
+          </div>
+        </div>
+        
+        <nav class="nav-links">
+          <a href="index.html">首頁</a>
+          <a href="shop.html" class="active">商店</a>
+          <a href="cart.html" class="cart-icon">
+            🛒 購物車
+            <span class="cart-badge">0</span>
+          </a>
+          <a href="admin.html">管理</a>
+        </nav>
+        
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shop Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>🐠 孔雀魚商品</h2>
+        <p>選擇您喜愛的孔雀魚品種</p>
+      </div>
+      
+      <!-- Product Controls -->
+      <div class="product-controls">
+        <div class="controls-left">
+          <button class="filter-btn active" data-category="all" onclick="filterProducts('all')">全部</button>
+          <button class="filter-btn" data-category="紅色系" onclick="filterProducts('紅色系')">🔴 紅色系</button>
+          <button class="filter-btn" data-category="黑色系" onclick="filterProducts('黑色系')">⚫ 黑色系</button>
+          <button class="filter-btn" data-category="特殊系" onclick="filterProducts('特殊系')">🌈 特殊系</button>
+          <button class="filter-btn" data-category="稀有系" onclick="filterProducts('稀有系')">💎 稀有系</button>
+          <button class="filter-btn" data-category="藍色系" onclick="filterProducts('藍色系')">🔵 藍色系</button>
+          <button class="filter-btn" data-category="金色系" onclick="filterProducts('金色系')">🟡 金色系</button>
+        </div>
+        <div class="controls-right">
+          <select class="sort-select" id="sort-filter" onchange="sortProducts()">
+            <option value="default">預設排序</option>
+            <option value="price-low">價格: 低到高</option>
+            <option value="price-high">價格: 高到低</option>
+            <option value="name">名稱排序</option>
+            <option value="newest">最新上架</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Search Results Info -->
+      <div id="search-info" style="display: none; margin-bottom: 20px; padding: 15px; background: var(--primary-light); border-radius: var(--border-radius);">
+        <span id="search-text"></span>
+        <button class="btn btn-sm" style="margin-left: 15px;" onclick="clearSearch()">清除搜尋</button>
+      </div>
+      
+      <!-- Product Grid -->
+      <div class="product-grid" id="product-grid">
+        <div class="spinner"></div>
+      </div>
+      
+      <!-- No Results -->
+      <div id="no-results" class="empty-state" style="display: none;">
+        <div class="empty-state-icon">🔍</div>
+        <h3>沒有找到相關商品</h3>
+        <p>請嘗試其他關鍵字或瀏覽全部商品</p>
+        <a href="shop.html" class="btn btn-primary" style="margin-top: 20px;">查看全部商品</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>🐟 Aquarium Studio</h3>
+          <p>專業孔雀魚養殖與販售</p>
+        </div>
+        <div class="footer-section">
+          <h3>📞 聯絡我們</h3>
+          <p>LINE: @yasonok02061</p>
+        </div>
+        <div class="footer-section">
+          <h3>🔗 快速連結</h3>
+          <a href="index.html">首頁</a>
+          <a href="admin.html">管理員</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Aquarium Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    let currentCategory = 'all';
+    let currentSort = 'default';
+    let searchQuery = '';
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category');
+      const search = urlParams.get('search');
+      
+      if (category) {
+        currentCategory = category;
+        filterProducts(category);
+      }
+      
+      if (search) {
+        searchQuery = search;
+        document.getElementById('search-input').value = search;
+        performSearchFilter(search);
+      } else {
+        renderProducts('all', 'default');
+      }
+    });
+
+    function filterProducts(category) {
+      currentCategory = category;
+      
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.category === category) {
+          btn.classList.add('active');
+        }
+      });
+      
+      renderProducts(category, currentSort);
+    }
+
+    function sortProducts() {
+      currentSort = document.getElementById('sort-filter').value;
+      renderProducts(currentCategory, currentSort);
+    }
+
+    function handleSearch(event) {
+      if (event.key === 'Enter') {
+        performSearch();
+      }
+    }
+
+    function performSearch() {
+      const query = document.getElementById('search-input').value.trim();
+      if (query) {
+        searchQuery = query;
+        performSearchFilter(query);
+      } else {
+        searchQuery = '';
+        document.getElementById('search-info').style.display = 'none';
+        document.getElementById('no-results').style.display = 'none';
+        document.getElementById('product-grid').style.display = 'grid';
+        renderProducts(currentCategory, currentSort);
+      }
+    }
+
+    function performSearchFilter(query) {
+      let products = AquariumApp.getProducts();
+      
+      // Filter by search query
+      products = products.filter(p => 
+        p.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.description.toLowerCase().includes(query.toLowerCase()) ||
+        p.category.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      // Also filter by current category if not 'all'
+      if (currentCategory !== 'all') {
+        products = products.filter(p => p.category === currentCategory);
+      }
+      
+      // Sort
+      products = sortProductList(products, currentSort);
+      
+      renderProductList(products);
+      
+      // Show search info
+      document.getElementById('search-info').style.display = 'flex';
+      document.getElementById('search-text').textContent = `搜尋結果：「${query}」找到 ${products.length} 項商品`;
+    }
+
+    function clearSearch() {
+      searchQuery = '';
+      document.getElementById('search-input').value = '';
+      document.getElementById('search-info').style.display = 'none';
+      document.getElementById('no-results').style.display = 'none';
+      document.getElementById('product-grid').style.display = 'grid';
+      renderProducts(currentCategory, currentSort);
+    }
+
+    function renderProducts(category, sort) {
+      let products = AquariumApp.getProducts();
+      
+      // Filter by category
+      if (category !== 'all') {
+        products = products.filter(p => p.category === category);
+      }
+      
+      // Sort
+      products = sortProductList(products, sort);
+      
+      renderProductList(products);
+    }
+
+    function sortProductList(products, sortBy) {
+      const sorted = [...products];
+      switch(sortBy) {
+        case 'price-low':
+          sorted.sort((a, b) => a.price - b.price);
+          break;
+        case 'price-high':
+          sorted.sort((a, b) => b.price - a.price);
+          break;
+        case 'name':
+          sorted.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'newest':
+          sorted.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+          break;
+      }
+      return sorted;
+    }
+
+    function renderProductList(products) {
+      const grid = document.getElementById('product-grid');
+      
+      if (products.length === 0) {
+        grid.innerHTML = '';
+        document.getElementById('no-results').style.display = 'block';
+        grid.style.display = 'none';
+        return;
+      }
+      
+      document.getElementById('no-results').style.display = 'none';
+      grid.style.display = 'grid';
+      
+      grid.innerHTML = products.map(product => createProductCard(product)).join('');
+    }
+
+    function createProductCard(product) {
+      const stockClass = product.stock <= 0 ? 'out' : product.stock <= 5 ? 'low' : '';
+      const stockText = product.stock <= 0 ? '缺貨中' : product.stock <= 5 ? `僅剩 ${product.stock} 隻` : `庫存 ${product.stock} 隻`;
+      const btnDisabled = product.stock <= 0 ? 'disabled' : '';
+      const btnText = product.stock <= 0 ? '缺貨' : '加入購物車';
+
+      return `
+        <div class="product-card" data-id="${product.id}">
+          <div class="product-image-wrapper">
+            <img src="${product.image || 'images/products/default-guppy.svg'}" 
+                 alt="${product.name}" 
+                 class="product-image"
+                 onerror="this.src='images/products/default-guppy.svg'">
+            <span class="product-badge ${Math.random() > 0.5 ? 'badge-new' : 'badge-hot'}">${Math.random() > 0.5 ? '熱銷' : '推薦'}</span>
+          </div>
+          <div class="product-info">
+            <span class="product-category">${product.category}</span>
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-description">${product.description}</p>
+            <div class="product-meta">
+              <span class="product-price">$${product.price}</span>
+              <span class="product-stock ${stockClass}">${stockText}</span>
+            </div>
+            <button class="btn btn-primary product-btn add-cart" 
+                    onclick="AquariumApp.addToCart(${product.id}, 1)" 
+                    ${btnDisabled}>
+              🛒 ${btnText}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleMobileMenu() {
+      const navLinks = document.querySelector('.nav-links');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+      navLinks.classList.toggle('active');
+      menuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+    }
+  </script>
+</body>
+</html>

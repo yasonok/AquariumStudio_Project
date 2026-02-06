@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐟 Aquarium Studio - 專業孔雀魚專賣店</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="logo">
+          <span class="logo-icon">🐟</span>
+          <span class="logo-text">Aquarium <span>Studio</span></span>
+        </a>
+        
+        <div class="header-search">
+          <div class="search-box">
+            <input type="text" id="search-input" placeholder="搜尋孔雀魚品種..." onkeyup="handleSearch(event)">
+            <button onclick="performSearch()">🔍</button>
+          </div>
+        </div>
+        
+        <nav class="nav-links">
+          <a href="index.html" class="active">首頁</a>
+          <a href="shop.html">商店</a>
+          <a href="cart.html" class="cart-icon">
+            🛒 購物車
+            <span class="cart-badge">0</span>
+          </a>
+          <a href="admin.html">管理</a>
+        </nav>
+        
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>🐟 Aquarium Studio</h1>
+        <p>專業孔雀魚養殖與販售 | 精選優質品種 | 讓您輕鬆擁有美麗的水族世界</p>
+        <div class="hero-buttons">
+          <a href="shop.html" class="btn btn-primary btn-lg">開始選購</a>
+          <a href="#categories" class="btn btn-secondary btn-lg">查看分類</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section id="categories" class="section categories-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>🐠 商品分類</h2>
+        <p>依照顏色與特色挑選最適合的孔雀魚</p>
+      </div>
+      
+      <div class="categories-grid">
+        <div class="category-card" onclick="filterByCategory('紅色系')">
+          <span class="category-icon">🔴</span>
+          <span class="category-name">紅色系</span>
+          <span class="category-count">經典熱銷</span>
+        </div>
+        <div class="category-card" onclick="filterByCategory('黑色系')">
+          <span class="category-icon">⚫</span>
+          <span class="category-name">黑色系</span>
+          <span class="category-count">優雅神秘</span>
+        </div>
+        <div class="category-card" onclick="filterByCategory('特殊系')">
+          <span class="category-icon">🌈</span>
+          <span class="category-name">特殊系</span>
+          <span class="category-count">獨特花紋</span>
+        </div>
+        <div class="category-card" onclick="filterByCategory('稀有系')">
+          <span class="category-icon">💎</span>
+          <span class="category-name">稀有系</span>
+          <span class="category-count">收藏首選</span>
+        </div>
+        <div class="category-card" onclick="filterByCategory('藍色系')">
+          <span class="category-icon">🔵</span>
+          <span class="category-name">藍色系</span>
+          <span class="category-count">清新脫俗</span>
+        </div>
+        <div class="category-card" onclick="filterByCategory('金色系')">
+          <span class="category-icon">🟡</span>
+          <span class="category-name">金色系</span>
+          <span class="category-count">富貴吉祥</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>✨ 精選商品</h2>
+        <p>我們嚴選最優質的孔雀魚，適合各種水族愛好者</p>
+      </div>
+      
+      <div class="product-grid" id="featured-grid">
+        <div class="spinner"></div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="shop.html" class="btn btn-outline btn-lg">查看全部商品 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section style="background: var(--white); padding: 80px 0;">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+        <div style="text-align: center; padding: 30px;">
+          <div style="font-size: 3rem; margin-bottom: 20px;">🌟</div>
+          <h3 style="margin-bottom: 12px; color: var(--dark-color);">優質品質</h3>
+          <p style="color: var(--gray-600);">每隻孔雀魚都經過嚴格篩選，確保健康與品相</p>
+        </div>
+        <div style="text-align: center; padding: 30px;">
+          <div style="font-size: 3rem; margin-bottom: 20px;">🚚</div>
+          <h3 style="margin-bottom: 12px; color: var(--dark-color);">快速配送</h3>
+          <p style="color: var(--gray-600);">專業包裝配送，確保魚兒安全送達</p>
+        </div>
+        <div style="text-align: center; padding: 30px;">
+          <div style="font-size: 3rem; margin-bottom: 20px;">💬</div>
+          <h3 style="margin-bottom: 12px; color: var(--dark-color);">LINE 客服</h3>
+          <p style="color: var(--gray-600);">透過 LINE 與我們聯繫，即時回答您的問題</p>
+        </div>
+        <div style="text-align: center; padding: 30px;">
+          <div style="font-size: 3rem; margin-bottom: 20px;">🔧</div>
+          <h3 style="margin-bottom: 12px; color: var(--dark-color);">養殖諮詢</h3>
+          <p style="color: var(--gray-600);">提供專業養殖建議，讓您的魚兒健康成長</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>🐟 Aquarium Studio</h3>
+          <p>專業孔雀魚養殖與販售</p>
+          <p>用心照顧每一隻魚</p>
+          <div class="footer-social">
+            <a href="#" class="social-link">📱</a>
+            <a href="#" class="social-link">💬</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>📞 聯絡我們</h3>
+          <p>LINE: @yasonok02061</p>
+          <p>電話: (02) 1234-5678</p>
+          <p>服務時間: 週一至週六 9:00-18:00</p>
+        </div>
+        <div class="footer-section">
+          <h3>🔗 快速連結</h3>
+          <a href="index.html">首頁</a>
+          <a href="shop.html">商店</a>
+          <a href="cart.html">購物車</a>
+          <a href="admin.html">管理員</a>
+        </div>
+        <div class="footer-section">
+          <h3>📦 購買須知</h3>
+          <p>運費說明</p>
+          <p>退換貨政策</p>
+          <p>常見問題</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Aquarium Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    // Load featured products (first 4)
+    document.addEventListener('DOMContentLoaded', function() {
+      renderFeaturedProducts();
+    });
+
+    function renderFeaturedProducts() {
+      const grid = document.getElementById('featured-grid');
+      const products = AquariumApp.getProducts();
+      
+      if (!grid) return;
+      
+      if (products.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🐟</div>
+            <h3>暫無商品</h3>
+            <p>敬請期待我們的孔雀魚上架！</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = products.slice(0, 4).map(product => createProductCard(product)).join('');
+    }
+
+    function createProductCard(product) {
+      const stockClass = product.stock <= 0 ? 'out' : product.stock <= 5 ? 'low' : '';
+      const stockText = product.stock <= 0 ? '缺貨中' : product.stock <= 5 ? `僅剩 ${product.stock} 隻` : `庫存 ${product.stock} 隻`;
+      const btnDisabled = product.stock <= 0 ? 'disabled' : '';
+      const btnText = product.stock <= 0 ? '缺貨' : '加入購物車';
+
+      return `
+        <div class="product-card" data-id="${product.id}">
+          <div class="product-image-wrapper">
+            <img src="${product.image || 'images/products/default-guppy.svg'}" 
+                 alt="${product.name}" 
+                 class="product-image"
+                 onerror="this.src='images/products/default-guppy.svg'">
+            <span class="product-badge badge-new">新品</span>
+          </div>
+          <div class="product-info">
+            <span class="product-category">${product.category}</span>
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-description">${product.description}</p>
+            <div class="product-meta">
+              <span class="product-price">$${product.price}</span>
+              <span class="product-stock ${stockClass}">${stockText}</span>
+            </div>
+            <button class="btn btn-primary product-btn add-cart" 
+                    onclick="AquariumApp.addToCart(${product.id}, 1)" 
+                    ${btnDisabled}>
+              🛒 ${btnText}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function filterByCategory(category) {
+      window.location.href = `shop.html?category=${encodeURIComponent(category)}`;
+    }
+
+    function handleSearch(event) {
+      if (event.key === 'Enter') {
+        performSearch();
+      }
+    }
+
+    function performSearch() {
+      const query = document.getElementById('search-input').value.trim();
+      if (query) {
+        window.location.href = `shop.html?search=${encodeURIComponent(query)}`;
+      }
+    }
+
+    function toggleMobileMenu() {
+      const navLinks = document.querySelector('.nav-links');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+      navLinks.classList.toggle('active');
+      menuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+    }
+  </script>
+</body>
+</html>

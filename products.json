@@ -1,0 +1,104 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "紅色草尾孔雀魚",
+      "category": "孔雀魚",
+      "price": 200,
+      "description": "色澤鮮艷的紅色草尾孔雀魚，適合初學者飼養，健康好養",
+      "image": "images/products/guppy-red.svg",
+      "stock": 10,
+      "featured": true
+    },
+    {
+      "id": 2,
+      "name": "藍色莫斯科孔雀魚",
+      "category": "孔雀魚",
+      "price": 350,
+      "description": "全身藍色金屬光澤，非常美麗的觀賞魚，適合展示",
+      "image": "images/products/guppy-blue.svg",
+      "stock": 5,
+      "featured": true
+    },
+    {
+      "id": 3,
+      "name": "黃色扇尾孔雀魚",
+      "category": "孔雀魚",
+      "price": 180,
+      "description": "優雅的扇尾造型，黃金般的體色，活潑好動",
+      "image": "images/products/guppy-yellow.svg",
+      "stock": 8,
+      "featured": false
+    },
+    {
+      "id": 4,
+      "name": "白色鴿子孔雀魚",
+      "category": "孔雀魚",
+      "price": 250,
+      "description": "純白色體色搭配鮮紅眼睛，經典品種",
+      "image": "images/products/default.svg",
+      "stock": 6,
+      "featured": true
+    },
+    {
+      "id": 5,
+      "name": "蛇王孔雀魚",
+      "category": "孔雀魚",
+      "price": 300,
+      "description": "獨特的花紋宛如蛇紋，稀有品種",
+      "image": "images/products/default.svg",
+      "stock": 3,
+      "featured": false
+    },
+    {
+      "id": 6,
+      "name": "魚缸過濾器 (小型)",
+      "category": "設備",
+      "price": 800,
+      "description": "適合30-60公分魚缸使用，静音高效，省電",
+      "image": "images/products/default.svg",
+      "stock": 15,
+      "featured": false
+    },
+    {
+      "id": 7,
+      "name": "孔雀魚專用飼料",
+      "category": "飼料",
+      "price": 150,
+      "description": "專用營養飼料，含多種維生素，增色增艷",
+      "image": "images/products/default.svg",
+      "stock": 30,
+      "featured": true
+    },
+    {
+      "id": 8,
+      "name": "水質安定劑",
+      "category": "水質",
+      "price": 200,
+      "description": "快速消除自來水中的氯和重金屬，保護魚兒",
+      "image": "images/products/default.svg",
+      "stock": 25,
+      "featured": false
+    },
+    {
+      "id": 9,
+      "name": "水溫加熱棒 (25W)",
+      "category": "設備",
+      "price": 350,
+      "description": "自動控溫，安全省電，適合小型魚缸",
+      "image": "images/products/default.svg",
+      "stock": 12,
+      "featured": false
+    },
+    {
+      "id": 10,
+      "name": "魚缸造景水草",
+      "category": "設備",
+      "price": 120,
+      "description": "仿真水草，提供魚兒躲藏環境，美化魚缸",
+      "image": "images/products/default.svg",
+      "stock": 20,
+      "featured": false
+    }
+  ]
+}
