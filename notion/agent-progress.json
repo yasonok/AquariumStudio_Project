@@ -1,0 +1,46 @@
+{
+  "-5192967461": {
+    "agentName": "AQUABOT",
+    "projectName": "桌上型水族網站製作",
+    "currentPhase": "UI/UX 設計",
+    "progress": 60,
+    "tasks": [
+      {"name": "需求分析", "status": "completed", "progress": 100},
+      {"name": "UI/UX 設計", "status": "in_progress", "progress": 60},
+      {"name": "前端開發", "status": "pending", "progress": 0},
+      {"name": "功能測試", "status": "pending", "progress": 0},
+      {"name": "上線部署", "status": "pending", "progress": 0}
+    ],
+    "lastUpdated": "2026-02-08T03:25:00Z",
+    "notes": "Aquarium Studio 電商網站"
+  },
+  "-5144687626": {
+    "agentName": "Daily_news",
+    "projectName": "每日新聞與星座運勢",
+    "currentPhase": "待命",
+    "progress": 0,
+    "tasks": [
+      {"name": "新聞來源配置", "status": "pending", "progress": 0},
+      {"name": "星座 API 串接", "status": "pending", "progress": 0},
+      {"name": "每日排程測試", "status": "pending", "progress": 0},
+      {"name": "正式上線", "status": "pending", "progress": 0}
+    ],
+    "lastUpdated": "2026-02-08T03:50:00Z",
+    "notes": "每天早上 8 點自動發送"
+  },
+  "-5215480233": {
+    "agentName": "Seo_agent",
+    "projectName": "SEO 網站架設",
+    "currentPhase": "網站架構規劃",
+    "progress": 30,
+    "tasks": [
+      {"name": "網站架構規劃", "status": "in_progress", "progress": 30},
+      {"name": "SEO 優化設定", "status": "pending", "progress": 0},
+      {"name": "內容策略制定", "status": "pending", "progress": 0},
+      {"name": "每日文章發布", "status": "pending", "progress": 0},
+      {"name": "排名監測與優化", "status": "pending", "progress": 0}
+    ],
+    "lastUpdated": "2026-02-08T05:50:00Z",
+    "notes": "每天發布一篇 SEO 優化文章"
+  }
+}

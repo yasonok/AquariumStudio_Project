@@ -37,20 +37,24 @@ function initializeApp() {
 
 // Product Management
 function loadProducts() {
-  const storedProducts = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS);
-  if (!storedProducts) {
-    // Load from products.json
-    fetch('products.json')
-      .then(response => response.json())
-      .then(data => {
-        localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(data.products));
-      })
-      .catch(() => {
-        // Use default products if file not found
+  // Always fetch fresh data from products.json first
+  fetch('products.json')
+    .then(response => response.json())
+    .then(data => {
+      localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(data.products));
+      // Refresh the display if on shop page
+      if (document.getElementById('product-grid')) {
+        renderProducts();
+      }
+    })
+    .catch(() => {
+      // Fallback to localStorage if fetch fails
+      const storedProducts = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS);
+      if (!storedProducts) {
         const defaultProducts = getDefaultProducts();
         localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(defaultProducts));
-      });
-  }
+      }
+    });
 }
 
 function getProducts() {

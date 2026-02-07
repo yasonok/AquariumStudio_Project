@@ -1,0 +1,19 @@
+{
+  "name": "openclaw-skill-notion",
+  "version": "1.0.0",
+  "description": "Notion integration for OpenClaw",
+  "main": "notion-cli.js",
+  "scripts": {
+    "test": "node notion-cli.js help"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.3.0"
+  },
+  "keywords": [
+    "notion",
+    "openclaw",
+    "skill"
+  ],
+  "author": "",
+  "license": "MIT"
+}
