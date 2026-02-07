@@ -90,7 +90,7 @@ open agent-dashboard.html
 
 ### 管理員操作
 1. 打開 `admin.html`
-2. 密碼：`admin123`
+2. 密碼：`aquarium123`
 3. 可新增、編輯、刪除商品（含影片）
 4. 查看訂單狀態
 

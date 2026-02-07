@@ -2,7 +2,7 @@
 
 // Admin Configuration
 const ADMIN_CONFIG = {
-  DEFAULT_PASSWORD: 'admin123',
+  DEFAULT_PASSWORD: 'aquarium123',
   STORAGE_KEYS: {
     PRODUCTS: 'aquarium_products',
     ORDERS: 'aquarium_orders',

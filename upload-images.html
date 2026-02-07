@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>上傳孔雀魚圖片 - Aquarium Studio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+    h1 { color: #333; margin-bottom: 10px; text-align: center; }
+    .subtitle { color: #666; text-align: center; margin-bottom: 30px; }
+    .upload-area { border: 3px dashed #ddd; border-radius: 12px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 20px; }
+    .upload-area:hover { border-color: #667eea; background: #f8f9ff; }
+    .upload-area input { display: none; }
+    .upload-icon { font-size: 48px; margin-bottom: 10px; }
+    .preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; margin-top: 20px; }
+    .preview-item { position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .preview-item img { width: 100%; height: 100px; object-fit: cover; }
+    .preview-item .name { font-size: 12px; padding: 5px; text-align: center; background: #f5f5f5; }
+    .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; margin-top: 10px; }
+    .btn:hover { opacity: 0.9; }
+    .info { background: #f0f0f0; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🐟 上傳孔雀魚圖片</h1>
+    <p class="subtitle">將圖片拖放到下方或點擊選擇</p>
+    
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+      <div class="upload-icon">📸</div>
+      <p>點擊選擇圖片或拖放圖片至此</p>
+      <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFiles(this.files)">
+    </div>
+    
+    <div class="info">
+      <strong>請提供以下圖片：</strong><br>
+      📁 images/products/ 目錄<br>
+      • guppy-red.jpg - 紅色孔雀魚<br>
+      • guppy-blue.jpg - 藍色孔雀魚<br>
+      • guppy-yellow.jpg - 黃色孔雀魚<br>
+      • guppy-black.jpg - 黑色孔雀魚<br>
+      • guppy-white.jpg - 白色孔雀魚
+    </div>
+    
+    <div class="preview" id="preview"></div>
+    
+    <button class="btn" onclick="alert('請將圖片複製到 images/products/ 目錄中！')">💾 下載圖片清單</button>
+  </div>
+
+  <script>
+    function handleFiles(files) {
+      const preview = document.getElementById('preview');
+      preview.innerHTML = '';
+      
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.className = 'preview-item';
+          div.innerHTML = `<img src="${e.target.result}"><div class="name">${file.name}</div>`;
+          preview.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
+</body>
+</html>
