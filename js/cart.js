@@ -19,9 +19,6 @@ function setupCheckoutForm() {
     const submitBtn = form.querySelector('button[type="submit"]');
     if (!submitBtn) return;
     
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="spinner" style="width:20px;height:20px;border-width:2px;margin:0;"></span> 處理中...';
-    
     // Collect form data
     const customerInfo = {
       name: document.getElementById('customer-name').value,
@@ -30,18 +27,95 @@ function setupCheckoutForm() {
       note: document.getElementById('customer-note').value
     };
     
-    // Create order
-    const order = AquariumApp.createOrder(customerInfo);
+    // Create order message
+    const cart = JSON.parse(localStorage.getItem('aquarium_cart') || '[]');
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
-    if (order) {
-      // Show success and LINE option
-      showOrderConfirmation(order);
-    } else {
-      AquariumApp.showToast('訂單建立失敗', 'error');
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '確認訂單';
-    }
+    const orderMessage = `
+🐟 Aquarium Studio 訂單
+
+顧客資料:
+- 姓名: ${customerInfo.name}
+- 電話: ${customerInfo.phone}
+- 地址: ${customerInfo.address}
+${customerInfo.note ? `- 備註: ${customerInfo.note}` : ''}
+
+訂單內容:
+${cart.map(item => `- ${item.name} x ${item.quantity} = $${item.price * item.quantity}`).join('\n')}
+
+總金額: $${total}
+`;
+
+    // Show copy dialog first
+    showCopyDialog(orderMessage, customerInfo, cart, total);
   });
+}
+
+function showCopyDialog(orderMessage, customerInfo, cart, total) {
+  const modal = document.getElementById('order-modal');
+  const content = document.getElementById('order-modal-content');
+  
+  if (!modal || !content) return;
+  
+  content.innerHTML = `
+    <div style="padding: 20px;">
+      <h2 style="margin-bottom: 15px;">📋 訂單內容</h2>
+      <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">
+        請複製以下訂單內容，然後開啟 LINE 貼給管理員
+      </p>
+      
+      <textarea id="order-copy-text" style="
+        width: 100%;
+        height: 250px;
+        padding: 15px;
+        border: 2px solid #667eea;
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: inherit;
+        resize: none;
+        margin-bottom: 15px;
+      ">${orderMessage}</textarea>
+      
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button onclick="copyOrderText()" class="btn btn-primary" style="flex: 1;">
+          📋 複製訂單內容
+        </button>
+        <a href="https://line.me/R/ti/p/@yasonok02061" target="_blank" class="btn btn-secondary" style="flex: 1;">
+          💬 開啟 LINE
+        </a>
+      </div>
+      
+      <p id="copy-success" style="
+        color: #198754;
+        text-align: center;
+        margin-top: 15px;
+        font-weight: bold;
+        display: none;
+      ">✅ 已複製！請開啟 LINE 並貼上訂單內容</p>
+      
+      <button onclick="clearCartAndClose()" class="btn btn-outline" style="width: 100%; margin-top: 15px;">
+        完成訂單（清除購物車）
+      </button>
+    </div>
+  `;
+  
+  modal.style.display = 'flex';
+}
+
+function copyOrderText() {
+  const textarea = document.getElementById('order-copy-text');
+  textarea.select();
+  document.execCommand('copy');
+  
+  const successMsg = document.getElementById('copy-success');
+  if (successMsg) {
+    successMsg.style.display = 'block';
+  }
+}
+
+function clearCartAndClose() {
+  localStorage.removeItem('aquarium_cart');
+  window.location.href = 'shop.html';
 }
 
 function showOrderConfirmation(order) {
