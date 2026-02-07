@@ -244,7 +244,6 @@
   </style>
 </head>
 <body class="mobile-upload-page">
-  <!-- Mobile Header -->
   <header class="mobile-upload-header">
     <a href="admin.html" class="nav-back-link">
       ← 返回後台
@@ -253,9 +252,7 @@
     <p>大按鈕設計，方便手機操作</p>
   </header>
 
-  <!-- Upload Form -->
   <div class="mobile-upload-card">
-    <!-- Quick Actions -->
     <div class="quick-actions">
       <button class="btn btn-secondary quick-action-btn" onclick="loadSampleProducts()">
         <span>📥</span>
@@ -268,7 +265,6 @@
     </div>
 
     <form id="mobile-upload-form">
-      <!-- Image Upload -->
       <div class="mobile-form-group">
         <label>📷 商品圖片</label>
         <div class="upload-area" id="mobile-upload-area" onclick="document.getElementById('mobile-product-image').click()">
@@ -276,22 +272,19 @@
           <p class="upload-text">點擊選擇圖片</p>
           <p class="upload-hint">支援 JPG、PNG 格式</p>
         </div>
-        <input type="file" id="mobile-product-image" accept="image/*" style="display: none;" multiple>
+        <input type="file" id="mobile-product-image" accept="image/*" style="display: none;">
         <div class="image-preview" id="mobile-image-preview"></div>
       </div>
 
-      <!-- Camera Button -->
       <button type="button" id="camera-capture-btn" class="btn btn-secondary camera-btn">
         📷 相機拍攝
       </button>
 
-      <!-- Product Name -->
       <div class="mobile-form-group">
         <label>🐟 商品名稱 *</label>
         <input type="text" id="mobile-product-name" required placeholder="例如：全紅孔雀魚">
       </div>
 
-      <!-- Price & Stock -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
         <div class="mobile-form-group">
           <label>💰 價格 *</label>
@@ -303,44 +296,28 @@
         </div>
       </div>
 
-      <!-- Category -->
       <div class="mobile-form-group">
         <label>🏷️ 類別 *</label>
         <select id="mobile-product-category" required>
-          <option value="紅色系">🔴 紅色系</option>
-          <option value="黑色系">⚫ 黑色系</option>
-          <option value="特殊系">🌈 特殊系</option>
-          <option value="稀有系">💎 稀有系</option>
-          <option value="藍色系">🔵 藍色系</option>
-          <option value="金色系">🟡 金色系</option>
+          <option value="孔雀魚">🐟 孔雀魚</option>
+          <option value="設備">⚙️ 設備</option>
+          <option value="飼料">🦐 飼料</option>
+          <option value="水質">💧 水質</option>
           <option value="其他">📁 其他</option>
         </select>
       </div>
 
-      <!-- Description -->
       <div class="mobile-form-group">
         <label>📝 商品描述</label>
         <textarea id="mobile-product-description" rows="3" placeholder="輸入商品特色與說明"></textarea>
       </div>
 
-      <!-- Video Upload -->
-      <div class="mobile-form-group">
-        <label>🎬 影片（選填，直接上傳 MP4/MOV）</label>
-        <div id="mobile-video-preview" class="image-upload-area" onclick="document.getElementById('mobile-product-video').click()">
-          <div class="icon">🎥</div>
-          <div class="text">點擊上傳影片</div>
-        </div>
-        <input type="file" id="mobile-product-video" accept="video/*" style="display: none;" onchange="handleMobileVideoUpload(this)">
-      </div>
-
-      <!-- Submit Button -->
       <button type="submit" class="btn btn-primary submit-btn">
         ➕ 新增商品
       </button>
     </form>
   </div>
 
-  <!-- Tips Card -->
   <div class="tips-card">
     <h4>💡 上傳小提示</h4>
     <ul>
@@ -351,7 +328,6 @@
     </ul>
   </div>
 
-  <!-- Bottom Navigation -->
   <nav class="bottom-nav">
     <a href="index.html">
       <span>🏠</span>
@@ -372,12 +348,10 @@
   </nav>
 
   <script src="js/app.js"></script>
-  <script src="js/admin.js"></script>
   <script>
-    // Initialize mobile upload
+    const STORAGE_KEY = 'aquarium_products';
+    
     document.addEventListener('DOMContentLoaded', function() {
-      AdminApp.setupMobileUpload();
-      
       // Image preview
       const imageInput = document.getElementById('mobile-product-image');
       const preview = document.getElementById('mobile-image-preview');
@@ -406,33 +380,69 @@
           }
         });
       });
+      
+      // Form submit
+      document.getElementById('mobile-upload-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const imageFile = document.getElementById('mobile-product-image').files[0];
+        const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        
+        const productData = {
+          id: Date.now(),
+          name: document.getElementById('mobile-product-name').value,
+          price: parseInt(document.getElementById('mobile-product-price').value),
+          stock: parseInt(document.getElementById('mobile-product-stock').value),
+          category: document.getElementById('mobile-product-category').value,
+          description: document.getElementById('mobile-product-description').value,
+          featured: false,
+          updated_at: new Date().toISOString()
+        };
+        
+        if (imageFile) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            productData.image = e.target.result;
+            products.push(productData);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+            alert('✅ 商品已新增！');
+            window.location.reload();
+          };
+          reader.readAsDataURL(imageFile);
+        } else {
+          productData.image = 'images/products/default-guppy.svg';
+          products.push(productData);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+          alert('✅ 商品已新增！');
+          window.location.reload();
+        }
+      });
     });
 
-    // Load sample products
     function loadSampleProducts() {
       if (!confirm('載入範例商品會覆蓋現有資料，確定要繼續嗎？')) return;
       
       const sampleProducts = [
-        { id: 1, name: '全紅孔雀魚', price: 200, stock: 15, category: '紅色系', description: '經典熱門品種，顏色鮮豔，繁殖穩定，適合新手', image: 'images/products/default-guppy.svg' },
-        { id: 2, name: '黑禮服孔雀魚', price: 150, stock: 8, category: '黑色系', description: '優雅黑色禮服，經典款式，適應力強', image: 'images/products/default-guppy.svg' },
-        { id: 3, name: '馬賽克孔雀魚', price: 180, stock: 12, category: '特殊系', description: '色彩繽紛如馬賽克，觀賞性極高', image: 'images/products/default-guppy.svg' },
-        { id: 4, name: '蛇王孔雀魚', price: 300, stock: 5, category: '稀有系', description: '蛇紋圖案獨特美觀，稀有品種', image: 'images/products/default-guppy.svg' },
-        { id: 5, name: '藍寶石孔雀魚', price: 250, stock: 10, category: '藍色系', description: '如藍寶石般璀璨的藍色鱗片', image: 'images/products/default-guppy.svg' },
-        { id: 6, name: '黃金孔雀魚', price: 280, stock: 6, category: '金色系', description: '全身金黃色鱗片，富貴吉祥的象徵', image: 'images/products/default-guppy.svg' }
+        { id: 1, name: '紅色草尾孔雀魚', price: 200, stock: 10, category: '孔雀魚', description: '色澤鮮艷的紅色草尾孔雀魚', image: 'images/products/guppy-red.jpg' },
+        { id: 2, name: '藍色莫斯科孔雀魚', price: 350, stock: 5, category: '孔雀魚', description: '全身藍色金屬光澤', image: 'images/products/guppy-blue.jpg' },
+        { id: 3, name: '黃色扇尾孔雀魚', price: 180, stock: 8, category: '孔雀魚', description: '優雅的扇尾造型', image: 'images/products/guppy-yellow.jpg' },
+        { id: 4, name: '白色白金孔雀魚', price: 250, stock: 6, category: '孔雀魚', description: '純白色體色搭配白金光澤', image: 'images/products/guppy-white.jpg' },
+        { id: 5, name: '黑色神風孔雀魚', price: 300, stock: 3, category: '孔雀魚', description: '神秘黑色體色', image: 'images/products/guppy-black.jpg' },
+        { id: 6, name: '魚缸過濾器 (小型)', price: 800, stock: 15, category: '設備', description: '適合30-60公分魚缸', image: 'images/products/default.svg' },
+        { id: 7, name: '孔雀魚專用飼料', price: 150, stock: 30, category: '飼料', description: '專用營養飼料', image: 'images/products/default.svg' }
       ];
       
-      localStorage.setItem('aquarium_products', JSON.stringify(sampleProducts));
-      AquariumApp.showToast('範例商品已載入！', 'success');
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleProducts));
+      alert('範例商品已載入！');
     }
 
-    // Clear all products
     function clearAllProducts() {
       if (!confirm('確定要清除所有商品嗎？此動作無法復原！')) return;
       
-      localStorage.removeItem('aquarium_products');
+      localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem('aquarium_orders');
       localStorage.removeItem('aquarium_cart');
-      AquariumApp.showToast('所有資料已清除', 'success');
+      alert('所有資料已清除');
     }
   </script>
 </body>
