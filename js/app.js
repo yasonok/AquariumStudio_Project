@@ -475,17 +475,16 @@ ${order.items.map(item => `- ${item.name} x ${item.quantity} = $${item.price * i
   // Encode message for LINE
   const encodedMessage = encodeURIComponent(message);
   
-  // Show notification info (in production, this would send to actual LINE API)
-  console.log('LINE Notification:', message);
-  
   // Open LINE with order message
   const lineUrl = `https://line.me/R/ti/p/@yasonok02061?${encodedMessage}`;
-  showToast('訂單已成立！正在開啟 LINE 通知...', 'success');
   
   // Store for admin to see
   const notifications = JSON.parse(localStorage.getItem('line_notifications') || '[]');
   notifications.push({ orderId: order.id, message: message, created_at: new Date().toISOString() });
   localStorage.setItem('line_notifications', JSON.stringify(notifications));
+  
+  // Open LINE in new window
+  window.open(lineUrl, '_blank');
 }
 
 // Mobile Menu
