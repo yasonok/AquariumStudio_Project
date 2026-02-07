@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeApp();
 });
 
-function initializeApp() {
-  // Load products from storage or use default
-  loadProducts();
+async function initializeApp() {
+  // Always fetch fresh data from products.json first
+  await loadProducts();
   
   // Setup mobile menu toggle
   setupMobileMenu();
   
-  // Render products on shop page
+  // Render products on shop page (only after data is loaded)
   if (document.getElementById('product-grid')) {
     renderProducts();
   }
@@ -36,25 +36,15 @@ function initializeApp() {
 }
 
 // Product Management
-function loadProducts() {
-  // Always fetch fresh data from products.json first
-  fetch('products.json')
-    .then(response => response.json())
-    .then(data => {
-      localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(data.products));
-      // Refresh the display if on shop page
-      if (document.getElementById('product-grid')) {
-        renderProducts();
-      }
-    })
-    .catch(() => {
-      // Fallback to localStorage if fetch fails
-      const storedProducts = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS);
-      if (!storedProducts) {
-        const defaultProducts = getDefaultProducts();
-        localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(defaultProducts));
-      }
-    });
+async function loadProducts() {
+  try {
+    const response = await fetch('products.json?_=' + Date.now());
+    const data = await response.json();
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(data.products));
+    // Data will be rendered by initializeApp() after this completes
+  } catch (error) {
+    console.log('Using cached products');
+  }
 }
 
 function getProducts() {
@@ -171,9 +161,12 @@ function createProductCard(product) {
     </button>
   ` : '';
 
+  // Add cache-busting parameter to image URL
+  const imageUrl = product.image ? product.image + '?_=' + Date.now() : 'images/products/default-guppy.svg';
+  
   return `
     <div class="product-card" data-id="${product.id}">
-      <img src="${product.image || 'images/products/default-guppy.svg'}" 
+      <img src="${imageUrl}" 
            alt="${product.name}" 
            class="product-image"
            onerror="this.src='images/products/default-guppy.svg'">
@@ -385,7 +378,7 @@ function renderCart() {
   cartContainer.innerHTML = cart.map(item => `
     <div class="cart-item" data-id="${item.id}">
       <div class="cart-item-image">
-        <img src="${item.image || 'images/products/default-guppy.svg'}" 
+        <img src="${item.image ? item.image + '?_=' + Date.now() : 'images/products/default-guppy.svg'}" 
              alt="${item.name}"
              onerror="this.src='images/products/default-guppy.svg'">
         <div>
