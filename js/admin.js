@@ -74,7 +74,16 @@ function formatCurrency(amount) {
 
 // Products Functions
 function getProducts() {
-  return JSON.parse(localStorage.getItem(ADMIN_CONFIG.STORAGE_KEYS.PRODUCTS) || '[]');
+  const stored = localStorage.getItem(ADMIN_CONFIG.STORAGE_KEYS.PRODUCTS);
+  if (!stored) return [];
+  
+  const products = JSON.parse(stored);
+  
+  // Remove video fields from cached products
+  return products.map(p => {
+    const { video, ...rest } = p;
+    return rest;
+  });
 }
 
 function getOrders() {

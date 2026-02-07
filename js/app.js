@@ -40,16 +40,30 @@ async function loadProducts() {
   try {
     const response = await fetch('products.json?_=' + Date.now());
     const data = await response.json();
-    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(data.products));
-    // Data will be rendered by initializeApp() after this completes
+    
+    // Remove video fields from products and save
+    const cleanProducts = data.products.map(p => {
+      const { video, ...rest } = p;
+      return rest;
+    });
+    
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(cleanProducts));
   } catch (error) {
     console.log('Using cached products');
   }
 }
 
 function getProducts() {
-  const products = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS);
-  return products ? JSON.parse(products) : [];
+  const stored = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS);
+  if (!stored) return [];
+  
+  const products = JSON.parse(stored);
+  
+  // Remove video fields from cached products
+  return products.map(p => {
+    const { video, ...rest } = p;
+    return rest;
+  });
 }
 
 function saveProducts(products) {
