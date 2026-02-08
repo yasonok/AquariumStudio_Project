@@ -361,12 +361,12 @@ function getCartCount() {
 }
 
 function updateCartBadge() {
-  const badge = document.querySelector('.cart-badge');
-  if (badge) {
-    const count = getCartCount();
+  const badges = document.querySelectorAll('.cart-badge');
+  const count = getCartCount();
+  badges.forEach(badge => {
     badge.textContent = count;
     badge.style.display = count > 0 ? 'flex' : 'none';
-  }
+  });
 }
 
 // Render Cart
