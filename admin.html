@@ -167,7 +167,7 @@
     <div class="modal" id="crop-modal">
         <div class="modal-content modal-content-wide">
             <div class="modal-header">
-                <h3>📐 裁剪 (300x300)</h3>
+                <h3>📐 裁剪 (600x600)</h3>
                 <button class="modal-close" onclick="closeCropModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -176,7 +176,7 @@
                     <canvas id="crop-canvas" class="crop-canvas"></canvas>
                     <div class="crop-frame" id="crop-frame"></div>
                 </div>
-                <p class="crop-info">📐 輸出尺寸：300 x 300 像素</p>
+                <p class="crop-info">📐 輸出尺寸：600 x 600 像素</p>
                 <div style="margin-top:15px; display:flex; gap:10px;">
                     <button type="button" class="btn-secondary" style="flex:1; padding:12px;" onclick="skipCrop()">跳過裁剪</button>
                     <button type="button" class="btn-primary" style="flex:1; padding:12px;" onclick="applyCrop()">✅ 確認</button>
@@ -269,7 +269,7 @@
         const KEY = 'aquarium_products';
         const SITE_KEY = 'site_content';
         const CAT_KEY = 'aquarium_categories';
-        const CROP_SIZE = 300;
+        const CROP_SIZE = 600;
         
         function load() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
         function saveAll(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
