@@ -620,40 +620,40 @@ input, select, textarea {
 /* Categories Section */
 .categories-section {
   background: var(--white);
+  padding: 20px 0;
 }
 
 .categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
 .category-card {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 30px 20px;
+  gap: 8px;
+  padding: 10px 15px;
   background: var(--gray-100);
-  border-radius: var(--border-radius-lg);
+  border-radius: 20px;
   transition: var(--transition);
   cursor: pointer;
+  font-size: 0.9rem;
 }
 
 .category-card:hover {
   background: var(--primary-light);
-  transform: translateY(-5px);
+  transform: translateY(-2px);
 }
 
 .category-icon {
-  font-size: 3rem;
-  margin-bottom: 15px;
+  font-size: 1.3rem;
 }
 
 .category-name {
-  font-size: 1.1rem;
   font-weight: 600;
   color: var(--dark-color);
-  margin-bottom: 5px;
 }
 
 .category-count {
