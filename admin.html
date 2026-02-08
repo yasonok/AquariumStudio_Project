@@ -32,6 +32,7 @@
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
         .modal.active { display: flex; }
         .modal-content { background: white; border-radius: 16px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        .modal-content-wide { max-width: 500px; }
         .modal-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .modal-header h3 { font-size: 1rem; }
         .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
@@ -52,14 +53,23 @@
         .btn-secondary { background: #eee; color: #666; }
         .empty { text-align: center; padding: 50px 20px; color: #999; }
         .empty .icon { font-size: 3rem; margin-bottom: 15px; }
+        
+        /* 分類列表樣式 */
+        .cat-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f8f9fa; border-radius: 10px; margin-bottom: 8px; }
+        .cat-item .icon { font-size: 1.5rem; }
+        .cat-item .name { flex: 1; font-weight: 500; }
+        .cat-item .count { color: #667eea; font-size: 0.9rem; }
+        .cat-item .actions { display: flex; gap: 5px; }
+        .cat-item .actions button { padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🎛️ 商品管理</h1>
         <div class="header-btns">
-            <button onclick="editSiteContent()">📝 網站內容</button>
-            <button onclick="clearAll()">🗑️ 清除</button>
+            <button onclick="editCategories()">🏷️ 分類</button>
+            <button onclick="editSiteContent()">📝 網站</button>
+            <button onclick="clearAll()">🗑️</button>
         </div>
     </div>
     
@@ -119,13 +129,7 @@
                     
                     <div class="form-group">
                         <label>🏷️ 分類 *</label>
-                        <select id="p-cat" required>
-                            <option value="孔雀魚">🐟 孔雀魚</option>
-                            <option value="設備">⚙️ 設備</option>
-                            <option value="飼料">🦐 飼料</option>
-                            <option value="水質">💧 水質</option>
-                            <option value="其他">📁 其他</option>
-                        </select>
+                        <select id="p-cat" required></select>
                     </div>
                     
                     <div class="form-group">
@@ -137,6 +141,63 @@
                         <button type="submit" class="btn-primary">💾 儲存</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 裁剪 Modal -->
+    <div class="modal" id="crop-modal">
+        <div class="modal-content modal-content-wide">
+            <div class="modal-header">
+                <h3>📐 裁剪圖片</h3>
+                <button class="modal-close" onclick="closeCropModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:15px; color:#666;">👇 拖動滑鼠選擇要保留的範圍</p>
+                <div style="position:relative; display:inline-block; max-width:100%; background:#000; border-radius:10px; overflow:hidden;">
+                    <canvas id="crop-canvas" style="max-width:100%; display:block; cursor:crosshair;"></canvas>
+                </div>
+                <div style="margin-top:15px; display:flex; gap:10px;">
+                    <button type="button" class="btn-secondary" style="flex:1; padding:12px;" onclick="skipCrop()">跳過裁剪</button>
+                    <button type="button" class="btn-primary" style="flex:1; padding:12px;" onclick="applyCrop()">✅ 確認</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 分類 Modal -->
+    <div class="modal" id="cat-modal">
+        <div class="modal-content modal-content-wide">
+            <div class="modal-header">
+                <h3>🏷️ 分類管理</h3>
+                <button class="modal-close" onclick="closeCatModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="cat-list"></div>
+                
+                <div style="margin-top:20px; padding-top:15px; border-top:1px solid #eee;">
+                    <h4 style="margin-bottom:15px; font-size:0.95rem;">➕ 新增分類</h4>
+                    <form onsubmit="addCategory(event)">
+                        <div class="form-group">
+                            <label>🏷️ 名稱 *</label>
+                            <input type="text" id="cat-new-name" required placeholder="例如：進口魚">
+                        </div>
+                        <div class="form-group">
+                            <label>🌈 圖示</label>
+                            <select id="cat-new-icon">
+                                <option value="🐟">🐟 魚</option>
+                                <option value="🐠">🐠 熱帶魚</option>
+                                <option value="🦐">🦐 蝦</option>
+                                <option value="🐚">🐚 貝類</option>
+                                <option value="⚙️">⚙️ 設備</option>
+                                <option value="💧">💧 水質</option>
+                                <option value="🌿">🌿 水草</option>
+                                <option value="📦">📦 其他</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width:100%;">➕ 新增</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -187,15 +248,35 @@
     <script>
         const KEY = 'aquarium_products';
         const SITE_KEY = 'site_content';
+        const CAT_KEY = 'aquarium_categories';
         
         function load() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
         function saveAll(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
         function loadSite() { return JSON.parse(localStorage.getItem(SITE_KEY) || '{}'); }
+        function loadCats() { return JSON.parse(localStorage.getItem(CAT_KEY) || '[]'); }
+        function saveCats(c) { localStorage.setItem(CAT_KEY, JSON.stringify(c)); }
+        
+        // 初始化預設分類
+        if (!localStorage.getItem(CAT_KEY)) {
+            saveCats([
+                { id: 1, name: '孔雀魚', icon: '🐟' },
+                { id: 2, name: '設備', icon: '⚙️' },
+                { id: 3, name: '飼料', icon: '🦐' },
+                { id: 4, name: '水質', icon: '💧' }
+            ]);
+        }
+        
+        function renderCats() {
+            const cats = loadCats();
+            const select = document.getElementById('p-cat');
+            select.innerHTML = cats.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join('');
+        }
         
         function render() {
             const p = load();
             document.getElementById('count-products').textContent = p.length;
             document.getElementById('count-stock').textContent = p.reduce((s, i) => s + (i.stock||0), 0);
+            renderCats();
             
             const list = document.getElementById('product-list');
             if (p.length === 0) {
@@ -225,10 +306,10 @@
             document.getElementById('p-name').value = '';
             document.getElementById('p-price').value = '';
             document.getElementById('p-stock').value = '';
-            document.getElementById('p-cat').value = '孔雀魚';
             document.getElementById('p-desc').value = '';
             document.getElementById('p-img').value = '';
             document.getElementById('preview-img').classList.remove('show');
+            renderCats();
             document.getElementById('modal').classList.add('active');
         }
         
@@ -240,9 +321,10 @@
             document.getElementById('p-name').value = p.name;
             document.getElementById('p-price').value = p.price;
             document.getElementById('p-stock').value = p.stock;
-            document.getElementById('p-cat').value = p.category;
             document.getElementById('p-desc').value = p.description || '';
             document.getElementById('p-img').value = p.image || '';
+            renderCats();
+            setTimeout(() => document.getElementById('p-cat').value = p.category, 0);
             if (p.image) {
                 document.getElementById('preview-img').src = p.image;
                 document.getElementById('preview-img').classList.add('show');
@@ -260,7 +342,218 @@
             document.getElementById('modal').classList.remove('active');
         }
         
-        // 網站內容編輯
+        // ===== 分類管理 =====
+        function editCategories() {
+            const cats = loadCats();
+            const products = load();
+            document.getElementById('cat-list').innerHTML = cats.map(c => {
+                const count = products.filter(p => p.category === c.name).length;
+                return `
+                    <div class="cat-item">
+                        <span class="icon">${c.icon}</span>
+                        <span class="name">${c.name}</span>
+                        <span class="count">${count} 項</span>
+                        <div class="actions">
+                            <button class="btn-secondary" onclick="editCat(${c.id})">✏️</button>
+                            <button class="btn-delete" onclick="delCat(${c.id})" ${count > 0 ? 'disabled' : ''}>🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p style="text-align:center;color:#999;">尚無分類</p>';
+            document.getElementById('cat-modal').classList.add('active');
+        }
+        
+        function editCat(id) {
+            const cats = loadCats();
+            const cat = cats.find(c => c.id === id);
+            if (!cat) return;
+            const newName = prompt('輸入新名稱：', cat.name);
+            if (newName && newName.trim()) {
+                cat.name = newName.trim();
+                saveCats(cats);
+                editCategories();
+            }
+        }
+        
+        function delCat(id) {
+            const cats = loadCats();
+            const cat = cats.find(c => c.id === id);
+            if (!cat) return;
+            if (!confirm(`刪除分類「${cat.name}」？`)) return;
+            saveCats(cats.filter(c => c.id !== id));
+            editCategories();
+        }
+        
+        function addCategory(e) {
+            e.preventDefault();
+            const name = document.getElementById('cat-new-name').value.trim();
+            const icon = document.getElementById('cat-new-icon').value;
+            if (!name) return;
+            const cats = loadCats();
+            cats.push({ id: Date.now(), name, icon });
+            saveCats(cats);
+            document.getElementById('cat-new-name').value = '';
+            editCategories();
+        }
+        
+        function closeCatModal() {
+            document.getElementById('cat-modal').classList.remove('active');
+        }
+        
+        // ===== 裁剪功能 =====
+        let cropImg, cropStartX, cropStartY, cropEndX, cropEndY, isDragging = false;
+        let originalImageData = null;
+        
+        function handleImg(input) {
+            if (!input.files[0]) return;
+            const file = input.files[0];
+            const r = new FileReader();
+            r.onload = e => {
+                cropImg = new Image();
+                cropImg.onload = () => {
+                    originalImageData = e.target.result;
+                    openCropModal();
+                };
+                cropImg.src = e.target.result;
+            };
+            r.readAsDataURL(file);
+        }
+        
+        function openCropModal() {
+            const canvas = document.getElementById('crop-canvas');
+            const ctx = canvas.getContext('2d');
+            const maxSize = 450;
+            let w = cropImg.width, h = cropImg.height;
+            if (w > maxSize || h > maxSize) {
+                if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+                else { w = Math.round(w * maxSize / h); h = maxSize; }
+            }
+            canvas.width = w;
+            canvas.height = h;
+            ctx.drawImage(cropImg, 0, 0, w, h);
+            cropStartX = w * 0.2;
+            cropStartY = h * 0.2;
+            cropEndX = w * 0.8;
+            cropEndY = h * 0.8;
+            document.getElementById('crop-modal').classList.add('active');
+            drawCropSelection();
+        }
+        
+        function drawCropSelection() {
+            const canvas = document.getElementById('crop-canvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.drawImage(cropImg, 0, 0, w, h);
+            const sx = Math.round(cropStartX), sy = Math.round(cropStartY);
+            const sw = Math.round(cropEndX - cropStartX), sh = Math.round(cropEndY - cropStartY);
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillRect(0, 0, w, h);
+            ctx.clearRect(sx, sy, sw, sh);
+            ctx.drawImage(cropImg, sx, sy, sw, sh, sx, sy, sw, sh);
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(sx, sy, sw, sh);
+            const cs = 12;
+            ctx.fillStyle = '#667eea';
+            [[sx, sy], [sx+sw, sy], [sx, sy+sh], [sx+sw, sy+sh]].forEach(([x, y]) => {
+                ctx.fillRect(x-cs/2, y-cs/2, cs, cs);
+            });
+        }
+        
+        function getMousePos(canvas, e) {
+            const rect = canvas.getBoundingClientRect();
+            return { x: (e.clientX - rect.left) * (canvas.width / rect.width), y: (e.clientY - rect.top) * (canvas.height / rect.height) };
+        }
+        
+        const cropCanvas = document.getElementById('crop-canvas');
+        cropCanvas.addEventListener('mousedown', e => {
+            const pos = getMousePos(cropCanvas, e);
+            cropStartX = cropEndX = pos.x;
+            cropStartY = cropEndY = pos.y;
+            isDragging = true;
+            e.preventDefault();
+        });
+        cropCanvas.addEventListener('mousemove', e => {
+            if (!isDragging) return;
+            const pos = getMousePos(cropCanvas, e);
+            cropEndX = Math.max(0, Math.min(cropImg.width, pos.x));
+            cropEndY = Math.max(0, Math.min(cropImg.height, pos.y));
+            drawCropSelection();
+        });
+        cropCanvas.addEventListener('mouseup', () => isDragging = false);
+        cropCanvas.addEventListener('mouseleave', () => isDragging = false);
+        
+        cropCanvas.addEventListener('touchstart', e => {
+            const touch = e.touches[0];
+            const pos = getMousePos(cropCanvas, touch);
+            cropStartX = cropEndX = pos.x;
+            cropStartY = cropEndY = pos.y;
+            isDragging = true;
+            e.preventDefault();
+        });
+        cropCanvas.addEventListener('touchmove', e => {
+            if (!isDragging) return;
+            const touch = e.touches[0];
+            const pos = getMousePos(cropCanvas, touch);
+            cropEndX = Math.max(0, Math.min(cropImg.width, pos.x));
+            cropEndY = Math.max(0, Math.min(cropImg.height, pos.y));
+            drawCropSelection();
+            e.preventDefault();
+        });
+        cropCanvas.addEventListener('touchend', () => isDragging = false);
+        
+        function applyCrop() {
+            const canvas = document.getElementById('crop-canvas');
+            const ctx = canvas.getContext('2d');
+            let sx = Math.min(cropStartX, cropEndX), sy = Math.min(cropStartY, cropEndY);
+            let sw = Math.abs(cropEndX - cropStartX), sh = Math.abs(cropEndY - cropStartY);
+            if (sw < 50 || sh < 50) { sw = sh = 200; sx = (canvas.width - 200) / 2; sy = (canvas.height - 200) / 2; }
+            const c = document.createElement('canvas');
+            c.width = 300;
+            c.height = 300;
+            const cx = c.getContext('2d');
+            cx.drawImage(canvas, sx, sy, sw, sh, 0, 0, 300, 300);
+            const result = c.toDataURL('image/jpeg', 0.85);
+            document.getElementById('preview-img').src = result;
+            document.getElementById('preview-img').classList.add('show');
+            document.getElementById('p-img').value = result;
+            closeCropModal();
+        }
+        
+        function skipCrop() {
+            const r = new FileReader();
+            r.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    const c = document.createElement('canvas');
+                    const ctx = c.getContext('2d');
+                    const max = 300;
+                    let w = img.width, h = img.height;
+                    if (w > h) { if (w > max) { h = Math.round(h * max / w); w = max; } }
+                    else { if (h > max) { w = Math.round(w * max / h); h = max; } }
+                    c.width = w; c.height = h;
+                    ctx.drawImage(img, 0, 0, w, h);
+                    c.toBlob(blob => {
+                        const r2 = new FileReader();
+                        r2.onload = ev => {
+                            document.getElementById('preview-img').src = ev.target.result;
+                            document.getElementById('preview-img').classList.add('show');
+                            document.getElementById('p-img').value = ev.target.result;
+                        };
+                        r2.readAsDataURL(blob);
+                    }, 'image/jpeg', 0.85);
+                };
+                img.src = e.target.result;
+            };
+            r.readAsDataURL(originalImageData);
+            closeCropModal();
+        }
+        
+        function closeCropModal() {
+            document.getElementById('crop-modal').classList.remove('active');
+            originalImageData = null;
+        }
+        
         function editSiteContent() {
             const c = loadSite();
             document.getElementById('site-title').value = c.title || '';
@@ -288,53 +581,6 @@
         
         function closeSiteModal() {
             document.getElementById('site-modal').classList.remove('active');
-        }
-        
-        // 圖片處理
-        function handleImg(input) {
-            if (!input.files[0]) return;
-            const file = input.files[0];
-            
-            if (file.size > 200 * 1024) {
-                compressImage(file);
-                return;
-            }
-            
-            const r = new FileReader();
-            r.onload = e => {
-                document.getElementById('preview-img').src = e.target.result;
-                document.getElementById('preview-img').classList.add('show');
-                document.getElementById('p-img').value = e.target.result;
-            };
-            r.readAsDataURL(file);
-        }
-        
-        function compressImage(file) {
-            const r = new FileReader();
-            r.onload = e => {
-                const img = new Image();
-                img.onload = () => {
-                    const c = document.createElement('canvas');
-                    const ctx = c.getContext('2d');
-                    const max = 400;
-                    let w = img.width, h = img.height;
-                    if (w > h) { if (w > max) { h = Math.round(h * max / w); w = max; } }
-                    else { if (h > max) { w = Math.round(w * max / h); h = max; } }
-                    c.width = w; c.height = h;
-                    ctx.drawImage(img, 0, 0, w, h);
-                    c.toBlob(blob => {
-                        const r2 = new FileReader();
-                        r2.onload = ev => {
-                            document.getElementById('preview-img').src = ev.target.result;
-                            document.getElementById('preview-img').classList.add('show');
-                            document.getElementById('p-img').value = ev.target.result;
-                        };
-                        r2.readAsDataURL(blob);
-                    }, 'image/jpeg', 0.7);
-                };
-                img.src = e.target.result;
-            };
-            r.readAsDataURL(file);
         }
         
         function save(e) {
@@ -374,6 +620,7 @@
         
         document.addEventListener('DOMContentLoaded', render);
         document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+        document.getElementById('crop-modal').addEventListener('click', e => { if (e.target === document.getElementById('crop-modal')) closeCropModal(); });
     </script>
 </body>
 </html>

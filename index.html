@@ -57,40 +57,11 @@
     <div class="container">
       <div class="section-header">
         <h2>🐠 商品分類</h2>
-        <p>依照顏色與特色挑選最適合的孔雀魚</p>
+        <p>依照類型挑選最適合的商品</p>
       </div>
       
-      <div class="categories-grid">
-        <div class="category-card" onclick="filterByCategory('紅色系')">
-          <span class="category-icon">🔴</span>
-          <span class="category-name">紅色系</span>
-          <span class="category-count">經典熱銷</span>
-        </div>
-        <div class="category-card" onclick="filterByCategory('黑色系')">
-          <span class="category-icon">⚫</span>
-          <span class="category-name">黑色系</span>
-          <span class="category-count">優雅神秘</span>
-        </div>
-        <div class="category-card" onclick="filterByCategory('特殊系')">
-          <span class="category-icon">🌈</span>
-          <span class="category-name">特殊系</span>
-          <span class="category-count">獨特花紋</span>
-        </div>
-        <div class="category-card" onclick="filterByCategory('稀有系')">
-          <span class="category-icon">💎</span>
-          <span class="category-name">稀有系</span>
-          <span class="category-count">收藏首選</span>
-        </div>
-        <div class="category-card" onclick="filterByCategory('藍色系')">
-          <span class="category-icon">🔵</span>
-          <span class="category-name">藍色系</span>
-          <span class="category-count">清新脫俗</span>
-        </div>
-        <div class="category-card" onclick="filterByCategory('金色系')">
-          <span class="category-icon">🟡</span>
-          <span class="category-name">金色系</span>
-          <span class="category-count">富貴吉祥</span>
-        </div>
+      <div class="categories-grid" id="categories-grid">
+        <!-- 分類會自動載入 -->
       </div>
     </div>
   </section>
@@ -277,6 +248,28 @@
       if (site.subtitle && heroP) {
         heroP.textContent = site.subtitle + (site.description ? ' | ' + site.description : '');
       }
+      
+      // 動態載入分類
+      loadCategories();
+    }
+    
+    // 載入分類
+    function loadCategories() {
+      const cats = JSON.parse(localStorage.getItem('aquarium_categories') || '[]');
+      const grid = document.getElementById('categories-grid');
+      
+      if (cats.length === 0) {
+        grid.innerHTML = '<p style="text-align:center;color:#999;padding:30px;">尚無分類</p>';
+        return;
+      }
+      
+      grid.innerHTML = cats.map(c => `
+        <div class="category-card" onclick="filterByCategory('${c.name}')">
+          <span class="category-icon">${c.icon}</span>
+          <span class="category-name">${c.name}</span>
+          <span class="category-count">查看更多</span>
+        </div>
+      `).join('');
     }
 
     // 頁面載入時讀取內容

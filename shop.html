@@ -48,14 +48,8 @@
       
       <!-- Product Controls -->
       <div class="product-controls">
-        <div class="controls-left">
-          <button class="filter-btn active" data-category="all" onclick="filterProducts('all')">全部</button>
-          <button class="filter-btn" data-category="紅色系" onclick="filterProducts('紅色系')">🔴 紅色系</button>
-          <button class="filter-btn" data-category="黑色系" onclick="filterProducts('黑色系')">⚫ 黑色系</button>
-          <button class="filter-btn" data-category="特殊系" onclick="filterProducts('特殊系')">🌈 特殊系</button>
-          <button class="filter-btn" data-category="稀有系" onclick="filterProducts('稀有系')">💎 稀有系</button>
-          <button class="filter-btn" data-category="藍色系" onclick="filterProducts('藍色系')">🔵 藍色系</button>
-          <button class="filter-btn" data-category="金色系" onclick="filterProducts('金色系')">🟡 金色系</button>
+        <div class="controls-left" id="filter-buttons">
+          <!-- 分類按鈕會自動載入 -->
         </div>
         <div class="controls-right">
           <select class="sort-select" id="sort-filter" onchange="sortProducts()">
@@ -307,6 +301,27 @@
       const site = JSON.parse(localStorage.getItem('site_content') || '{}');
       const h1 = document.querySelector('.section-header h2');
       if (site.title && h1) h1.textContent = '🛒 ' + (site.title) + ' - 商店';
+      
+      // 動態載入分類按鈕
+      loadFilterButtons();
+    }
+    
+    // 載入分類篩選按鈕
+    function loadFilterButtons() {
+      const cats = JSON.parse(localStorage.getItem('aquarium_categories') || '[]');
+      const container = document.getElementById('filter-buttons');
+      
+      let html = '<button class="filter-btn active" data-category="all" onclick="filterProducts(\'all\')">全部</button>';
+      
+      if (cats.length > 0) {
+        html += cats.map(c => 
+          `<button class="filter-btn" data-category="${c.name}" onclick="filterProducts('${c.name}')">${c.icon} ${c.name}</button>`
+        ).join('');
+      } else {
+        html += '<button class="filter-btn" data-category="default" onclick="filterProducts(\'default\')">🐟 預設分類</button>';
+      }
+      
+      container.innerHTML = html;
     }
     
     document.addEventListener('DOMContentLoaded', loadSiteContent);
