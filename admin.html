@@ -385,6 +385,7 @@
             <form id="productForm" onsubmit="saveProduct(event)">
                 <input type="hidden" id="productId">
                 <input type="hidden" id="originalImage">
+                <input type="hidden" id="compressed-image-data">
                 
                 <div class="form-group">
                     <label>📷 商品圖片</label>
@@ -489,6 +490,7 @@
             document.getElementById('productId').value = '';
             document.getElementById('productForm').reset();
             document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('compressed-image-data').value = '';
             document.getElementById('productModal').classList.add('active');
         }
         
@@ -505,6 +507,7 @@
             document.getElementById('productCategory').value = product.category;
             document.getElementById('productDesc').value = product.description || '';
             document.getElementById('originalImage').value = product.image || '';
+            document.getElementById('compressed-image-data').value = '';
             
             if (product.image) {
                 const preview = document.getElementById('imagePreview');
@@ -534,7 +537,7 @@
                 
                 // 自動壓縮 iPhone 截圖和高解析度圖片
                 if (file.size > 300 * 1024 || file.type === 'image/heic' || file.name.toLowerCase().endsWith('.heic')) {
-                    compressLargeImage(file, input);
+                    compressLargeImage(file);
                     return;
                 }
                 
@@ -543,13 +546,15 @@
                     const preview = document.getElementById('imagePreview');
                     preview.src = e.target.result;
                     preview.style.display = 'block';
+                    // 儲存圖片到 hidden input
+                    document.getElementById('compressed-image-data').value = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         }
         
-        // 壓縮大圖片和 HEIC 圖片
-        function compressLargeImage(file, input) {
+        // 壓縮大圖片
+        function compressLargeImage(file) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
@@ -557,8 +562,7 @@
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    // 計算新尺寸（最大 800px）
-                    const maxSize = 800;
+                    const maxSize = 600; // 更小的尺寸
                     let width = img.width;
                     let height = img.height;
                     
@@ -576,28 +580,21 @@
                     
                     canvas.width = width;
                     canvas.height = height;
-                    
-                    // 繪製並壓縮
                     ctx.drawImage(img, 0, 0, width, height);
                     
                     canvas.toBlob(function(blob) {
-                        const compressedReader = new FileReader();
-                        compressedReader.onload = function(event) {
+                        const reader2 = new FileReader();
+                        reader2.onload = function(event) {
                             const preview = document.getElementById('imagePreview');
                             preview.src = event.target.result;
                             preview.style.display = 'block';
                             
-                            // 替換為壓縮後的檔案
-                            const dataTransfer = new DataTransfer();
-                            const ext = file.type === 'image/png' ? '.png' : '.jpg';
-                            const compressedFile = new File([blob], 'image' + ext, { type: blob.type });
-                            dataTransfer.items.add(compressedFile);
-                            input.files = dataTransfer.files;
-                            
+                            // 儲存到 hidden input
+                            document.getElementById('compressed-image-data').value = event.target.result;
                             console.log('✅ 圖片已壓縮：' + Math.round(blob.size / 1024) + 'KB');
                         };
-                        compressedReader.readAsDataURL(blob);
-                    }, file.type === 'image/png' ? 'image/png' : 'image/jpeg', 0.7);
+                        reader2.readAsDataURL(blob);
+                    }, 'image/jpeg', 0.6);
                 };
                 img.src = e.target.result;
             };
@@ -623,7 +620,13 @@
                 updated_at: new Date().toISOString()
             };
             
-            if (imageFile) {
+            // 優先使用已壓縮的圖片
+            const compressedImage = document.getElementById('compressed-image-data').value;
+            
+            if (compressedImage) {
+                productData.image = compressedImage;
+                doSaveProduct(products, id, productData, originalImage);
+            } else if (imageFile) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     productData.image = e.target.result;
