@@ -535,70 +535,223 @@
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 
-                // 自動壓縮 iPhone 截圖和高解析度圖片
-                if (file.size > 300 * 1024 || file.type === 'image/heic' || file.name.toLowerCase().endsWith('.heic')) {
-                    compressLargeImage(file);
-                    return;
-                }
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const preview = document.getElementById('imagePreview');
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    // 儲存圖片到 hidden input
-                    document.getElementById('compressed-image-data').value = e.target.result;
+                    showCropDialog(e.target.result);
                 };
                 reader.readAsDataURL(file);
             }
         }
         
-        // 壓縮大圖片
-        function compressLargeImage(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
+        // 裁剪對話框
+        function showCropDialog(imageData) {
+            const modal = document.getElementById('productModal');
+            const content = modal.querySelector('.modal-content');
+            
+            content.innerHTML = `
+                <div style="padding: 20px; text-align: center;">
+                    <h3 style="margin-bottom: 15px;">📷 調整圖片範圍</h3>
+                    <p style="color: #666; margin-bottom: 15px;">拖動方框選擇要保留的範圍</p>
                     
-                    const maxSize = 600; // 更小的尺寸
-                    let width = img.width;
-                    let height = img.height;
+                    <div id="crop-container" style="position: relative; display: inline-block; max-width: 100%;">
+                        <img id="crop-source" src="${imageData}" style="max-width: 100%; display: block; max-height: 300px;">
+                        <div id="crop-overlay" style="position: absolute; top: 10%; left: 10%; right: 10%; bottom: 10%; border: 2px solid #667eea; background: rgba(102, 126, 234, 0.3);">
+                            <div id="crop-handle" style="position: absolute; bottom: -15px; right: -15px; width: 30px; height: 30px; background: #667eea; border-radius: 50%; cursor: se-resize; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">↔</div>
+                        </div>
+                    </div>
                     
-                    if (width > height) {
-                        if (width > maxSize) {
-                            height = Math.round(height * maxSize / width);
-                            width = maxSize;
-                        }
-                    } else {
-                        if (height > maxSize) {
-                            width = Math.round(width * maxSize / height);
-                            height = maxSize;
-                        }
-                    }
-                    
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    canvas.toBlob(function(blob) {
-                        const reader2 = new FileReader();
-                        reader2.onload = function(event) {
-                            const preview = document.getElementById('imagePreview');
-                            preview.src = event.target.result;
-                            preview.style.display = 'block';
-                            
-                            // 儲存到 hidden input
-                            document.getElementById('compressed-image-data').value = event.target.result;
-                            console.log('✅ 圖片已壓縮：' + Math.round(blob.size / 1024) + 'KB');
-                        };
-                        reader2.readAsDataURL(blob);
-                    }, 'image/jpeg', 0.6);
+                    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="applyCrop()" class="btn" style="background: #667eea; color: white;">✅ 確認裁剪</button>
+                        <button onclick="skipCrop()" class="btn" style="background: #999; color: white;">跳過裁剪</button>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            setTimeout(() => {
+                initCropArea();
+            }, 100);
+        }
+        
+        let cropState = { x: 0.1, y: 0.1, width: 0.8, height: 0.8 };
+        
+        function initCropArea() {
+            const img = document.getElementById('crop-source');
+            const overlay = document.getElementById('crop-overlay');
+            if (!img || !overlay) return;
+            
+            const rect = img.getBoundingClientRect();
+            cropState = { x: 0.1, y: 0.1, width: 0.8, height: 0.8 };
+            updateCropOverlay();
+            setupCropDrag();
+        }
+        
+        function updateCropOverlay() {
+            const overlay = document.getElementById('crop-overlay');
+            if (!overlay) return;
+            overlay.style.left = (cropState.x * 100) + '%';
+            overlay.style.top = (cropState.y * 100) + '%';
+            overlay.style.width = (cropState.width * 100) + '%';
+            overlay.style.height = (cropState.height * 100) + '%';
+        }
+        
+        function setupCropDrag() {
+            const overlay = document.getElementById('crop-overlay');
+            const container = document.getElementById('crop-container');
+            let isDragging = false, isResizing = false;
+            let startX, startY, startCrop;
+            
+            overlay.addEventListener('mousedown', (e) => {
+                if (e.target.id === 'crop-handle') { isResizing = true; }
+                else { isDragging = true; }
+                startX = e.clientX; startY = e.clientY;
+                startCrop = {...cropState};
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging && !isResizing) return;
+                const rect = container.getBoundingClientRect();
+                const dx = (e.clientX - startX) / rect.width;
+                const dy = (e.clientY - startY) / rect.height;
+                
+                if (isDragging) {
+                    cropState.x = Math.max(0, Math.min(1 - cropState.width, startCrop.x + dx));
+                    cropState.y = Math.max(0, Math.min(1 - cropState.height, startCrop.y + dy));
+                } else if (isResizing) {
+                    cropState.width = Math.max(0.2, Math.min(1 - cropState.x, startCrop.width + dx));
+                    cropState.height = cropState.width;
+                }
+                updateCropOverlay();
+            });
+            
+            document.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
+        }
+        
+        function applyCrop() {
+            const img = document.getElementById('crop-source');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const targetSize = 400;
+            
+            canvas.width = targetSize;
+            canvas.height = targetSize;
+            
+            const scale = img.naturalWidth / img.width;
+            const srcX = cropState.x * img.naturalWidth;
+            const srcY = cropState.y * img.naturalHeight;
+            const srcW = cropState.width * img.naturalWidth;
+            const srcH = cropState.height * img.naturalHeight;
+            
+            ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, targetSize, targetSize);
+            
+            canvas.toBlob(function(blob) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('compressed-image-data').value = e.target.result;
+                    closeCropDialog();
                 };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(blob);
+            }, 'image/jpeg', 0.85);
+        }
+        
+        function skipCrop() {
+            const img = document.getElementById('crop-source');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const targetSize = 400;
+            
+            canvas.width = targetSize;
+            canvas.height = targetSize;
+            ctx.drawImage(img, 0, 0, targetSize, targetSize);
+            
+            canvas.toBlob(function(blob) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('compressed-image-data').value = e.target.result;
+                    closeCropDialog();
+                };
+                reader.readAsDataURL(blob);
+            }, 'image/jpeg', 0.85);
+        }
+        
+        function closeCropDialog() {
+            const modal = document.getElementById('productModal');
+            const content = modal.querySelector('.modal-content');
+            
+            // 恢復表單
+            content.innerHTML = `
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalTitle">新增商品</h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                
+                <form id="productForm" onsubmit="saveProduct(event)">
+                    <input type="hidden" id="productId">
+                    <input type="hidden" id="originalImage">
+                    <input type="hidden" id="compressed-image-data">
+                    
+                    <div class="form-group">
+                        <label>📷 商品圖片</label>
+                        <div class="upload-area" onclick="document.getElementById('productImage').click()">
+                            <div class="icon">📷</div>
+                            <p>點擊上傳圖片</p>
+                            <small>支援 JPG, PNG</small>
+                        </div>
+                        <input type="file" id="productImage" accept="image/*" style="display: none;" onchange="previewImage(this)">
+                        <img id="imagePreview" class="preview-image" alt="預覽">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🐟 商品名稱 *</label>
+                        <input type="text" id="productName" required placeholder="例如：紅色草尾孔雀魚">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>💰 價格 *</label>
+                        <input type="number" id="productPrice" required placeholder="200" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📦 庫存數量 *</label>
+                        <input type="number" id="productStock" required placeholder="10" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🏷️ 分類 *</label>
+                        <select id="productCategory" required>
+                            <option value="孔雀魚">🐟 孔雀魚</option>
+                            <option value="設備">⚙️ 設備</option>
+                            <option value="飼料">🦐 飼料</option>
+                            <option value="水質">💧 水質</option>
+                            <option value="其他">📁 其他</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📝 商品描述</label>
+                        <textarea id="productDesc" rows="3" placeholder="輸入商品特色與說明"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">💾 儲存商品</button>
+                </form>
+            `;
+            
+            modal.style.display = 'none';
+            modal.classList.remove('active');
+            
+            // 重新顯示新增表單
+            setTimeout(() => {
+                document.getElementById('modalTitle').textContent = '新增商品';
+                document.getElementById('productId').value = '';
+                document.getElementByById('imagePreview').style.display = 'block';
+                document.getElementById('productModal').classList.add('active');
+            }, 100);
         }
         
         function saveProduct(event) {
