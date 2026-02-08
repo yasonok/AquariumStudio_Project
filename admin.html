@@ -531,14 +531,6 @@
         function previewImage(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
-                
-                // 檢查檔案大小 (限制 500KB)
-                if (file.size > 500 * 1024) {
-                    alert('圖片太大！請選擇小於 500KB 的圖片，將自動壓縮...');
-                    compressImage(file, input);
-                    return;
-                }
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const preview = document.getElementById('imagePreview');
@@ -549,52 +541,6 @@
             }
         }
         
-        // 圖片壓縮函數
-        function compressImage(file, input) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // 裁剪成正方形 (取中間)
-                    const size = Math.min(img.width, img.height);
-                    const offsetX = (img.width - size) / 2;
-                    const offsetY = (img.height - size) / 2;
-                    
-                    // 目標尺寸 400x400
-                    const targetSize = 400;
-                    canvas.width = targetSize;
-                    canvas.height = targetSize;
-                    
-                    // 裁剪並縮放
-                    ctx.drawImage(img, offsetX, offsetY, size, size, 0, 0, targetSize, targetSize);
-                    
-                    // 壓縮成 JPEG (品質 0.7)
-                    canvas.toBlob(function(blob) {
-                        const compressedReader = new FileReader();
-                        compressedReader.onload = function(event) {
-                            const preview = document.getElementById('imagePreview');
-                            preview.src = event.target.result;
-                            preview.style.display = 'block';
-                            
-                            // 替換原檔案為壓縮後的 Blob
-                            const dataTransfer = new DataTransfer();
-                            const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.jpg'), { type: 'image/jpeg' });
-                            dataTransfer.items.add(compressedFile);
-                            input.files = dataTransfer.files;
-                            
-                            alert('✅ 圖片已壓縮並裁剪成正方形！大小：' + Math.round(blob.size / 1024) + 'KB');
-                        };
-                        compressedReader.readAsDataURL(blob);
-                    }, 'image/jpeg', 0.7);
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-        
         function saveProduct(event) {
             event.preventDefault();
             
@@ -602,12 +548,6 @@
             const id = document.getElementById('productId').value;
             const imageFile = document.getElementById('productImage').files[0];
             const originalImage = document.getElementById('originalImage').value || 'images/products/default-guppy.svg';
-            
-            // 檢查圖片大小
-            if (imageFile && imageFile.size > 500 * 1024) {
-                alert('圖片超過 500KB，請選擇較小的圖片或重新選擇');
-                return;
-            }
             
             const productData = {
                 id: id ? parseInt(id) : Date.now(),
