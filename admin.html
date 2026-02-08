@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品管理 - Aquarium Studio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.2rem; }
+        .btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
+        .stats { display: flex; gap: 10px; padding: 15px; background: white; }
+        .stat { flex: 1; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; }
+        .stat .num { font-size: 1.5rem; font-weight: bold; color: #667eea; }
+        .stat .label { font-size: 0.8rem; color: #666; margin-top: 5px; }
+        .section { padding: 15px; }
+        .section h2 { font-size: 1rem; margin-bottom: 15px; }
+        .product { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .product img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background: #eee; }
+        .product .info { flex: 1; }
+        .product .name { font-weight: 600; margin-bottom: 5px; }
+        .product .meta { font-size: 0.85rem; color: #666; }
+        .product .price { font-size: 1.1rem; font-weight: bold; color: #667eea; margin-top: 5px; }
+        .product .actions { display: flex; flex-direction: column; gap: 5px; }
+        .product .actions button { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        .btn-edit { background: #667eea; color: white; }
+        .btn-delete { background: #ff6b6b; color: white; }
+        .fab { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102,126,234,0.4); display: flex; align-items: center; justify-content: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 16px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 1rem; }
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
+        .modal-body { padding: 15px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 5px; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; }
+        .form-group input:focus { outline: none; border-color: #667eea; }
+        .upload-box { border: 2px dashed #ddd; border-radius: 10px; padding: 25px; text-align: center; cursor: pointer; background: #f8f9fa; }
+        .upload-box:hover { border-color: #667eea; }
+        .upload-box .icon { font-size: 2rem; margin-bottom: 8px; }
+        .upload-box p { color: #666; font-size: 0.9rem; }
+        .preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; }
+        .preview.show { display: block; }
+        .btn-row { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-row button { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-secondary { background: #eee; color: #666; }
+        .empty { text-align: center; padding: 50px 20px; color: #999; }
+        .empty .icon { font-size: 3rem; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎛️ 商品管理</h1>
+        <button class="btn" onclick="clearAll()">🗑️ 清除</button>
+    </div>
+    
+    <div class="stats">
+        <div class="stat">
+            <div class="num" id="count-products">0</div>
+            <div class="label">商品數</div>
+        </div>
+        <div class="stat">
+            <div class="num" id="count-stock">0</div>
+            <div class="label">總庫存</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>📦 商品列表</h2>
+        <div id="product-list">
+            <div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>
+        </div>
+    </div>
+    
+    <button class="fab" onclick="openModal()">+</button>
+    
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">新增商品</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="preview-img" class="preview" alt="預覽">
+                
+                <div class="upload-box" onclick="document.getElementById('img-input').click()">
+                    <div class="icon">📷</div>
+                    <p>點擊選擇圖片</p>
+                </div>
+                <input type="file" id="img-input" accept="image/*" style="display:none" onchange="handleImg(this)">
+                
+                <form onsubmit="save(event)">
+                    <input type="hidden" id="p-id">
+                    <input type="hidden" id="p-img">
+                    
+                    <div class="form-group">
+                        <label>🐟 名稱 *</label>
+                        <input type="text" id="p-name" required placeholder="例如：紅色孔雀魚">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>💰 價格 *</label>
+                        <input type="number" id="p-price" required placeholder="200" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📦 庫存 *</label>
+                        <input type="number" id="p-stock" required placeholder="10" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🏷️ 分類 *</label>
+                        <select id="p-cat" required>
+                            <option value="孔雀魚">🐟 孔雀魚</option>
+                            <option value="設備">⚙️ 設備</option>
+                            <option value="飼料">🦐 飼料</option>
+                            <option value="水質">💧 水質</option>
+                            <option value="其他">📁 其他</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📝 描述</label>
+                        <textarea id="p-desc" rows="2" placeholder="商品特色"></textarea>
+                    </div>
+                    
+                    <div class="btn-row">
+                        <button type="submit" class="btn-primary">💾 儲存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const KEY = 'aquarium_products';
+        
+        function load() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
+        function saveAll(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
+        
+        function render() {
+            const p = load();
+            document.getElementById('count-products').textContent = p.length;
+            document.getElementById('count-stock').textContent = p.reduce((s, i) => s + (i.stock||0), 0);
+            
+            const list = document.getElementById('product-list');
+            if (p.length === 0) {
+                list.innerHTML = '<div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>';
+                return;
+            }
+            
+            list.innerHTML = p.map(i => `
+                <div class="product">
+                    <img src="${i.image||'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'">
+                    <div class="info">
+                        <div class="name">${i.name}</div>
+                        <div class="meta">${i.category} • 庫存: ${i.stock}</div>
+                        <div class="price">$${i.price}</div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-edit" onclick="edit(${i.id})">✏️</button>
+                        <button class="btn-delete" onclick="del(${i.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function openModal() {
+            document.getElementById('modal-title').textContent = '新增商品';
+            document.getElementById('p-id').value = '';
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-price').value = '';
+            document.getElementById('p-stock').value = '';
+            document.getElementById('p-cat').value = '孔雀魚';
+            document.getElementById('p-desc').value = '';
+            document.getElementById('p-img').value = '';
+            document.getElementById('preview-img').classList.remove('show');
+            document.getElementById('modal').classList.add('active');
+        }
+        
+        function edit(id) {
+            const p = load().find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('modal-title').textContent = '編輯商品';
+            document.getElementById('p-id').value = p.id;
+            document.getElementById('p-name').value = p.name;
+            document.getElementById('p-price').value = p.price;
+            document.getElementById('p-stock').value = p.stock;
+            document.getElementById('p-cat').value = p.category;
+            document.getElementById('p-desc').value = p.description || '';
+            document.getElementById('p-img').value = p.image || '';
+            if (p.image) {
+                document.getElementById('preview-img').src = p.image;
+                document.getElementById('preview-img').classList.add('show');
+            }
+            document.getElementById('modal').classList.add('active');
+        }
+        
+        function del(id) {
+            if (!confirm('刪除這個商品？')) return;
+            saveAll(load().filter(x => x.id !== id));
+            render();
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+        
+        function handleImg(input) {
+            if (!input.files[0]) return;
+            const r = new FileReader();
+            r.onload = e => {
+                document.getElementById('preview-img').src = e.target.result;
+                document.getElementById('preview-img').classList.add('show');
+                document.getElementById('p-img').value = e.target.result;
+            };
+            r.readAsDataURL(input.files[0]);
+        }
+        
+        function save(e) {
+            e.preventDefault();
+            const p = load();
+            const id = document.getElementById('p-id').value;
+            const item = {
+                id: id ? parseInt(id) : Date.now(),
+                name: document.getElementById('p-name').value,
+                price: parseInt(document.getElementById('p-price').value),
+                stock: parseInt(document.getElementById('p-stock').value),
+                category: document.getElementById('p-cat').value,
+                description: document.getElementById('p-desc').value,
+                updated_at: new Date().toISOString()
+            };
+            const img = document.getElementById('p-img').value;
+            const oldImg = p.find(x => x.id == id)?.image;
+            item.image = img || oldImg || 'images/products/default-guppy.svg';
+            
+            if (id) {
+                const i = p.findIndex(x => x.id == id);
+                if (i !== -1) p[i] = item;
+            } else {
+                p.push(item);
+            }
+            saveAll(p);
+            closeModal();
+            render();
+            alert(id ? '✅ 已更新！' : '✅ 已新增！');
+        }
+        
+        function clearAll() {
+            if (!confirm('清除所有商品？')) return;
+            localStorage.removeItem(KEY);
+            render();
+        }
+        
+        document.addEventListener('DOMContentLoaded', render);
+        document.getElementById('modal').addEventListener('click', e => {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
