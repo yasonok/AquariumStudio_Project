@@ -263,6 +263,26 @@
       navLinks.classList.toggle('active');
       menuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
     }
+
+    // 載入自訂網站內容
+    function loadSiteContent() {
+      const site = JSON.parse(localStorage.getItem('site_content') || '{}');
+      
+      // 更新標題
+      const h1 = document.querySelector('.hero-content h1');
+      if (site.title && h1) h1.textContent = '🐟 ' + site.title;
+      
+      // 更新副標題和描述
+      const heroP = document.querySelector('.hero-content > p');
+      if (site.subtitle && heroP) {
+        heroP.textContent = site.subtitle + (site.description ? ' | ' + site.description : '');
+      }
+    }
+
+    // 頁面載入時讀取內容
+    document.addEventListener('DOMContentLoaded', function() {
+      loadSiteContent();
+    });
   </script>
 </body>
 </html>

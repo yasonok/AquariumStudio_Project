@@ -301,6 +301,15 @@
       navLinks.classList.toggle('active');
       menuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
     }
+
+    // 載入自訂網站內容
+    function loadSiteContent() {
+      const site = JSON.parse(localStorage.getItem('site_content') || '{}');
+      const h1 = document.querySelector('.section-header h2');
+      if (site.title && h1) h1.textContent = '🛒 ' + (site.title) + ' - 商店';
+    }
+    
+    document.addEventListener('DOMContentLoaded', loadSiteContent);
   </script>
 </body>
 </html>

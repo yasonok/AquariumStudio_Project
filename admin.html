@@ -7,26 +7,28 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; }
-        .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { font-size: 1.2rem; }
-        .btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
-        .stats { display: flex; gap: 10px; padding: 15px; background: white; }
-        .stat { flex: 1; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; }
+        .header-btns { display: flex; gap: 8px; }
+        .header-btns button { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        .stats { display: flex; gap: 10px; padding: 15px; background: white; overflow-x: auto; }
+        .stat { min-width: 100px; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; flex: 1; }
         .stat .num { font-size: 1.5rem; font-weight: bold; color: #667eea; }
         .stat .label { font-size: 0.8rem; color: #666; margin-top: 5px; }
         .section { padding: 15px; }
-        .section h2 { font-size: 1rem; margin-bottom: 15px; }
-        .product { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-        .product img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background: #eee; }
-        .product .info { flex: 1; }
-        .product .name { font-weight: 600; margin-bottom: 5px; }
+        .section h2 { font-size: 1rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .section h2 button { background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        .product { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow-x: auto; }
+        .product img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background: #eee; flex-shrink: 0; }
+        .product .info { flex: 1; min-width: 0; }
+        .product .name { font-weight: 600; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .product .meta { font-size: 0.85rem; color: #666; }
         .product .price { font-size: 1.1rem; font-weight: bold; color: #667eea; margin-top: 5px; }
-        .product .actions { display: flex; flex-direction: column; gap: 5px; }
+        .product .actions { display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
         .product .actions button { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
         .btn-edit { background: #667eea; color: white; }
         .btn-delete { background: #ff6b6b; color: white; }
-        .fab { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102,126,234,0.4); display: flex; align-items: center; justify-content: center; }
+        .fab { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102,126,234,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; }
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
         .modal.active { display: flex; }
         .modal-content { background: white; border-radius: 16px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
@@ -55,7 +57,10 @@
 <body>
     <div class="header">
         <h1>🎛️ 商品管理</h1>
-        <button class="btn" onclick="clearAll()">🗑️ 清除</button>
+        <div class="header-btns">
+            <button onclick="editSiteContent()">📝 網站內容</button>
+            <button onclick="clearAll()">🗑️ 清除</button>
+        </div>
     </div>
     
     <div class="stats">
@@ -70,7 +75,7 @@
     </div>
     
     <div class="section">
-        <h2>📦 商品列表</h2>
+        <h2>📦 商品列表 <button onclick="openModal()">➕ 新增</button></h2>
         <div id="product-list">
             <div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>
         </div>
@@ -78,7 +83,7 @@
     
     <button class="fab" onclick="openModal()">+</button>
     
-    <!-- Modal -->
+    <!-- 商品 Modal -->
     <div class="modal" id="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -87,7 +92,6 @@
             </div>
             <div class="modal-body">
                 <img id="preview-img" class="preview" alt="預覽">
-                
                 <div class="upload-box" onclick="document.getElementById('img-input').click()">
                     <div class="icon">📷</div>
                     <p>點擊選擇圖片</p>
@@ -137,11 +141,56 @@
         </div>
     </div>
     
+    <!-- 網站內容 Modal -->
+    <div class="modal" id="site-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📝 網站內容</h3>
+                <button class="modal-close" onclick="closeSiteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="saveSiteContent(event)">
+                    <div class="form-group">
+                        <label>🏠 商店名稱</label>
+                        <input type="text" id="site-title" placeholder="例如：瑞安水族">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📢 副標題</label>
+                        <input type="text" id="site-subtitle" placeholder="專業孔雀魚專賣店">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📝 商店描述</label>
+                        <textarea id="site-desc" rows="3" placeholder="介紹你的商店..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📞 聯絡電話</label>
+                        <input type="text" id="site-phone" placeholder="09xx-xxx-xxx">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>📍 地址</label>
+                        <input type="text" id="site-address" placeholder="縣市鄉鎮...">
+                    </div>
+                    
+                    <div class="btn-row">
+                        <button type="button" class="btn-secondary" onclick="closeSiteModal()">取消</button>
+                        <button type="submit" class="btn-primary">💾 儲存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     <script>
         const KEY = 'aquarium_products';
+        const SITE_KEY = 'site_content';
         
         function load() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
         function saveAll(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
+        function loadSite() { return JSON.parse(localStorage.getItem(SITE_KEY) || '{}'); }
         
         function render() {
             const p = load();
@@ -211,15 +260,81 @@
             document.getElementById('modal').classList.remove('active');
         }
         
+        // 網站內容編輯
+        function editSiteContent() {
+            const c = loadSite();
+            document.getElementById('site-title').value = c.title || '';
+            document.getElementById('site-subtitle').value = c.subtitle || '';
+            document.getElementById('site-desc').value = c.description || '';
+            document.getElementById('site-phone').value = c.phone || '';
+            document.getElementById('site-address').value = c.address || '';
+            document.getElementById('site-modal').classList.add('active');
+        }
+        
+        function saveSiteContent(e) {
+            e.preventDefault();
+            const c = {
+                title: document.getElementById('site-title').value,
+                subtitle: document.getElementById('site-subtitle').value,
+                description: document.getElementById('site-desc').value,
+                phone: document.getElementById('site-phone').value,
+                address: document.getElementById('site-address').value,
+                updated_at: new Date().toISOString()
+            };
+            localStorage.setItem(SITE_KEY, JSON.stringify(c));
+            document.getElementById('site-modal').classList.remove('active');
+            alert('✅ 網站內容已更新！');
+        }
+        
+        function closeSiteModal() {
+            document.getElementById('site-modal').classList.remove('active');
+        }
+        
+        // 圖片處理
         function handleImg(input) {
             if (!input.files[0]) return;
+            const file = input.files[0];
+            
+            if (file.size > 200 * 1024) {
+                compressImage(file);
+                return;
+            }
+            
             const r = new FileReader();
             r.onload = e => {
                 document.getElementById('preview-img').src = e.target.result;
                 document.getElementById('preview-img').classList.add('show');
                 document.getElementById('p-img').value = e.target.result;
             };
-            r.readAsDataURL(input.files[0]);
+            r.readAsDataURL(file);
+        }
+        
+        function compressImage(file) {
+            const r = new FileReader();
+            r.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    const c = document.createElement('canvas');
+                    const ctx = c.getContext('2d');
+                    const max = 400;
+                    let w = img.width, h = img.height;
+                    if (w > h) { if (w > max) { h = Math.round(h * max / w); w = max; } }
+                    else { if (h > max) { w = Math.round(w * max / h); h = max; } }
+                    c.width = w; c.height = h;
+                    ctx.drawImage(img, 0, 0, w, h);
+                    c.toBlob(blob => {
+                        const r2 = new FileReader();
+                        r2.onload = ev => {
+                            document.getElementById('preview-img').src = ev.target.result;
+                            document.getElementById('preview-img').classList.add('show');
+                            document.getElementById('p-img').value = ev.target.result;
+                        };
+                        r2.readAsDataURL(blob);
+                    }, 'image/jpeg', 0.7);
+                };
+                img.src = e.target.result;
+            };
+            r.readAsDataURL(file);
         }
         
         function save(e) {
@@ -258,9 +373,7 @@
         }
         
         document.addEventListener('DOMContentLoaded', render);
-        document.getElementById('modal').addEventListener('click', e => {
-            if (e.target === this) closeModal();
-        });
+        document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
     </script>
 </body>
 </html>
