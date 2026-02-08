@@ -546,6 +546,7 @@
             const products = loadProducts();
             const id = document.getElementById('productId').value;
             const imageFile = document.getElementById('productImage').files[0];
+            const originalImage = document.getElementById('originalImage').value || 'images/products/default-guppy.svg';
             
             const productData = {
                 id: id ? parseInt(id) : Date.now(),
@@ -562,31 +563,34 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     productData.image = e.target.result;
-                    saveToProducts();
+                    doSaveProduct(products, id, productData, originalImage);
+                };
+                reader.onerror = function() {
+                    alert('圖片讀取失敗，請重新選擇圖片');
                 };
                 reader.readAsDataURL(imageFile);
             } else {
-                productData.image = document.getElementById('originalImage').value || 'images/products/default-guppy.svg';
-                saveToProducts();
+                productData.image = originalImage;
+                doSaveProduct(products, id, productData, originalImage);
+            }
+        }
+        
+        function doSaveProduct(products, id, productData, originalImage) {
+            if (id) {
+                const index = products.findIndex(p => p.id == id);
+                if (index !== -1) {
+                    productData.image = productData.image || products[index].image || originalImage;
+                    products[index] = productData;
+                }
+            } else {
+                productData.image = productData.image || originalImage;
+                products.push(productData);
             }
             
-            function saveToProducts() {
-                if (id) {
-                    const index = products.findIndex(p => p.id == id);
-                    if (index !== -1) {
-                        productData.image = productData.image || products[index].image;
-                        products[index] = productData;
-                    }
-                } else {
-                    productData.image = productData.image || 'images/products/default-guppy.svg';
-                    products.push(productData);
-                }
-                
-                saveProducts(products);
-                closeModal();
-                renderProducts();
-                alert(id ? '✅ 商品已更新！' : '✅ 商品已新增！');
-            }
+            saveProducts(products);
+            closeModal();
+            renderProducts();
+            alert(id ? '✅ 商品已更新！' : '✅ 商品已新增！');
         }
         
         function syncWithGitHub() {

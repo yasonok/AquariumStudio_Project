@@ -1,0 +1,22 @@
+{
+  "gemini-2.0-flash-exp": {
+    "date": "2026-02-08",
+    "totalTokens": 4300,
+    "totalRequests": 2,
+    "warningSent": false,
+    "history": [
+      {
+        "timestamp": "2026-02-08T09:55:17.982Z",
+        "input": 2000,
+        "output": 1500,
+        "total": 3500
+      },
+      {
+        "timestamp": "2026-02-08T10:09:04.342Z",
+        "input": 500,
+        "output": 300,
+        "total": 800
+      }
+    ]
+  }
+}
