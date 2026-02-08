@@ -3,713 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品管理後台 - Aquarium Studio</title>
+    <title>商品管理 - Aquarium Studio</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; }
         
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f6fa;
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
+        /* 頂部導航 */
+        .top-nav { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .top-nav h1 { font-size: 1.2rem; }
+        .top-nav button { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
         
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        /* 統計卡片 */
+        .stats-row { display: flex; gap: 10px; padding: 15px; background: white; margin-bottom: 10px; }
+        .stat-box { flex: 1; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 12px; }
+        .stat-box .num { font-size: 1.5rem; font-weight: bold; color: #667eea; }
+        .stat-box .label { font-size: 0.8rem; color: #666; margin-top: 5px; }
         
-        .header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
+        /* 商品列表 */
+        .product-section { padding: 15px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-header h2 { font-size: 1.1rem; color: #333; }
+        .add-btn { background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 1rem; cursor: pointer; }
         
-        .header p {
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
+        .product-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .product-card img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; background: #eee; }
+        .product-card .info { flex: 1; }
+        .product-card .name { font-weight: 600; font-size: 1rem; margin-bottom: 5px; }
+        .product-card .meta { font-size: 0.85rem; color: #666; margin-bottom: 8px; }
+        .product-card .price { font-size: 1.1rem; font-weight: bold; color: #667eea; }
+        .product-card .actions { display: flex; flex-direction: column; gap: 5px; }
+        .product-card .actions button { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        .btn-edit { background: #667eea; color: white; }
+        .btn-delete { background: #ff6b6b; color: white; }
         
-        .container {
-            padding: 15px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        /* 浮動按鈕 */
+        .fab { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 2rem; cursor: pointer; box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4); display: flex; align-items: center; justify-content: center; }
         
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        /* 模態框 */
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 16px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 1.1rem; }
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
+        .modal-body { padding: 20px; }
         
-        .stat-card {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
+        /* 表單 */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 8px; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; }
+        .form-group input:focus { outline: none; border-color: #667eea; }
         
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #667eea;
-        }
+        /* 圖片上傳 */
+        .upload-box { border: 2px dashed #ddd; border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; background: #f8f9fa; }
+        .upload-box:hover { border-color: #667eea; background: #f0f4ff; }
+        .upload-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .upload-box p { color: #666; font-size: 0.9rem; }
+        .upload-preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; }
+        .upload-preview.show { display: block; }
         
-        .stat-label {
-            font-size: 0.8rem;
-            color: #666;
-        }
+        /* 裁剪區域 */
+        .crop-area { position: relative; margin-top: 15px; display: none; }
+        .crop-area.show { display: block; }
+        .crop-area img { width: 100%; border-radius: 10px; display: block; }
+        .crop-overlay { position: absolute; top: 10%; left: 5%; right: 5%; bottom: 10%; border: 2px solid #667eea; background: rgba(102, 126, 234, 0.2); border-radius: 8px; }
+        .crop-hint { text-align: center; color: #666; font-size: 0.85rem; margin-top: 10px; }
         
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        /* 按鈕組 */
+        .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-row button { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-secondary { background: #eee; color: #666; }
         
-        .action-btn {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-        }
+        /* 空狀態 */
+        .empty-state { text-align: center; padding: 50px 20px; color: #999; }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 15px; }
         
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .action-btn .icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-        
-        .action-btn .label {
-            font-size: 0.9rem;
-            color: #333;
-        }
-        
-        .section-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .product-list {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        
-        .product-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            gap: 15px;
-        }
-        
-        .product-item:last-child {
-            border-bottom: none;
-        }
-        
-        .product-thumb {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            object-fit: cover;
-            background: #eee;
-        }
-        
-        .product-info {
-            flex: 1;
-        }
-        
-        .product-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .product-meta {
-            font-size: 0.85rem;
-            color: #666;
-        }
-        
-        .product-actions {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-        
-        .btn-edit {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-delete {
-            background: #ff6b6b;
-            color: white;
-        }
-        
-        .fab {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .modal-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 1rem;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .upload-area {
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .upload-area:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
-        
-        .upload-area .icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .preview-image {
-            width: 100%;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-top: 10px;
-            display: none;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #666;
-        }
-        
-        .empty-state .icon {
-            font-size: 4rem;
-            margin-bottom: 15px;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 30px;
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #eee;
-            border-top-color: #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        /* 預覽大圖 */
+        .preview-full { width: 100%; border-radius: 12px; margin-bottom: 15px; display: none; }
+        .preview-full.show { display: block; }
     </style>
 </head>
 <body>
-    <header class="header">
+    <!-- 頂部導航 -->
+    <div class="top-nav">
         <h1>🎛️ 商品管理</h1>
-        <p>Aquarium Studio - 管理後台</p>
-    </header>
+        <button onclick="clearAllData()">🗑️ 清除全部</button>
+    </div>
     
-    <div class="container">
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number" id="totalProducts">0</div>
-                <div class="stat-label">商品數量</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalStock">0</div>
-                <div class="stat-label">總庫存</div>
-            </div>
+    <!-- 統計 -->
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="num" id="stat-products">0</div>
+            <div class="label">商品數</div>
         </div>
-        
-        <div class="quick-actions">
-            <button class="action-btn" onclick="showAddModal()">
-                <div class="icon">➕</div>
-                <div class="label">新增商品</div>
-            </button>
-            <button class="action-btn" onclick="syncWithGitHub()">
-                <div class="icon">🔄</div>
-                <div class="label">同步到 GitHub</div>
-            </button>
+        <div class="stat-box">
+            <div class="num" id="stat-stock">0</div>
+            <div class="label">總庫存</div>
         </div>
-        
-        <h2 class="section-title">📦 商品列表</h2>
-        <div class="product-list" id="productList">
-            <div class="loading">
-                <div class="spinner"></div>
+    </div>
+    
+    <!-- 商品列表 -->
+    <div class="product-section">
+        <div class="section-header">
+            <h2>📦 商品列表</h2>
+        </div>
+        <div id="product-list">
+            <div class="empty-state">
+                <div class="icon">📦</div>
+                <p>尚未有商品</p>
+                <p style="font-size: 0.85rem; margin-top: 10px;">點擊下方 + 按鈕新增</p>
             </div>
         </div>
     </div>
     
-    <button class="fab" onclick="showAddModal()">+</button>
+    <!-- 浮動按鈕 -->
+    <button class="fab" onclick="openAddModal()">+</button>
     
+    <!-- 新增/編輯 Modal -->
     <div class="modal" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">新增商品</h3>
+                <h3 id="modalTitle">新增商品</h3>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
-            
-            <form id="productForm" onsubmit="saveProduct(event)">
-                <input type="hidden" id="productId">
-                <input type="hidden" id="originalImage">
-                <input type="hidden" id="compressed-image-data">
+            <div class="modal-body">
+                <!-- 圖片預覽 -->
+                <img id="previewImage" class="preview-full" alt="預覽">
                 
-                <div class="form-group">
-                    <label>📷 商品圖片</label>
-                    <div class="upload-area" onclick="document.getElementById('productImage').click()">
-                        <div class="icon">📷</div>
-                        <p>點擊上傳圖片</p>
-                        <small>支援 JPG, PNG</small>
-                    </div>
-                    <input type="file" id="productImage" accept="image/*" style="display: none;" onchange="previewImage(this)">
-                    <img id="imagePreview" class="preview-image" alt="預覽">
+                <!-- 裁剪區域 -->
+                <div class="crop-area" id="cropArea">
+                    <img id="cropImage" src="" alt="裁剪">
+                    <div class="crop-overlay" id="cropOverlay"></div>
+                    <p class="crop-hint">👆 拖動方框選擇範圍</p>
                 </div>
                 
-                <div class="form-group">
-                    <label>🐟 商品名稱 *</label>
-                    <input type="text" id="productName" required placeholder="例如：紅色草尾孔雀魚">
+                <!-- 上傳區域 -->
+                <div class="upload-box" id="uploadBox" onclick="document.getElementById('imageInput').click()">
+                    <div class="icon">📷</div>
+                    <p>點擊選擇圖片</p>
                 </div>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImage(this)">
                 
-                <div class="form-group">
-                    <label>💰 價格 *</label>
-                    <input type="number" id="productPrice" required placeholder="200" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label>📦 庫存數量 *</label>
-                    <input type="number" id="productStock" required placeholder="10" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label>🏷️ 分類 *</label>
-                    <select id="productCategory" required>
-                        <option value="孔雀魚">🐟 孔雀魚</option>
-                        <option value="設備">⚙️ 設備</option>
-                        <option value="飼料">🦐 飼料</option>
-                        <option value="水質">💧 水質</option>
-                        <option value="其他">📁 其他</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>📝 商品描述</label>
-                    <textarea id="productDesc" rows="3" placeholder="輸入商品特色與說明"></textarea>
-                </div>
-                
-                <button type="submit" class="btn-submit">💾 儲存商品</button>
-            </form>
-        </div>
-    </div>
-    
-    <script>
-        const STORAGE_KEY = 'aquarium_products';
-        
-        function loadProducts() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : [];
-        }
-        
-        function saveProducts(products) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-        }
-        
-        function renderProducts() {
-            const products = loadProducts();
-            const container = document.getElementById('productList');
-            
-            document.getElementById('totalProducts').textContent = products.length;
-            const totalStock = products.reduce((sum, p) => sum + (p.stock || 0), 0);
-            document.getElementById('totalStock').textContent = totalStock;
-            
-            if (products.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">📦</div>
-                        <p>尚未新增商品</p>
-                        <p style="font-size: 0.9rem; margin-top: 10px;">點擊下方 + 按鈕新增第一個商品！</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = products.map(product => `
-                <div class="product-item">
-                    <img src="${product.image || 'images/products/default-guppy.svg'}" 
-                         alt="${product.name}" 
-                         class="product-thumb"
-                         onerror="this.src='images/products/default-guppy.svg'">
-                    <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-meta">
-                            $${product.price} • ${product.category} • 庫存: ${product.stock}
-                        </div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-edit" onclick="editProduct('${product.id}')">✏️</button>
-                        <button class="btn btn-delete" onclick="deleteProduct('${product.id}')">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function showAddModal() {
-            document.getElementById('modalTitle').textContent = '新增商品';
-            document.getElementById('productId').value = '';
-            document.getElementById('productForm').reset();
-            document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('compressed-image-data').value = '';
-            document.getElementById('productModal').classList.add('active');
-        }
-        
-        function editProduct(id) {
-            const products = loadProducts();
-            const product = products.find(p => p.id == id);
-            if (!product) return;
-            
-            document.getElementById('modalTitle').textContent = '編輯商品';
-            document.getElementById('productId').value = product.id;
-            document.getElementById('productName').value = product.name;
-            document.getElementById('productPrice').value = product.price;
-            document.getElementById('productStock').value = product.stock;
-            document.getElementById('productCategory').value = product.category;
-            document.getElementById('productDesc').value = product.description || '';
-            document.getElementById('originalImage').value = product.image || '';
-            document.getElementById('compressed-image-data').value = '';
-            
-            if (product.image) {
-                const preview = document.getElementById('imagePreview');
-                preview.src = product.image;
-                preview.style.display = 'block';
-            }
-            
-            document.getElementById('productModal').classList.add('active');
-        }
-        
-        function deleteProduct(id) {
-            if (!confirm('確定要刪除這個商品嗎？')) return;
-            
-            let products = loadProducts();
-            products = products.filter(p => p.id != id);
-            saveProducts(products);
-            renderProducts();
-        }
-        
-        function closeModal() {
-            document.getElementById('productModal').classList.remove('active');
-        }
-        
-        function previewImage(input) {
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    showCropDialog(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-        
-        // 裁剪對話框
-        function showCropDialog(imageData) {
-            const modal = document.getElementById('productModal');
-            const content = modal.querySelector('.modal-content');
-            
-            content.innerHTML = `
-                <div style="padding: 20px; text-align: center;">
-                    <h3 style="margin-bottom: 15px;">📷 調整圖片範圍</h3>
-                    <p style="color: #666; margin-bottom: 15px;">拖動方框選擇要保留的範圍</p>
-                    
-                    <div id="crop-container" style="position: relative; display: inline-block; max-width: 100%;">
-                        <img id="crop-source" src="${imageData}" style="max-width: 100%; display: block; max-height: 300px;">
-                        <div id="crop-overlay" style="position: absolute; top: 10%; left: 10%; right: 10%; bottom: 10%; border: 2px solid #667eea; background: rgba(102, 126, 234, 0.3);">
-                            <div id="crop-handle" style="position: absolute; bottom: -15px; right: -15px; width: 30px; height: 30px; background: #667eea; border-radius: 50%; cursor: se-resize; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">↔</div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
-                        <button onclick="applyCrop()" class="btn" style="background: #667eea; color: white;">✅ 確認裁剪</button>
-                        <button onclick="skipCrop()" class="btn" style="background: #999; color: white;">跳過裁剪</button>
-                    </div>
-                </div>
-            `;
-            
-            modal.style.display = 'flex';
-            
-            setTimeout(() => {
-                initCropArea();
-            }, 100);
-        }
-        
-        let cropState = { x: 0.1, y: 0.1, width: 0.8, height: 0.8 };
-        
-        function initCropArea() {
-            const img = document.getElementById('crop-source');
-            const overlay = document.getElementById('crop-overlay');
-            if (!img || !overlay) return;
-            
-            const rect = img.getBoundingClientRect();
-            cropState = { x: 0.1, y: 0.1, width: 0.8, height: 0.8 };
-            updateCropOverlay();
-            setupCropDrag();
-        }
-        
-        function updateCropOverlay() {
-            const overlay = document.getElementById('crop-overlay');
-            if (!overlay) return;
-            overlay.style.left = (cropState.x * 100) + '%';
-            overlay.style.top = (cropState.y * 100) + '%';
-            overlay.style.width = (cropState.width * 100) + '%';
-            overlay.style.height = (cropState.height * 100) + '%';
-        }
-        
-        function setupCropDrag() {
-            const overlay = document.getElementById('crop-overlay');
-            const container = document.getElementById('crop-container');
-            let isDragging = false, isResizing = false;
-            let startX, startY, startCrop;
-            
-            overlay.addEventListener('mousedown', (e) => {
-                if (e.target.id === 'crop-handle') { isResizing = true; }
-                else { isDragging = true; }
-                startX = e.clientX; startY = e.clientY;
-                startCrop = {...cropState};
-                e.preventDefault();
-            });
-            
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging && !isResizing) return;
-                const rect = container.getBoundingClientRect();
-                const dx = (e.clientX - startX) / rect.width;
-                const dy = (e.clientY - startY) / rect.height;
-                
-                if (isDragging) {
-                    cropState.x = Math.max(0, Math.min(1 - cropState.width, startCrop.x + dx));
-                    cropState.y = Math.max(0, Math.min(1 - cropState.height, startCrop.y + dy));
-                } else if (isResizing) {
-                    cropState.width = Math.max(0.2, Math.min(1 - cropState.x, startCrop.width + dx));
-                    cropState.height = cropState.width;
-                }
-                updateCropOverlay();
-            });
-            
-            document.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
-        }
-        
-        function applyCrop() {
-            const img = document.getElementById('crop-source');
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const targetSize = 400;
-            
-            canvas.width = targetSize;
-            canvas.height = targetSize;
-            
-            const scale = img.naturalWidth / img.width;
-            const srcX = cropState.x * img.naturalWidth;
-            const srcY = cropState.y * img.naturalHeight;
-            const srcW = cropState.width * img.naturalWidth;
-            const srcH = cropState.height * img.naturalHeight;
-            
-            ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, targetSize, targetSize);
-            
-            canvas.toBlob(function(blob) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('imagePreview').src = e.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
-                    document.getElementById('compressed-image-data').value = e.target.result;
-                    closeCropDialog();
-                };
-                reader.readAsDataURL(blob);
-            }, 'image/jpeg', 0.85);
-        }
-        
-        function skipCrop() {
-            const img = document.getElementById('crop-source');
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const targetSize = 400;
-            
-            canvas.width = targetSize;
-            canvas.height = targetSize;
-            ctx.drawImage(img, 0, 0, targetSize, targetSize);
-            
-            canvas.toBlob(function(blob) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('imagePreview').src = e.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
-                    document.getElementById('compressed-image-data').value = e.target.result;
-                    closeCropDialog();
-                };
-                reader.readAsDataURL(blob);
-            }, 'image/jpeg', 0.85);
-        }
-        
-        function closeCropDialog() {
-            const modal = document.getElementById('productModal');
-            const content = modal.querySelector('.modal-content');
-            
-            // 恢復表單
-            content.innerHTML = `
-                <div class="modal-header">
-                    <h3 class="modal-title" id="modalTitle">新增商品</h3>
-                    <button class="modal-close" onclick="closeModal()">&times;</button>
-                </div>
-                
-                <form id="productForm" onsubmit="saveProduct(event)">
+                <form onsubmit="saveProduct(event)">
                     <input type="hidden" id="productId">
-                    <input type="hidden" id="originalImage">
-                    <input type="hidden" id="compressed-image-data">
+                    <input type="hidden" id="finalImage">
                     
                     <div class="form-group">
-                        <label>📷 商品圖片</label>
-                        <div class="upload-area" onclick="document.getElementById('productImage').click()">
-                            <div class="icon">📷</div>
-                            <p>點擊上傳圖片</p>
-                            <small>支援 JPG, PNG</small>
-                        </div>
-                        <input type="file" id="productImage" accept="image/*" style="display: none;" onchange="previewImage(this)">
-                        <img id="imagePreview" class="preview-image" alt="預覽">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>🐟 商品名稱 *</label>
-                        <input type="text" id="productName" required placeholder="例如：紅色草尾孔雀魚">
+                        <label>🐟 名稱 *</label>
+                        <input type="text" id="productName" required placeholder="例如：紅色孔雀魚">
                     </div>
                     
                     <div class="form-group">
@@ -718,7 +160,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>📦 庫存數量 *</label>
+                        <label>📦 庫存 *</label>
                         <input type="number" id="productStock" required placeholder="10" min="0">
                     </div>
                     
@@ -734,97 +176,270 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>📝 商品描述</label>
-                        <textarea id="productDesc" rows="3" placeholder="輸入商品特色與說明"></textarea>
+                        <label>📝 描述</label>
+                        <textarea id="productDesc" rows="2" placeholder="商品特色說明"></textarea>
                     </div>
                     
-                    <button type="submit" class="btn-submit">💾 儲存商品</button>
+                    <div class="btn-row">
+                        <button type="button" class="btn-secondary" onclick="skipCrop()">跳過裁剪</button>
+                        <button type="submit" class="btn-primary">💾 儲存</button>
+                    </div>
                 </form>
-            `;
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const STORAGE_KEY = 'aquarium_products';
+        let cropState = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 };
+        
+        // 載入商品
+        function loadProducts() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        }
+        
+        // 儲存商品
+        function saveProducts(products) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+        }
+        
+        // 渲染列表
+        function renderProducts() {
+            const products = loadProducts();
+            const list = document.getElementById('product-list');
+            const statProducts = document.getElementById('stat-products');
+            const statStock = document.getElementById('stat-stock');
             
-            modal.style.display = 'none';
-            modal.classList.remove('active');
+            statProducts.textContent = products.length;
+            statStock.textContent = products.reduce((sum, p) => sum + (p.stock || 0), 0);
             
-            // 重新顯示新增表單
+            if (products.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>尚未有商品</p><p style="font-size: 0.85rem; margin-top: 10px;">點擊下方 + 按鈕新增</p></div>';
+                return;
+            }
+            
+            list.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <img src="${p.image || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'}" 
+                         alt="${p.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'">
+                    <div class="info">
+                        <div class="name">${p.name}</div>
+                        <div class="meta">${p.category} • 庫存: ${p.stock}</div>
+                        <div class="price">$${p.price}</div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-edit" onclick="editProduct(${p.id})">✏️ 編輯</button>
+                        <button class="btn-delete" onclick="deleteProduct(${p.id})">🗑️ 刪除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // 打開新增Modal
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = '新增商品';
+            document.getElementById('productId').value = '';
+            document.getElementById('productForm')?.reset();
+            document.getElementById('previewImage').classList.remove('show');
+            document.getElementById('cropArea').classList.remove('show');
+            document.getElementById('uploadBox').style.display = 'block';
+            document.getElementById('finalImage').value = '';
+            document.getElementById('productModal').classList.add('active');
+        }
+        
+        // 編輯商品
+        function editProduct(id) {
+            const products = loadProducts();
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            
+            document.getElementById('modalTitle').textContent = '編輯商品';
+            document.getElementById('productId').value = p.id;
+            document.getElementById('productName').value = p.name;
+            document.getElementById('productPrice').value = p.price;
+            document.getElementById('productStock').value = p.stock;
+            document.getElementById('productCategory').value = p.category;
+            document.getElementById('productDesc').value = p.description || '';
+            document.getElementById('finalImage').value = p.image || '';
+            
+            if (p.image) {
+                document.getElementById('previewImage').src = p.image;
+                document.getElementById('previewImage').classList.add('show');
+                document.getElementById('uploadBox').style.display = 'none';
+                document.getElementById('cropArea').classList.remove('show');
+            } else {
+                document.getElementById('previewImage').classList.remove('show');
+                document.getElementById('uploadBox').style.display = 'block';
+            }
+            
+            document.getElementById('productModal').classList.add('active');
+        }
+        
+        // 刪除商品
+        function deleteProduct(id) {
+            if (!confirm('確定要刪除這個商品嗎？')) return;
+            let products = loadProducts();
+            products = products.filter(p => p.id !== id);
+            saveProducts(products);
+            renderProducts();
+        }
+        
+        // 關閉Modal
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+        
+        // 處理圖片
+        function handleImage(input) {
+            if (!input.files[0]) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                showCropDialog(e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+        
+        // 顯示裁剪
+        function showCropDialog(imgData) {
+            document.getElementById('cropImage').src = imgData;
+            document.getElementById('previewImage').classList.remove('show');
+            document.getElementById('uploadBox').style.display = 'none';
+            document.getElementById('cropArea').classList.add('show');
+            
             setTimeout(() => {
-                document.getElementById('modalTitle').textContent = '新增商品';
-                document.getElementById('productId').value = '';
-                document.getElementByById('imagePreview').style.display = 'block';
-                document.getElementById('productModal').classList.add('active');
+                cropState = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 };
+                updateCrop();
+                setupCrop();
             }, 100);
         }
         
-        function saveProduct(event) {
-            event.preventDefault();
+        // 設定裁剪
+        function setupCrop() {
+            const overlay = document.getElementById('cropOverlay');
+            const container = document.getElementById('cropArea');
+            let dragging = false, resizing = false;
+            let startX, startY, startCrop;
+            
+            overlay.addEventListener('mousedown', e => {
+                if (e.target === overlay) { dragging = true; startX = e.clientX; startY = e.clientY; startCrop = {...cropState}; }
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', e => {
+                if (!dragging && !resizing) return;
+                const rect = container.getBoundingClientRect();
+                const dx = (e.clientX - startX) / rect.width;
+                const dy = (e.clientY - startY) / rect.height;
+                
+                if (dragging) {
+                    cropState.x = Math.max(0, Math.min(1 - cropState.w, startCrop.x + dx));
+                    cropState.y = Math.max(0, Math.min(1 - cropState.h, startCrop.y + dy));
+                }
+                updateCrop();
+            });
+            
+            document.addEventListener('mouseup', () => { dragging = false; });
+        }
+        
+        function updateCrop() {
+            const overlay = document.getElementById('cropOverlay');
+            overlay.style.left = (cropState.x * 100) + '%';
+            overlay.style.top = (cropState.y * 100) + '%';
+            overlay.style.width = (cropState.w * 100) + '%';
+            overlay.style.height = (cropState.h * 100) + '%';
+        }
+        
+        // 跳過裁剪
+        function skipCrop() {
+            const img = document.getElementById('cropImage');
+            cropImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
+        }
+        
+        // 裁剪圖片
+        function cropImage(img, srcX, srcY, srcW, srcH) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const size = 400;
+            canvas.width = size;
+            canvas.height = size;
+            ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, size, size);
+            
+            canvas.toBlob(blob => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('previewImage').src = e.target.result;
+                    document.getElementById('previewImage').classList.add('show');
+                    document.getElementById('cropArea').classList.remove('show');
+                    document.getElementById('finalImage').value = e.target.result;
+                };
+                reader.readAsDataURL(blob);
+            }, 'image/jpeg', 0.85);
+        }
+        
+        // 確認裁剪
+        function applyCrop() {
+            const img = document.getElementById('cropImage');
+            const srcX = cropState.x * img.naturalWidth;
+            const srcY = cropState.y * img.naturalHeight;
+            const srcW = cropState.w * img.naturalWidth;
+            const srcH = cropState.h * img.naturalHeight;
+            cropImage(img, srcX, srcY, srcW, srcH);
+        }
+        
+        // 儲存商品
+        function saveProduct(e) {
+            e.preventDefault();
             
             const products = loadProducts();
             const id = document.getElementById('productId').value;
-            const imageFile = document.getElementById('productImage').files[0];
-            const originalImage = document.getElementById('originalImage').value || 'images/products/default-guppy.svg';
             
-            const productData = {
+            const product = {
                 id: id ? parseInt(id) : Date.now(),
                 name: document.getElementById('productName').value,
                 price: parseInt(document.getElementById('productPrice').value),
                 stock: parseInt(document.getElementById('productStock').value),
                 category: document.getElementById('productCategory').value,
                 description: document.getElementById('productDesc').value,
-                featured: false,
                 updated_at: new Date().toISOString()
             };
             
-            // 優先使用已壓縮的圖片
-            const compressedImage = document.getElementById('compressed-image-data').value;
+            // 處理圖片
+            const finalImage = document.getElementById('finalImage').value;
+            const oldImage = products.find(p => p.id == id)?.image;
             
-            if (compressedImage) {
-                productData.image = compressedImage;
-                doSaveProduct(products, id, productData, originalImage);
-            } else if (imageFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    productData.image = e.target.result;
-                    doSaveProduct(products, id, productData, originalImage);
-                };
-                reader.onerror = function() {
-                    alert('圖片讀取失敗，請重新選擇圖片');
-                };
-                reader.readAsDataURL(imageFile);
-            } else {
-                productData.image = originalImage;
-                doSaveProduct(products, id, productData, originalImage);
+            if (finalImage) {
+                product.image = finalImage;
+            } else if (oldImage) {
+                product.image = oldImage;
             }
-        }
-        
-        function doSaveProduct(products, id, productData, originalImage) {
+            
             if (id) {
-                const index = products.findIndex(p => p.id == id);
-                if (index !== -1) {
-                    productData.image = productData.image || products[index].image || originalImage;
-                    products[index] = productData;
-                }
+                const idx = products.findIndex(p => p.id == id);
+                if (idx !== -1) products[idx] = product;
             } else {
-                productData.image = productData.image || originalImage;
-                products.push(productData);
+                product.image = product.image || 'images/products/default-guppy.svg';
+                products.push(product);
             }
             
             saveProducts(products);
             closeModal();
             renderProducts();
-            alert(id ? '✅ 商品已更新！' : '✅ 商品已新增！');
+            alert(id ? '✅ 已更新！' : '✅ 已新增！');
         }
         
-        function syncWithGitHub() {
-            alert('🔄 同步到 GitHub\n\n若要啟用此功能，需要設定 GitHub Personal Access Token。');
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
+        // 清除全部
+        function clearAllData() {
+            if (!confirm('確定清除所有商品？')) return;
+            localStorage.removeItem(STORAGE_KEY);
             renderProducts();
-            
-            document.getElementById('productModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', renderProducts);
+        
+        // 點擊遮罩關閉
+        document.getElementById('productModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
         });
     </script>
 </body>
