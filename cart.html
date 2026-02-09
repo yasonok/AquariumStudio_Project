@@ -54,6 +54,17 @@
           <div class="spinner"></div>
         </div>
         
+        <!-- LINE 客服按鈕 -->
+        <a href="https://line.me/ti/p/tsAGZrm9vt" 
+           target="_blank"
+           style="display: flex; align-items: center; justify-content: center; gap: 10px; 
+                  background: #06C755; color: white; padding: 15px 20px; border-radius: 12px; 
+                  text-decoration: none; font-weight: bold; font-size: 1.1rem; margin: 20px 0;
+                  box-shadow: 0 4px 15px rgba(6,199,85,0.3);">
+          <span style="font-size: 1.5rem;">💬</span>
+          <span>有問題？聯絡我們 LINE</span>
+        </a>
+        
         <div id="cart-summary" style="display: none;">
           <div class="cart-summary">
             <div class="cart-total-row">
@@ -62,8 +73,8 @@
             </div>
             <div class="cart-actions">
               <a href="shop.html" class="btn btn-secondary">繼續購物</a>
-              <button class="btn btn-primary" onclick="showCheckout()">
-                💬 前往結帳 (LINE)
+              <button class="btn btn-primary" onclick="showCheckout()" style="background: #06C755;">
+                💬 結帳並開啟 LINE
               </button>
             </div>
           </div>
@@ -80,15 +91,13 @@
         <button class="modal-close" onclick="closeCheckout()">&times;</button>
       </div>
       <div class="modal-body">
-        <div style="background: var(--gray-100); padding: 20px; border-radius: var(--border-radius); margin-bottom: 25px;">
-          <h4 style="margin-bottom: 15px;">💡 結帳說明</h4>
-          <p style="color: var(--gray-600); font-size: 0.95rem; line-height: 1.7;">
-            1. 填寫您的聯絡資料<br>
-            2. 點擊「確認訂單」<br>
-            3. 系統將開啟 LINE，您可以直接與管理員聯繫<br>
-            4. 管理員會與您確認訂單並安排配送
-          </p>
-        </div>
+        <div style="background: linear-gradient(135deg, #06C755, #00C853); color: white; padding: 20px; border-radius: var(--border-radius); margin-bottom: 25px; text-align: center;">
+            <h4 style="margin-bottom: 10px; font-size: 1.1rem;">💬 結帳方式</h4>
+            <p style="font-size: 0.95rem; opacity: 0.95;">
+              點擊下方「確認訂單」將自動開啟 LINE<br>
+              訂單內容會自動帶入，您只需要傳送即可！
+            </p>
+          </div>
         
         <form id="checkout-form">
           <div class="form-row">
@@ -119,12 +128,12 @@
             </div>
           </div>
           
-          <button type="submit" class="btn btn-primary btn-lg btn-block">
+          <button type="submit" class="btn btn-primary btn-lg btn-block" style="background: #06C755; font-size: 1.2rem; padding: 18px;">
             💬 確認訂單並開啟 LINE
           </button>
           
           <p style="text-align: center; margin-top: 15px; color: var(--gray-500); font-size: 0.9rem;">
-            點擊上方按鈕後將開啟 LINE 與管理員聯繫
+            點擊後將開啟 LINE，自動帶入訂單內容
           </p>
         </form>
       </div>

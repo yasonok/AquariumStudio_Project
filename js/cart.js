@@ -19,6 +19,10 @@ function setupCheckoutForm() {
     const submitBtn = form.querySelector('button[type="submit"]');
     if (!submitBtn) return;
     
+    // Disable button to prevent double submit
+    submitBtn.disabled = true;
+    submitBtn.textContent = '處理中...';
+    
     // Collect form data
     const customerInfo = {
       name: document.getElementById('customer-name').value,
@@ -31,23 +35,38 @@ function setupCheckoutForm() {
     const cart = JSON.parse(localStorage.getItem('aquarium_cart') || '[]');
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
-    const orderMessage = `
-🐟 Aquarium Studio 訂單
+    const orderMessage = `🐟 Aquarium Studio 訂單
 
-顧客資料:
+👤 顧客資料:
 - 姓名: ${customerInfo.name}
 - 電話: ${customerInfo.phone}
 - 地址: ${customerInfo.address}
 ${customerInfo.note ? `- 備註: ${customerInfo.note}` : ''}
 
-訂單內容:
+🛒 訂單內容:
 ${cart.map(item => `- ${item.name} x ${item.quantity} = $${item.price * item.quantity}`).join('\n')}
 
-總金額: $${total}
-`;
+💰 總金額: $${total}
 
-    // Show copy dialog first
-    showCopyDialog(orderMessage, customerInfo, cart, total);
+---
+請確認訂單，謝謝！`;
+
+    // Create LINE URL with message
+    const lineUrl = `https://line.me/R/ti/p/tsAGZrm9vt?text=${encodeURIComponent(orderMessage)}`;
+    
+    // Open LINE
+    window.open(lineUrl, '_blank');
+    
+    // Reset button
+    submitBtn.disabled = false;
+    submitBtn.textContent = '💬 確認訂單並開啟 LINE';
+    
+    // Clear cart and show confirmation
+    setTimeout(() => {
+      if (confirm('訂單已開啟 LINE！\n\n點擊「確定」清除購物車並回到商店\n點擊「取消」繼續購物')) {
+        clearCartAndClose();
+      }
+    }, 500);
   });
 }
 
