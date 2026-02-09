@@ -3,68 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🐟 Aquarium Studio - 專業孔雀魚專賣店</title>
+  <title>Aquarium Studio - 專業孔雀魚專賣店</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    .tab-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: var(--gray-100); border-bottom: 1px solid var(--gray-200); position: relative; z-index: 10; }
-    .tab-btn { padding: 12px 30px; border: none; border-radius: 25px; background: white; color: var(--dark-color); font-size: 1rem; cursor: pointer; transition: all 0.3s; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; }
-    .tab-btn:hover { background: var(--primary-color); color: white; }
-    .tab-btn.active { background: var(--primary-color); color: white; box-shadow: var(--shadow-md); }
+    .tab-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: #f5f5f5; border-bottom: 1px solid #e0e0e0; }
+    .tab-btn { padding: 12px 28px; border: none; border-radius: 8px; background: white; color: #333; font-size: 15px; cursor: pointer; transition: all 0.3s; font-weight: 500; }
+    .tab-btn:hover { background: #667eea; color: white; }
+    .tab-btn.active { background: #667eea; color: white; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     
-    /* Professional Stats Section - WordPress Style */
-    .care-stats-section { background: #f8f9fa; padding: 60px 0; }
-    .care-stats-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-    .care-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
-    .care-stat-box { background: white; border-radius: 16px; padding: 35px 25px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: all 0.3s ease; border: 1px solid #eee; }
-    .care-stat-box:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
-    .care-stat-icon { font-size: 2.8rem; margin-bottom: 15px; display: block; }
-    .care-stat-number { font-size: 1.8rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; display: block; }
-    .care-stat-label { font-size: 1rem; color: #666; font-weight: 500; }
-    @media (max-width: 992px) { .care-stats-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 576px) { .care-stats-grid { grid-template-columns: 1fr; } .care-stats-section { padding: 40px 0; } }
+    /* Stats Section - Clean & Simple */
+    .stats-simple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 50px 20px; }
+    .stats-container { max-width: 1000px; margin: 0 auto; }
+    .stats-row { display: flex; justify-content: center; gap: 0; }
+    .stat-item { display: flex; align-items: center; gap: 15px; padding: 25px 40px; border-right: 1px solid rgba(255,255,255,0.2); }
+    .stat-item:last-child { border-right: none; }
+    .stat-emoji { font-size: 36px; }
+    .stat-info { color: white; }
+    .stat-value { font-size: 22px; font-weight: bold; display: block; }
+    .stat-label { font-size: 14px; opacity: 0.9; }
+    @media (max-width: 768px) {
+      .stats-row { flex-wrap: wrap; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); flex: 1 1 45%; justify-content: center; padding: 20px; }
+    }
     
     /* Care Guide Styles */
-    .care-hero { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: white; padding: 60px 0; text-align: center; }
-    .care-hero h1 { font-size: 2.2rem; margin-bottom: 15px; font-weight: 700; }
-    .care-hero p { font-size: 1.1rem; opacity: 0.9; max-width: 700px; margin: 0 auto; line-height: 1.6; }
-    .care-section { padding: 70px 0; }
-    .care-section:nth-child(even) { background: white; }
-    .care-container { max-width: 1100px; margin: 0 auto; padding: 0 25px; }
-    .care-section-header { text-align: center; margin-bottom: 45px; }
-    .care-section-header h2 { font-size: 1.8rem; color: #1a1a2e; margin-bottom: 12px; font-weight: 700; }
-    .care-section-header p { color: #666; font-size: 1.05rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+    .care-hero { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: white; padding: 50px 20px; text-align: center; }
+    .care-hero h1 { font-size: 28px; margin-bottom: 10px; font-weight: 700; }
+    .care-hero p { font-size: 16px; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+    .care-section { padding: 60px 20px; }
+    .care-section:nth-child(even) { background: #f9f9f9; }
+    .care-container { max-width: 1000px; margin: 0 auto; }
+    .care-header { text-align: center; margin-bottom: 40px; }
+    .care-header h2 { font-size: 24px; color: #333; margin-bottom: 10px; font-weight: 600; }
+    .care-header p { color: #666; font-size: 15px; max-width: 600px; margin: 0 auto; }
     .care-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-    .care-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s ease; border: 1px solid #eee; }
-    .care-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
-    .care-card-content { padding: 25px; }
-    .care-card-icon { font-size: 2.2rem; margin-bottom: 15px; display: block; }
-    .care-card h3 { font-size: 1.2rem; color: #1a1a2e; margin-bottom: 10px; font-weight: 600; }
-    .care-card p { color: #666; font-size: 0.95rem; line-height: 1.6; }
-    @media (max-width: 992px) { .care-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 576px) { .care-grid { grid-template-columns: 1fr; } .care-section { padding: 50px 0; } .care-hero h1 { font-size: 1.8rem; } }
-    
-    .care-info-box { background: white; border-radius: 16px; padding: 30px; margin-top: 35px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #eee; }
-    .care-info-box h4 { color: #667eea; font-size: 1.15rem; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-    .care-info-box ul { list-style: none; padding: 0; margin: 0; }
-    .care-info-box li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; color: #444; font-size: 0.95rem; display: flex; align-items: center; gap: 12px; }
-    .care-info-box li:last-child { border-bottom: none; }
-    .care-info-box li::before { content: '✓'; color: #667eea; font-weight: bold; }
-    
-    .care-warning { background: #fff9e6; border-left: 4px solid #ffc107; border-radius: 0 12px 12px 0; padding: 20px 25px; margin: 25px 0; }
-    .care-warning h4 { color: #856404; margin-bottom: 10px; font-size: 1.05rem; }
+    .care-card { background: white; border-radius: 12px; padding: 30px 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-align: center; transition: all 0.3s; border: 1px solid #eee; }
+    .care-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.12); }
+    .care-icon { font-size: 40px; margin-bottom: 15px; display: block; }
+    .care-card h3 { font-size: 18px; color: #333; margin-bottom: 10px; font-weight: 600; }
+    .care-card p { color: #666; font-size: 14px; line-height: 1.6; margin: 0; }
+    .care-list-box { background: white; border-radius: 12px; padding: 25px 30px; margin-top: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #eee; }
+    .care-list-box h4 { color: #667eea; font-size: 16px; margin-bottom: 15px; }
+    .care-list-box ul { list-style: none; padding: 0; margin: 0; }
+    .care-list-box li { padding: 10px 0; border-bottom: 1px solid #f0f0f0; color: #444; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+    .care-list-box li:last-child { border-bottom: none; }
+    .care-list-box li::before { content: '✓'; color: #667eea; font-weight: bold; }
+    .care-warning { background: #fff8e1; border-left: 4px solid #ffc107; border-radius: 0 8px 8px 0; padding: 20px; margin: 25px 0; }
+    .care-warning h4 { color: #856404; font-size: 15px; margin-bottom: 8px; }
     .care-warning ul { padding-left: 20px; margin: 0; }
-    .care-warning li { color: #856404; margin-bottom: 6px; font-size: 0.9rem; }
-    
-    .care-tip { background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); border-left: 4px solid #667eea; border-radius: 0 12px 12px 0; padding: 20px 25px; margin: 25px 0; }
-    .care-tip h4 { color: #667eea; margin-bottom: 8px; font-size: 1.05rem; }
-    .care-tip p { color: #555; margin: 0; font-size: 0.9rem; line-height: 1.6; }
-    
-    /* Navigation Pills */
-    .care-nav { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; padding: 25px 20px; background: white; border-bottom: 1px solid #eee; margin-bottom: 40px; }
-    .care-nav a { padding: 10px 22px; background: #f8f9fa; border-radius: 25px; color: #444; text-decoration: none; font-size: 0.95rem; transition: all 0.3s; font-weight: 500; }
+    .care-warning li { color: #856404; font-size: 14px; margin-bottom: 5px; }
+    .care-tip { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 20px; margin: 25px 0; }
+    .care-tip h4 { color: #667eea; font-size: 15px; margin-bottom: 8px; }
+    .care-tip p { color: #555; font-size: 14px; margin: 0; }
+    .care-nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 20px; background: white; border-bottom: 1px solid #eee; margin-bottom: 40px; }
+    .care-nav a { padding: 10px 20px; background: #f5f5f5; border-radius: 20px; color: #444; text-decoration: none; font-size: 14px; transition: all 0.3s; }
     .care-nav a:hover { background: #667eea; color: white; }
+    @media (max-width: 900px) { .care-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .care-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -84,8 +81,8 @@
   </header>
 
   <div class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab('home')">🏠 首頁</button>
-    <button class="tab-btn" onclick="switchTab('care')">🐟 孔雀魚飼養指南</button>
+    <button class="tab-btn active" onclick="switchTab('home')">首頁</button>
+    <button class="tab-btn" onclick="switchTab('care')">孔雀魚飼養指南</button>
   </div>
 
   <div id="tab-home" class="tab-content active">
@@ -116,11 +113,11 @@
     </section>
     <section style="background: white; padding: 80px 0;">
       <div class="container">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
-          <div style="text-align: center; padding: 30px;"><div style="font-size: 3rem; margin-bottom: 20px;">🌟</div><h3 style="margin-bottom: 12px; color: var(--dark-color);">優質品質</h3><p style="color: var(--gray-600);">每隻孔雀魚都經過嚴格篩選</p></div>
-          <div style="text-align: center; padding: 30px;"><div style="font-size: 3rem; margin-bottom: 20px;">🚚</div><h3 style="margin-bottom: 12px; color: var(--dark-color);">快速配送</h3><p style="color: var(--gray-600);">專業包裝確保安全送達</p></div>
-          <div style="text-align: center; padding: 30px;"><div style="font-size: 3rem; margin-bottom: 20px;">💬</div><h3 style="margin-bottom: 12px; color: var(--dark-color);">LINE 客服</h3><p style="color: var(--gray-600);">即時回答您的問題</p></div>
-          <div style="text-align: center; padding: 30px;"><div style="font-size: 3rem; margin-bottom: 20px;">🔧</div><h3 style="margin-bottom: 12px; color: var(--dark-color);">養殖諮詢</h3><p style="color: var(--gray-600);">提供專業養殖建議</p></div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+          <div style="text-align: center; padding: 30px;"><div style="font-size: 48px; margin-bottom: 15px;">🌟</div><h3 style="margin-bottom: 10px; color: #333;">優質品質</h3><p style="color: #666;">每隻孔雀魚都經過嚴格篩選</p></div>
+          <div style="text-align: center; padding: 30px;"><div style="font-size: 48px; margin-bottom: 15px;">🚚</div><h3 style="margin-bottom: 10px; color: #333;">快速配送</h3><p style="color: #666;">專業包裝確保安全送達</p></div>
+          <div style="text-align: center; padding: 30px;"><div style="font-size: 48px; margin-bottom: 15px;">💬</div><h3 style="margin-bottom: 10px; color: #333;">LINE 客服</h3><p style="color: #666;">即時回答您的問題</p></div>
+          <div style="text-align: center; padding: 30px;"><div style="font-size: 48px; margin-bottom: 15px;">🔧</div><h3 style="margin-bottom: 10px; color: #333;">養殖諮詢</h3><p style="color: #666;">提供專業養殖建議</p></div>
         </div>
       </div>
     </section>
@@ -134,28 +131,36 @@
       </div>
     </section>
     
-    <div class="care-stats-section">
-      <div class="care-stats-container">
-        <div class="care-stats-grid">
-          <div class="care-stat-box">
-            <span class="care-stat-icon">🐟</span>
-            <span class="care-stat-number">2-3 年<span class="care-stat-label">平均</span>
-            </span>
-          壽命</div>
-          <div class="care <span class="-stat-box">
-           care-stat-icon">🌡️</span>
-            <span class="care-stat-number">22-26°C</span>
-            <span class="care-stat-label">適合水溫</span>
+    <div class="stats-simple">
+      <div class="stats-container">
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-emoji">🐟</span>
+            <div class="stat-info">
+              <span class="stat-value">2-3 年</span>
+              <span class="stat-label">平均壽命</span>
+            </div>
           </div>
-          <div class="care-stat-box">
-            <span class="care-stat-icon">💧</span>
-            <span class="care-stat-number">7.0-7.5</span>
-            <span class="care-stat-label">最適合 pH</span>
+          <div class="stat-item">
+            <span class="stat-emoji">🌡️</span>
+            <div class="stat-info">
+              <span class="stat-value">22-26°C</span>
+              <span class="stat-label">適合水溫</span>
+            </div>
           </div>
-          <div class="care-stat-box">
-            <span class="care-stat-icon">🗓️</span>
-            <span class="care-stat-number">每月</span>
-            <span class="care-stat-label">繁殖週期</span>
+          <div class="stat-item">
+            <span class="stat-emoji">💧</span>
+            <div class="stat-info">
+              <span class="stat-value">7.0-7.5</span>
+              <span class="stat-label">最適合 pH</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-emoji">🗓️</span>
+            <div class="stat-info">
+              <span class="stat-value">每月</span>
+              <span class="stat-label">繁殖週期</span>
+            </div>
           </div>
         </div>
       </div>
@@ -171,34 +176,28 @@
 
     <section class="care-section" id="water">
       <div class="care-container">
-        <div class="care-section-header">
+        <div class="care-header">
           <h2>💧 水質管理</h2>
-          <p>水質是影響孔雀魚健康最重要的因素。好的水質能讓孔雀魚展現最美麗的體色。</p>
+          <p>水質是影響孔雀魚健康最重要的因素。</p>
         </div>
         <div class="care-grid">
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🔬</span>
-              <h3>水質檢測</h3>
-              <p>定期檢測水溫、pH 值、氨氮、亞硝酸鹽。每週至少檢測一次。</p>
-            </div>
+            <span class="care-icon">🔬</span>
+            <h3>水質檢測</h3>
+            <p>定期檢測水溫、pH 值、氨氮、亞硝酸鹽。每週至少檢測一次。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🔄</span>
-              <h3>定期換水</h3>
-              <p>每週更換 20-30% 的水。新鮮的水能稀釋有害物質。</p>
-            </div>
+            <span class="care-icon">🔄</span>
+            <h3>定期換水</h3>
+            <p>每週更換 20-30% 的水。新鮮的水能稀釋有害物質。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🌡️</span>
-              <h3>溫度穩定</h3>
-              <p>使用恒温器維持水溫在 22-26°C。避免溫差過大。</p>
-            </div>
+            <span class="care-icon">🌡️</span>
+            <h3>溫度穩定</h3>
+            <p>使用恒温器維持水溫在 22-26°C。避免溫差過大。</p>
           </div>
         </div>
-        <div class="care-info-box">
+        <div class="care-list-box">
           <h4>📋 水質標準值</h4>
           <ul>
             <li><strong>水溫：</strong>22-26°C（最佳 24°C）</li>
@@ -213,39 +212,33 @@
 
     <section class="care-section" id="feeding">
       <div class="care-container">
-        <div class="care-section-header">
+        <div class="care-header">
           <h2>🍽️ 餵食建議</h2>
-          <p>正確的餵食方式是養出健康孔雀魚的關鍵。過度餵食是最常見的錯誤。</p>
+          <p>正確的餵食方式是養出健康孔雀魚的關鍵。</p>
         </div>
         <div class="care-grid">
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🌾</span>
-              <h3>主食選擇</h3>
-              <p>選擇高品質的孔雀魚專用飼料。營養均衡且不易污染水質。</p>
-            </div>
+            <span class="care-icon">🌾</span>
+            <h3>主食選擇</h3>
+            <p>選擇高品質的孔雀魚專用飼料。營養均衡且不易污染水質。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🦐</span>
-              <h3>營養副食</h3>
-              <p>每週餵食 2-3 次豐年蝦或紅蟲，提供優質蛋白質。</p>
-            </div>
+            <span class="care-icon">🦐</span>
+            <h3>營養副食</h3>
+            <p>每週餵食 2-3 次豐年蝦或紅蟲，提供優質蛋白質。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">⏰</span>
-              <h3>餵食頻率</h3>
-              <p>成魚每天餵 1-2 次，幼魚可以增加到 3-4 次。</p>
-            </div>
+            <span class="care-icon">⏰</span>
+            <h3>餵食頻率</h3>
+            <p>成魚每天餵 1-2 次，幼魚可以增加到 3-4 次。</p>
           </div>
         </div>
         <div class="care-warning">
           <h4>⚠️ 禁忌事項</h4>
           <ul>
-            <li>千萬不要過度餵食！殘餘飼料會污染水質</li>
-            <li>不要餵食人類食物（麵包、餅乾等）</li>
-            <li>變質或發霉的飼料絕對不可餵食</li>
+            <li>千萬不要過度餵食！</li>
+            <li>不要餵食人類食物</li>
+            <li>變質飼料不可餵食</li>
           </ul>
         </div>
       </div>
@@ -253,77 +246,65 @@
 
     <section class="care-section" id="tank">
       <div class="care-container">
-        <div class="care-section-header">
+        <div class="care-header">
           <h2>🏠 魚缸環境</h2>
           <p>一個布置得當的魚缸是孔雀魚健康成長的基礎。</p>
         </div>
         <div class="care-grid">
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">📏</span>
-              <h3>缸體大小</h3>
-              <p>建議至少 20 公升水容量。空間越大，水質越穩定。</p>
-            </div>
+            <span class="care-icon">📏</span>
+            <h3>缸體大小</h3>
+            <p>建議至少 20 公升水容量。空間越大，水質越穩定。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🌿</span>
-              <h3>水草造景</h3>
-              <p>種植莫斯、水芙蓉等水草，提供躲藏處和休息空間。</p>
-            </div>
+            <span class="care-icon">🌿</span>
+            <h3>水草造景</h3>
+            <p>種植莫斯、水芙蓉等水草，提供躲藏處和休息空間。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🔧</span>
-              <h3>過濾系統</h3>
-              <p>選擇適合缸大小的過濾器。氣舉式或海綿式過濾器適合孔雀魚。</p>
-            </div>
+            <span class="care-icon">🔧</span>
+            <h3>過濾系統</h3>
+            <p>選擇適合缸大小的過濾器。氣舉式或海綿式過濾器適合孔雀魚。</p>
           </div>
         </div>
         <div class="care-tip">
           <h4>💡 底砂選擇</h4>
-          <p>建議使用中性底砂（如陶瓷砂或溪砂），避免使用會改變水質的珊瑚砂。底砂厚度 2-3 公分即可。</p>
+          <p>建議使用中性底砂（如陶瓷砂或溪砂），避免使用會改變水質的珊瑚砂。</p>
         </div>
       </div>
     </section>
 
     <section class="care-section" id="breeding">
       <div class="care-container">
-        <div class="care-section-header">
+        <div class="care-header">
           <h2>🧬 繁殖技巧</h2>
           <p>孔雀魚繁殖能力強大，是最適合新手練習繁殖的魚種。</p>
         </div>
         <div class="care-grid">
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">♀️♂️</span>
-              <h3>公母辨識</h3>
-              <p>公魚體色鮮艷、尾鰭大；母魚體色較淡、腹部較大。</p>
-            </div>
+            <span class="care-icon">♀️♂️</span>
+            <h3>公母辨識</h3>
+            <p>公魚體色鮮艷、尾鰭大；母魚體色較淡、腹部較大。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🤰</span>
-              <h3>懷孕徵兆</h3>
-              <p>母魚腹部後方出現明顯黑斑（胎斑），且越來越大。</p>
-            </div>
+            <span class="care-icon">🤰</span>
+            <h3>懷孕徵兆</h3>
+            <p>母魚腹部後方出現明顯黑斑（胎斑），且越來越大。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">👶</span>
-              <h3>分娩照護</h3>
-              <p>建議將待產母魚移到繁殖缸。小魚出生後要立即分離。</p>
-            </div>
+            <span class="care-icon">👶</span>
+            <h3>分娩照護</h3>
+            <p>建議將待產母魚移到繁殖缸。小魚出生後要立即分離。</p>
           </div>
         </div>
-        <div class="care-info-box">
+        <div class="care-list-box">
           <h4>📋 繁殖黃金法則</h4>
           <ul>
-            <li>公母比例 1:2 或 1:3 為佳，避免公魚過度追逐母魚</li>
-            <li>繁殖缸水溫維持 26°C，可提高繁殖成功率</li>
-            <li>母魚生產後需要休息 1-2 週再放回繁殖缸</li>
-            <li>幼魚長到 1-2 公分時可移出繁殖缸</li>
-            <li>避免近親繁殖，保持品種健康</li>
+            <li>公母比例 1:2 或 1:3 為佳</li>
+            <li>繁殖缸水溫維持 26°C</li>
+            <li>母魚生產後需要休息 1-2 週</li>
+            <li>幼魚長到 1-2 公分時可移出</li>
+            <li>避免近親繁殖</li>
           </ul>
         </div>
       </div>
@@ -331,39 +312,33 @@
 
     <section class="care-section" id="health">
       <div class="care-container">
-        <div class="care-section-header">
+        <div class="care-header">
           <h2>🏥 健康照護</h2>
-          <p>預防勝於治療！了解常見疾病症狀，及早發現及早治療。</p>
+          <p>預防勝於治療！了解常見疾病症狀。</p>
         </div>
         <div class="care-grid">
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🦠</span>
-              <h3>白點病</h3>
-              <p>魚鰭和身體出現白色小點。提高水溫至 28-30°C 可抑制。</p>
-            </div>
+            <span class="care-icon">🦠</span>
+            <h3>白點病</h3>
+            <p>魚鰭和身體出現白色小點。提高水溫至 28-30°C 可抑制。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🍄</span>
-              <h3>水黴病</h3>
-              <p>傷口出現白色棉絮狀物質。需要隔離治療。</p>
-            </div>
+            <span class="care-icon">🍄</span>
+            <h3>水黴病</h3>
+            <p>傷口出現白色棉絮狀物質。需要隔離治療。</p>
           </div>
           <div class="care-card">
-            <div class="care-card-content">
-              <span class="care-card-icon">🏊</span>
-              <h3>鰭部腐爛</h3>
-              <p>鰭邊緣出現白色或透明化。改善水質是首要步驟。</p>
-            </div>
+            <span class="care-icon">🏊</span>
+            <h3>鰭部腐爛</h3>
+            <p>鰭邊緣出現白色或透明化。改善水質是首要步驟。</p>
           </div>
         </div>
         <div class="care-warning">
           <h4>⚠️ 疾病預防原則</h4>
           <ul>
-            <li>新魚一定要隔離觀察 2 週再放入主缸</li>
-            <li>維持良好水質是預防疾病的根本</li>
-            <li>發現病魚立即隔離，避免傳染</li>
+            <li>新魚一定要隔離觀察 2 週</li>
+            <li>維持良好水質是根本</li>
+            <li>發現病魚立即隔離</li>
           </ul>
         </div>
       </div>
