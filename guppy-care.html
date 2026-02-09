@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孔雀魚飼養指南 - Aquarium Studio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .care-hero { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: white; padding: 80px 0; text-align: center; }
+        .care-hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .care-hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .care-section { padding: 60px 0; }
+        .care-section:nth-child(even) { background: var(--gray-100); }
+        .care-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .care-header { text-align: center; margin-bottom: 40px; }
+        .care-header h2 { font-size: 1.8rem; color: var(--dark-color); margin-bottom: 15px; }
+        .care-header p { color: var(--gray-600); line-height: 1.7; }
+        .care-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .care-card { background: white; border-radius: var(--border-radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.3s; }
+        .care-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .care-img { width: 100%; height: 200px; object-fit: cover; background: var(--gray-100); }
+        .care-content { padding: 20px; }
+        .care-content h3 { font-size: 1.2rem; color: var(--dark-color); margin-bottom: 10px; }
+        .care-content p { color: var(--gray-600); font-size: 0.95rem; line-height: 1.6; }
+        .care-list { background: white; border-radius: var(--border-radius-lg); padding: 25px; margin-top: 20px; box-shadow: var(--shadow-sm); }
+        .care-list h4 { color: var(--primary-color); margin-bottom: 15px; }
+        .care-list ul { list-style: none; padding: 0; }
+        .care-list li { padding: 10px 0; padding-left: 30px; position: relative; color: var(--gray-700); border-bottom: 1px solid var(--gray-100); }
+        .care-list li:last-child { border-bottom: none; }
+        .care-list li::before { content: '✓'; position: absolute; left: 0; color: var(--primary-color); font-weight: bold; }
+        .tip-box { background: linear-gradient(135deg, #667eea15, #764ba215); border-left: 4px solid var(--primary-color); padding: 20px; border-radius: 0 var(--border-radius) var(--border-radius) 0; margin: 20px 0; }
+        .warning-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; border-radius: 0 var(--border-radius) var(--border-radius) 0; margin: 20px 0; }
+        .warning-box h4 { color: #856404; margin-bottom: 10px; }
+        .stats-bar { display: flex; justify-content: center; gap: 40px; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 2rem; font-weight: bold; }
+        .stat-label { font-size: 0.9rem; opacity: 0.9; }
+        .section-nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 20px; background: white; border-bottom: 1px solid var(--gray-200); position: sticky; top: 70px; z-index: 50; }
+        .section-nav a { padding: 10px 20px; background: var(--gray-100); border-radius: 25px; color: var(--dark-color); text-decoration: none; font-size: 0.95rem; transition: all 0.3s; }
+        .section-nav a:hover { background: var(--primary-color); color: white; }
+        .checklist { background: white; border-radius: var(--border-radius-lg); padding: 25px; margin-top: 20px; }
+        .checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-100); }
+        .checklist-item:last-child { border-bottom: none; }
+        .check-icon { width: 24px; height: 24px; background: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+        .checklist-text h5 { color: var(--dark-color); margin-bottom: 3px; }
+        .checklist-text p { color: var(--gray-600); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="index.html" class="logo"><span class="logo-icon">🐟</span><span class="logo-text">Aquarium <span>Studio</span></span></a>
+                <nav class="nav-links">
+                    <a href="index.html">首頁</a>
+                    <a href="shop.html">商店</a>
+                    <a href="guppy-care.html" class="active">飼養指南</a>
+                </nav>
+                <div class="mobile-quick-btns">
+                    <a href="cart.html" class="quick-btn">🛒 <span class="cart-badge">0</span></a>
+                    <a href="admin.html" class="quick-btn">管理</a>
+                    <a href="https://line.me/ti/p/tsAGZrm9vt" class="quick-btn" style="background:#06C755;color:white;">LINE</a>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            </div>
+        </div>
+    </header>
+    <section class="care-hero">
+        <div class="container">
+            <h1>🐠 孔雀魚飼養指南</h1>
+            <p>從新手到專家，完整掌握孔雀魚飼養技巧，讓你的魚兒健康美麗！</p>
+        </div>
+    </section>
+    <div class="stats-bar">
+        <div class="stat-item"><div class="stat-num">2-3年</div><div class="stat-label">平均壽命</div></div>
+        <div class="stat-item"><div class="stat-num">22-26°C</div><div class="stat-label">適合水溫</div></div>
+        <div class="stat-item"><div class="stat-num">7.0-7.5</div><div class="stat-label">最適合 pH</div></div>
+        <div class="stat-item"><div class="stat-num">每月</div><div class="stat-label">繁殖週期</div></div>
+    </div>
+    <nav class="section-nav">
+        <a href="#water">💧 水質管理</a>
+        <a href="#feeding">🍽️ 餵食建議</a>
+        <a href="#tank">🏠 魚缸環境</a>
+        <a href="#breeding">🧬 繁殖技巧</a>
+        <a href="#health">🏥 健康照護</a>
+    </nav>
+    <section class="care-section" id="water">
+        <div class="care-container">
+            <div class="care-header">
+                <h2>💧 水質管理</h2>
+                <p>水質是影響孔雀魚健康最重要的因素。好的水質能讓孔雀魚展現最美麗的體色，並延長壽命。</p>
+            </div>
+            <div class="care-grid">
+                <div class="care-card">
+                    <img src="images/care-guide/water-test.jpg" alt="水質檢測" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>💧</text></svg>'">
+                    <div class="care-content">
+                        <h3>🔬 水質檢測</h3>
+                        <p>定期檢測水溫、pH 值、氨氮、亞硝酸鹽。每週至少檢測一次，發現異常立即處理。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/water-change.jpg" alt="換水作業" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🔄</text></svg>'">
+                    <div class="care-content">
+                        <h3>🔄 定期換水</h3>
+                        <p>每週更換 20-30% 的水。新鮮的水能稀釋有害物質，促進魚兒新陈代谢。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/temperature.jpg" alt="水溫控制" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🌡️</text></svg>'">
+                    <div class="care-content">
+                        <h3>🌡️ 溫度穩定</h3>
+                        <p>使用恒温器維持水溫在 22-26°C。避免溫差過大，會造成魚兒緊迫甚至生病。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tip-box">
+                <h4>💡 小技巧</h4>
+                <p>換水時先將新水放置 24 小時，讓氯氣揮發，並與魚缸水溫相近再加入。可使用水質穩定劑快速處理自來水。</p>
+            </div>
+            <div class="care-list">
+                <h4>📋 水質標準值</h4>
+                <ul>
+                    <li><strong>水溫：</strong>22-26°C（最佳 24°C）</li>
+                    <li><strong>pH 值：</strong>7.0-7.5（弱鹼性）</li>
+                    <li><strong>氨氮 (NH3)：</strong>0 ppm（越低越好）</li>
+                    <li><strong>亞硝酸鹽 (NO2)：</strong>0 ppm</li>
+                    <li><strong>硝酸鹽 (NO3)：</strong>低於 20 ppm</li>
+                    <li><strong>硬度 (GH)：</strong>8-12 dGH</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="care-section" id="feeding" style="background: var(--gray-100);">
+        <div class="care-container">
+            <div class="care-header">
+                <h2>🍽️ 餵食建議</h2>
+                <p>正確的餵食方式是養出健康孔雀魚的關鍵。過度餵食是新手最常見的錯誤。</p>
+            </div>
+            <div class="care-grid">
+                <div class="care-card">
+                    <img src="images/care-guide/flake-food.jpg" alt="主食飼料" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🍖</text></svg>'">
+                    <div class="care-content">
+                        <h3>🌾 主食選擇</h3>
+                        <p>選擇高品質的孔雀魚專用飼料。建議購買信譽品牌的產品，營養均衡且不易污染水質。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/brine-shrimp.jpg" alt="豐年蝦" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🦐</text></svg>'">
+                    <div class="care-content">
+                        <h3>🦐 營養副食</h3>
+                        <p>每週餵食 2-3 次豐年蝦或紅蟲，提供優質蛋白質，讓魚兒體色更鮮艷。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/feeding-time.jpg" alt="餵食頻率" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>⏰</text></svg>'">
+                    <div class="care-content">
+                        <h3>⏰ 餵食頻率</h3>
+                        <p>成魚每天餵 1-2 次，幼魚可以增加到 3-4 次。每次餵食量以 2-3 分鐘內吃完為準則。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="warning-box">
+                <h4>⚠️ 禁忌事項</h4>
+                <ul>
+                    <li style="list-style: disc; margin-bottom: 8px;">千萬不要過度餵食！殘餘飼料會污染水質</li>
+                    <li style="list-style: disc; margin-bottom: 8px;">不要餵食人類食物（麵包、餅乾等）</li>
+                    <li style="list-style: disc; margin-bottom: 8px;">變質或發霉的飼料絕對不可餵食</li>
+                    <li style="list-style: disc;">餵食後 5 分鐘內未吃完的飼料要撈除</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="care-section" id="tank">
+        <div class="care-container">
+            <div class="care-header">
+                <h2>🏠 魚缸環境</h2>
+                <p>一個布置得當的魚缸不僅美觀，更是孔雀魚健康成長的基礎。</p>
+            </div>
+            <div class="care-grid">
+                <div class="care-card">
+                    <img src="images/care-guide/tank-size.jpg" alt="魚缸大小" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>📏</text></svg>'">
+                    <div class="care-content">
+                        <h3>📏 缸體大小</h3>
+                        <p>建議至少 20 公升水容量。空間越大，水質越穩定，魚兒也更能展現自然行為。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/plants.jpg" alt="水草造景" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🌿</text></svg>'">
+                    <div class="care-content">
+                        <h3>🌿 水草造景</h3>
+                        <p>種植莫斯、水芙蓉等水草，提供躲藏處和休息空間，也能幫助稳定水質。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/filter.jpg" alt="過濾系統" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🔧</text></svg>'">
+                    <div class="care-content">
+                        <h3>🔧 過濾系統</h3>
+                        <p>選擇適合缸大小的過濾器，保持水流通順。氣舉式或海綿式過濾器適合孔雀魚。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tip-box">
+                <h4>💡 底砂選擇</h4>
+                <p>建議使用中性底砂（如陶瓷砂或溪砂），避免使用會改變水質的珊瑚砂。底砂厚度 2-3 公分即可。</p>
+            </div>
+        </div>
+    </section>
+    <section class="care-section" id="breeding" style="background: var(--gray-100);">
+        <div class="care-container">
+            <div class="care-header">
+                <h2>🧬 繁殖技巧</h2>
+                <p>孔雀魚繁殖能力強大，是最適合新手練習繁殖的魚種。</p>
+            </div>
+            <div class="care-grid">
+                <div class="care-card">
+                    <img src="images/care-guide/male-female.jpg" alt="公母辨識" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>♀️♂️</text></svg>'">
+                    <div class="care-content">
+                        <h3>♀️♂️ 公母辨識</h3>
+                        <p>公魚體色鮮艷、尾鰭大；母魚體色較淡、腹部較大。成熟公魚會有明顯的交接器。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/pregnant.jpg" alt="懷孕徵兆" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🤰</text></svg>'">
+                    <div class="care-content">
+                        <h3>🤰 懷孕徵兆</h3>
+                        <p>母魚腹部後方出現明顯黑斑（胎斑），且越來越大。接近生產時會躲在水草間。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/birth.jpg" alt="分娩照護" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>👶</text></svg>'">
+                    <div class="care-content">
+                        <h3>👶 分娩照護</h3>
+                        <p>建議將待產母魚移到繁殖缸。小魚出生後要立即與母魚分離，避免被吃掉。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="care-list">
+                <h4>📋 繁殖黃金法則</h4>
+                <ul>
+                    <li>公母比例 1:2 或 1:3 為佳，避免公魚過度追逐母魚</li>
+                    <li>繁殖缸水溫維持 26°C，可提高繁殖成功率</li>
+                    <li>母魚生產後需要休息 1-2 週再放回繁殖缸</li>
+                    <li>幼魚長到 1-2 公分時可移出繁殖缸</li>
+                    <li>避免近親繁殖，保持品種健康</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="care-section" id="health">
+        <div class="care-container">
+            <div class="care-header">
+                <h2>🏥 健康照護</h2>
+                <p>預防勝於治療！了解常見疾病症狀，及早發現及早治療。</p>
+            </div>
+            <div class="care-grid">
+                <div class="care-card">
+                    <img src="images/care-guide/ich.jpg" alt="白點病" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🦠</text></svg>'">
+                    <div class="care-content">
+                        <h3>🦠 白點病</h3>
+                        <p>魚鰭和身體出現白色小點。是常見寄生蟲病，傳染性強。提高水溫至 28-30°C 可抑制寄生蟲。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/fungus.jpg" alt="水黴病" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🍄</text></svg>'">
+                    <div class="care-content">
+                        <h3>🍄 水黴病</h3>
+                        <p>傷口或鰭部出現白色棉絮狀物質。通常由水質惡化或外傷引起，需要隔離治療。</p>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <img src="images/care-guide/float.jpg" alt="鰭部問題" class="care-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22105%22 text-anchor=%22middle%22 font-size=%2230%22>🏊</text></svg>'">
+                    <div class="care-content">
+                        <h3>🏊 鰭部腐爛</h3>
+                        <p>鰭邊緣出現白色或透明化。改善水質是首要步驟，嚴重時需使用抗菌藥物。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="warning-box">
+                <h4>⚠️ 疾病預防原則</h4>
+                <ul>
+                    <li style="list-style: disc; margin-bottom: 8px;">新魚一定要隔離觀察 2 週再放入主缸</li>
+                    <li style="list-style: disc; margin-bottom: 8px;">維持良好水質是預防疾病的根本</li>
+                    <li style="list-style: disc; margin-bottom: 8px;">發現病魚立即隔離，避免傳染</li>
+                    <li style="list-style: disc;">使用任何藥物前，請詳閱說明書並適量使用</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Aquarium Studio. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="js/app.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            navLinks.classList.toggle('active');
+            menuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        }
+        function updateCartBadge() {
+            const badges = document.querySelectorAll('.cart-badge');
+            const count = (JSON.parse(localStorage.getItem('aquarium_cart') || '[]')).reduce((sum, item) => sum + item.quantity, 0);
+            badges.forEach(badge => { badge.textContent = count; badge.style.display = count > 0 ? 'flex' : 'none'; });
+        }
+        document.addEventListener('DOMContentLoaded', updateCartBadge);
+    </script>
+</body>
+</html>
