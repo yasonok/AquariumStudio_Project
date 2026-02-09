@@ -180,10 +180,6 @@
       .tip-box { background: linear-gradient(135deg, #667eea15, #764ba215); border-left: 4px solid var(--primary-color); padding: 15px; border-radius: 0 var(--border-radius) var(--border-radius) 0; margin: 15px 0; }
       .warning-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 0 var(--border-radius) var(--border-radius) 0; margin: 15px 0; }
       .warning-box h4 { color: #856404; margin-bottom: 8px; }
-      .stats-bar { display: flex; justify-content: center; gap: 20px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; flex-wrap: wrap; }
-      .stat-item { text-align: center; }
-      .stat-num { font-size: 1.5rem; font-weight: bold; }
-      .stat-label { font-size: 0.85rem; opacity: 0.9; }
     </style>
 
     <section class="care-hero">
@@ -193,9 +189,36 @@
       </div>
     </section>
 
-    <div class="stats-bar">
-      <div class="stat-item"><div class="stat-num">2-3年</div><div class="stat-label">平均壽命</div></div>
-      <div class="stat-item"><div class="stat-num">22-26°C</div><div class="stat-label">適合水溫</div></div>
+    <div class="care-stats">
+      <div class="care-stat-card">
+        <div class="care-stat-icon">🐟</div>
+        <div class="care-stat-content">
+          <div class="care-stat-value">2-3 年</div>
+          <div class="care-stat-label">平均壽命</div>
+        </div>
+      </div>
+      <div class="care-stat-card">
+        <div class="care-stat-icon">🌡️</div>
+        <div class="care-stat-content">
+          <div class="care-stat-value">22-26°C</div>
+          <div class="care-stat-label">適合水溫</div>
+        </div>
+      </div>
+      <div class="care-stat-card">
+        <div class="care-stat-icon">💧</div>
+        <div class="care-stat-content">
+          <div class="care-stat-value">7.0-7.5</div>
+          <div class="care-stat-label">最適合 pH</div>
+        </div>
+      </div>
+      <div class="care-stat-card">
+        <div class="care-stat-icon">🗓️</div>
+        <div class="care-stat-content">
+          <div class="care-stat-value">每月</div>
+          <div class="care-stat-label">繁殖週期</div>
+        </div>
+      </div>
+    </div>      <div class="stat-item"><div class="stat-num">22-26°C</div><div class="stat-label">適合水溫</div></div>
       <div class="stat-item"><div class="stat-num">7.0-7.5</div><div class="stat-label">最適合 pH</div></div>
       <div class="stat-item"><div class="stat-num">每月</div><div class="stat-label">繁殖週期</div></div>
     </div>
