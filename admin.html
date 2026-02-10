@@ -8,7 +8,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; }
         
-        /* 登入頁面樣式 */
+        /* 登入頁面 */
         .login-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #667eea, #764ba2); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
         .login-overlay.active { display: flex; }
         .login-box { background: white; border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
@@ -20,8 +20,13 @@
         .login-box button { width: 100%; padding: 16px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .login-box button:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
         .login-box .error { color: #ff6b6b; font-size: 0.85rem; margin-top: 10px; display: none; }
+        .login-box .hint { color: #888; font-size: 0.8rem; margin-top: 15px; }
         
-        /* 管理後台隱藏 */
+        /* Firebase 狀態 */
+        .fb-status { background: #fff3cd; color: #856404; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; font-size: 0.85rem; display: none; }
+        .fb-status.show { display: block; }
+        
+        /* 管理後台 */
         .admin-content { display: none; }
         .admin-content.active { display: block; }
         
@@ -31,6 +36,7 @@
         .header-btns button, .header-btns a { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; text-decoration: none; }
         .header-btns button:hover { background: rgba(255,255,255,0.3); }
         .header-btns .user-info { background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; }
+        .header-btns .btn-logout { background: rgba(255,107,107,0.8); }
         
         .stats { display: flex; gap: 10px; padding: 15px; background: white; overflow-x: auto; }
         .stat { min-width: 100px; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; flex: 1; }
@@ -50,10 +56,10 @@
         .btn-edit { background: #667eea; color: white; }
         .btn-delete { background: #ff6b6b; color: white; }
         .fab { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102,126,234,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; }
+        
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
         .modal.active { display: flex; }
         .modal-content { background: white; border-radius: 16px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        .modal-content-wide { max-width: 500px; }
         .modal-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .modal-header h3 { font-size: 1rem; }
         .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
@@ -64,8 +70,6 @@
         .form-group input:focus { outline: none; border-color: #667eea; }
         .upload-box { border: 2px dashed #ddd; border-radius: 10px; padding: 25px; text-align: center; cursor: pointer; background: #f8f9fa; }
         .upload-box:hover { border-color: #667eea; }
-        .upload-box .icon { font-size: 2rem; margin-bottom: 8px; }
-        .upload-box p { color: #666; font-size: 0.9rem; }
         .preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; }
         .preview.show { display: block; }
         .btn-row { display: flex; gap: 10px; margin-top: 15px; }
@@ -75,7 +79,6 @@
         .empty { text-align: center; padding: 50px 20px; color: #999; }
         .empty .icon { font-size: 3rem; margin-bottom: 15px; }
         
-        /* 分類列表樣式 */
         .cat-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f8f9fa; border-radius: 10px; margin-bottom: 8px; }
         .cat-item .icon { font-size: 1.5rem; }
         .cat-item .name { flex: 1; font-weight: 500; }
@@ -94,8 +97,12 @@
             <input type="password" id="login-password" placeholder="密碼" onkeyup="if(event.key==='Enter')login()">
             <button onclick="login()">登入</button>
             <div class="error" id="login-error">密碼錯誤，請重試</div>
+            <div class="hint">預設密碼：1234</div>
         </div>
     </div>
+
+    <!-- Firebase 狀態 -->
+    <div class="fb-status" id="fb-status"></div>
 
     <!-- 管理後台 -->
     <div class="admin-content" id="admin-content">
@@ -106,7 +113,7 @@
                 <button onclick="editCategories()">🏷️ 分類</button>
                 <button onclick="editSiteContent()">📝 網站</button>
                 <span class="user-info">👤 管理員</span>
-                <button onclick="logout()" style="background: rgba(255,107,107,0.8);">🚪 登出</button>
+                <button class="btn-logout" onclick="logout()">🚪 登出</button>
             </div>
         </div>
         
@@ -124,7 +131,7 @@
         <div class="section">
             <h2>📦 商品列表 <button onclick="openModal()">➕ 新增</button></h2>
             <div id="product-list">
-                <div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>
+                <div class="empty"><div class="icon">📦</div><p>載入中...</p></div>
             </div>
         </div>
         
@@ -185,7 +192,7 @@
     
     <!-- 分類 Modal -->
     <div class="modal" id="cat-modal">
-        <div class="modal-content modal-content-wide">
+        <div class="modal-content">
             <div class="modal-header">
                 <h3>🏷️ 分類管理</h3>
                 <button class="modal-close" onclick="closeCatModal()">&times;</button>
@@ -263,14 +270,14 @@
         </div>
     </div>
     
+    <script src="js/firebase/config.js"></script>
+    <script src="js/firebase/app.js"></script>
     <script>
-        const KEY = 'aquarium_products';
-        const SITE_KEY = 'site_content';
-        const CAT_KEY = 'aquarium_categories';
         const LOGIN_KEY = 'aquarium_admin_logged';
         const DEFAULT_PASSWORD = '1234';
+        const SITE_KEY = 'site_content';
         
-        // 檢查登入狀態
+        // 登入狀態檢查
         function checkLogin() {
             if (localStorage.getItem(LOGIN_KEY) === 'true') {
                 document.getElementById('login-overlay').classList.remove('active');
@@ -304,55 +311,50 @@
             document.getElementById('admin-content').classList.remove('active');
         }
         
-        function load() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
-        function saveAll(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
-        function loadSite() { return JSON.parse(localStorage.getItem(SITE_KEY) || '{}'); }
-        function loadCats() { return JSON.parse(localStorage.getItem(CAT_KEY) || '[]'); }
-        function saveCats(c) { localStorage.setItem(CAT_KEY, JSON.stringify(c)); }
-        
-        if (!localStorage.getItem(CAT_KEY)) {
-            saveCats([
-                { id: 1, name: '孔雀魚', icon: '🐟' },
-                { id: 2, name: '設備', icon: '⚙️' },
-                { id: 3, name: '飼料', icon: '🦐' },
-                { id: 4, name: '水質', icon: '💧' }
-            ]);
-        }
-        
-        function renderCats() {
-            const cats = loadCats();
+        // 載入分類
+        async function renderCategories() {
+            const cats = await AquariumFirebase.categories.getAll();
             const select = document.getElementById('p-cat');
             select.innerHTML = cats.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join('');
         }
         
-        function render() {
-            const p = load();
-            document.getElementById('count-products').textContent = p.length;
-            document.getElementById('count-stock').textContent = p.reduce((s, i) => s + (i.stock||0), 0);
-            renderCats();
-            
-            const list = document.getElementById('product-list');
-            if (p.length === 0) {
-                list.innerHTML = '<div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>';
-                return;
+        // 渲染商品列表
+        async function render() {
+            try {
+                const products = await AquariumFirebase.products.getAll();
+                const cats = await AquariumFirebase.categories.getAll();
+                
+                document.getElementById('count-products').textContent = products.length;
+                document.getElementById('count-stock').textContent = products.reduce((s, i) => s + (i.stock||0), 0);
+                
+                await renderCategories();
+                
+                const list = document.getElementById('product-list');
+                if (products.length === 0) {
+                    list.innerHTML = '<div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>';
+                    return;
+                }
+                
+                list.innerHTML = products.map(i => `
+                    <div class="product">
+                        <img src="${i.image || 'images/products/default-guppy.svg'}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'">
+                        <div class="info">
+                            <div class="name">${i.name}</div>
+                            <div class="meta">${i.category} • 庫存: ${i.stock}</div>
+                            <div class="price">$${i.price}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-edit" onclick="edit(${i.id})">✏️</button>
+                            <button class="btn-delete" onclick="del(${i.id})">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Render error:', error);
             }
-            
-            list.innerHTML = p.map(i => `
-                <div class="product">
-                    <img src="${i.image||'images/products/default-guppy.svg'}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'">
-                    <div class="info">
-                        <div class="name">${i.name}</div>
-                        <div class="meta">${i.category} • 庫存: ${i.stock}</div>
-                        <div class="price">$${i.price}</div>
-                    </div>
-                    <div class="actions">
-                        <button class="btn-edit" onclick="edit(${i.id})">✏️</button>
-                        <button class="btn-delete" onclick="del(${i.id})">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
         }
         
+        // 開啟新增 Modal
         function openModal() {
             document.getElementById('modal-title').textContent = '新增商品';
             document.getElementById('p-id').value = '';
@@ -362,13 +364,16 @@
             document.getElementById('p-desc').value = '';
             document.getElementById('p-img').value = '';
             document.getElementById('preview-img').classList.remove('show');
-            renderCats();
+            renderCategories();
             document.getElementById('modal').classList.add('active');
         }
         
-        function edit(id) {
-            const p = load().find(x => x.id === id);
+        // 編輯商品
+        async function edit(id) {
+            const products = await AquariumFirebase.products.getAll();
+            const p = products.find(x => x.id == id || x.id === id);
             if (!p) return;
+            
             document.getElementById('modal-title').textContent = '編輯商品';
             document.getElementById('p-id').value = p.id;
             document.getElementById('p-name').value = p.name;
@@ -376,8 +381,10 @@
             document.getElementById('p-stock').value = p.stock;
             document.getElementById('p-desc').value = p.description || '';
             document.getElementById('p-img').value = p.image || '';
-            renderCats();
+            
+            await renderCategories();
             setTimeout(() => document.getElementById('p-cat').value = p.category, 0);
+            
             if (p.image) {
                 document.getElementById('preview-img').src = p.image;
                 document.getElementById('preview-img').classList.add('show');
@@ -385,9 +392,10 @@
             document.getElementById('modal').classList.add('active');
         }
         
-        function del(id) {
+        // 刪除商品
+        async function del(id) {
             if (!confirm('刪除這個商品？')) return;
-            saveAll(load().filter(x => x.id !== id));
+            await AquariumFirebase.products.delete(id);
             render();
         }
         
@@ -395,9 +403,11 @@
             document.getElementById('modal').classList.remove('active');
         }
         
-        function editCategories() {
-            const cats = loadCats();
-            const products = load();
+        // 分類管理
+        async function editCategories() {
+            const cats = await AquariumFirebase.categories.getAll();
+            const products = await AquariumFirebase.products.getAll();
+            
             document.getElementById('cat-list').innerHTML = cats.map(c => {
                 const count = products.filter(p => p.category === c.name).length;
                 return `
@@ -406,44 +416,49 @@
                         <span class="name">${c.name}</span>
                         <span class="count">${count} 項</span>
                         <div class="actions">
-                            <button class="btn-secondary" onclick="editCat(${c.id})">✏️</button>
-                            <button class="btn-delete" onclick="delCat(${c.id})" ${count > 0 ? 'disabled' : ''}>🗑️</button>
+                            <button class="btn-secondary" onclick="editCat('${c.id}')">✏️</button>
+                            <button class="btn-delete" onclick="delCat('${c.id}')" ${count > 0 ? 'disabled' : ''}>🗑️</button>
                         </div>
                     </div>
                 `;
             }).join('') || '<p style="text-align:center;color:#999;">尚無分類</p>';
+            
             document.getElementById('cat-modal').classList.add('active');
         }
         
-        function editCat(id) {
-            const cats = loadCats();
-            const cat = cats.find(c => c.id === id);
+        async function editCat(id) {
+            const cats = await AquariumFirebase.categories.getAll();
+            const cat = cats.find(c => c.id == id || c.id === id);
             if (!cat) return;
+            
             const newName = prompt('輸入新名稱：', cat.name);
             if (newName && newName.trim()) {
                 cat.name = newName.trim();
-                saveCats(cats);
+                await AquariumFirebase.categories.save(cat);
                 editCategories();
             }
         }
         
-        function delCat(id) {
-            const cats = loadCats();
-            const cat = cats.find(c => c.id === id);
+        async function delCat(id) {
+            const cats = await AquariumFirebase.categories.getAll();
+            const cat = cats.find(c => c.id == id || c.id === id);
             if (!cat) return;
-            if (!confirm(`刪除分類「${cat.name}」？`)) return;
-            saveCats(cats.filter(c => c.id !== id));
+            
+            if (!confirm(`刪除分類「${cat.name」？`)) return;
+            await AquariumFirebase.categories.delete(id);
             editCategories();
         }
         
-        function addCategory(e) {
+        async function addCategory(e) {
             e.preventDefault();
             const name = document.getElementById('cat-new-name').value.trim();
             const icon = document.getElementById('cat-new-icon').value;
             if (!name) return;
-            const cats = loadCats();
-            cats.push({ id: Date.now(), name, icon });
-            saveCats(cats);
+            
+            const cats = await AquariumFirebase.categories.getAll();
+            cats.push({ id: Date.now().toString(), name, icon });
+            await AquariumFirebase.categories.saveAll ? cats : localStorage.setItem('aquarium_categories', JSON.stringify(cats));
+            
             document.getElementById('cat-new-name').value = '';
             editCategories();
         }
@@ -452,6 +467,7 @@
             document.getElementById('cat-modal').classList.remove('active');
         }
         
+        // 圖片處理
         function handleImg(input) {
             if (!input.files[0]) return;
             const file = input.files[0];
@@ -459,13 +475,11 @@
             r.onload = e => {
                 const img = new Image();
                 img.onload = () => {
-                    // 自動裁剪為 600x600 正方形
                     const canvas = document.createElement('canvas');
                     canvas.width = 600;
                     canvas.height = 600;
                     const ctx = canvas.getContext('2d');
                     
-                    // 計算裁剪區域
                     let sx = 0, sy = 0, sw = img.width, sh = img.height;
                     if (sw > sh) {
                         sx = (sw - sh) / 2;
@@ -476,8 +490,8 @@
                     }
                     
                     ctx.drawImage(img, sx, sy, sw, sh, 0, 0, 600, 600);
-                    
                     const result = canvas.toDataURL('image/jpeg', 0.85);
+                    
                     document.getElementById('preview-img').src = result;
                     document.getElementById('preview-img').classList.add('show');
                     document.getElementById('p-img').value = result;
@@ -487,8 +501,9 @@
             r.readAsDataURL(file);
         }
         
+        // 網站內容
         function editSiteContent() {
-            const c = loadSite();
+            const c = JSON.parse(localStorage.getItem(SITE_KEY) || '{}');
             document.getElementById('site-title').value = c.title || '';
             document.getElementById('site-subtitle').value = c.subtitle || '';
             document.getElementById('site-desc').value = c.description || '';
@@ -508,19 +523,19 @@
                 updated_at: new Date().toISOString()
             };
             localStorage.setItem(SITE_KEY, JSON.stringify(c));
-            document.getElementById('site-modal').classList.remove('active');
-            alert('✅ 網站內容已更新！');
+            document.getElementById('site-modal').classList.remove('alert('✅ 網站內容已更新！');
         }
         
         function closeSiteModal() {
             document.getElementById('site-modal').classList.remove('active');
         }
         
-        function save(e) {
+        // 儲存商品
+        async function save(e) {
             e.preventDefault();
-            const p = load();
+            
             const id = document.getElementById('p-id').value;
-            const item = {
+            const product = {
                 id: id ? parseInt(id) : Date.now(),
                 name: document.getElementById('p-name').value,
                 price: parseInt(document.getElementById('p-price').value),
@@ -529,28 +544,20 @@
                 description: document.getElementById('p-desc').value,
                 updated_at: new Date().toISOString()
             };
-            const img = document.getElementById('p-img').value;
-            const oldImg = p.find(x => x.id == id)?.image;
-            item.image = img || oldImg || 'images/products/default-guppy.svg';
             
-            if (id) {
-                const i = p.findIndex(x => x.id == id);
-                if (i !== -1) p[i] = item;
-            } else {
-                p.push(item);
-            }
-            saveAll(p);
+            const img = document.getElementById('p-img').value;
+            const products = await AquariumFirebase.products.getAll();
+            const oldImg = products.find(x => x.id == id || x.id === id)?.image;
+            product.image = img || oldImg || 'images/products/default-guppy.svg';
+            
+            await AquariumFirebase.products.save(product);
+            
             closeModal();
             render();
             alert(id ? '✅ 已更新！' : '✅ 已新增！');
         }
         
-        function clearAll() {
-            if (!confirm('清除所有商品？')) return;
-            localStorage.removeItem(KEY);
-            render();
-        }
-        
+        // 初始化
         document.addEventListener('DOMContentLoaded', checkLogin);
         document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
     </script>

@@ -1,0 +1,11 @@
+# Robots.txt for RYAN生活黑客
+User-agent: *
+Allow: /
+Disallow: /private/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://seo-blog-lemon.vercel.app/sitemap.xml
+
+# Crawl-delay (可選)
+Crawl-delay: 10

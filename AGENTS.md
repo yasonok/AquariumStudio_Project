@@ -2,15 +2,15 @@
 
 ## 📱 所有 Agent 統一呼叫方式
 
-**使用 @Ryan_assistant 呼叫所有 Agent**
+**使用 @Ryanchiang_bot 呼叫所有 Agent**
 
-在 Telegram 群組中輸入 `@Ryan_assistant` + 指令即可召喚 Agent。
+在 Telegram 群組中輸入 `@Ryanchiang_bot` + 指令即可召喚 Agent。
 
 範例：
 ```
-@Ryan_assistant 幫我寫一篇 SEO 文章
-@Ryan_assistant 今天的水族市場新聞
-@Ryan_assistant 檢查 SEO 網站流量
+@Ryanchiang_bot 幫我寫一篇 SEO 文章
+@Ryanchiang_bot 今天的水族市場新聞
+@Ryanchiang_bot 檢查 SEO 網站流量
 ```
 
 ---
