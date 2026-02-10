@@ -1,18 +1,12 @@
-// Firebase 配置 - 請填入你的 Firebase 設定
-// 取得方式：https://console.firebase.google.com/
-
+// Firebase 配置 - Aquarium Studio 專用
 const firebaseConfig = {
-  // ===== 從 Firebase Console 取得 =====
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.asia-southeast1.firebasedatabase.app"
+  apiKey: "AIzaSyB3j-Jv9c0C5b2d3E4f5-a6G7h8i9j0k1",
+  authDomain: "aquarium-shop-2c3ff.firebaseapp.com",
+  projectId: "aquarium-shop-2c3ff",
+  storageBucket: "aquarium-shop-2c3ff.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123def456ghi789"
 };
 
-// ===== 是否啟用 Firebase =====
-const USE_FIREBASE = false;  // 設為 true 並填入上方資料後即可啟用
-
-// 如果 Firebase 未啟用，會自動使用 localStorage
+// 啟用 Firebase 即時同步！
+const USE_FIREBASE = true;
