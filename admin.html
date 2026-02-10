@@ -7,10 +7,31 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; }
+        
+        /* 登入頁面樣式 */
+        .login-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #667eea, #764ba2); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
+        .login-overlay.active { display: flex; }
+        .login-box { background: white; border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        .login-box .icon { font-size: 3.5rem; margin-bottom: 15px; }
+        .login-box h1 { font-size: 1.4rem; margin-bottom: 8px; color: #333; }
+        .login-box p { color: #888; font-size: 0.9rem; margin-bottom: 25px; }
+        .login-box input { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 12px; font-size: 1.1rem; text-align: center; margin-bottom: 15px; transition: all 0.3s; }
+        .login-box input:focus { outline: none; border-color: #667eea; }
+        .login-box button { width: 100%; padding: 16px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .login-box button:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .login-box .error { color: #ff6b6b; font-size: 0.85rem; margin-top: 10px; display: none; }
+        
+        /* 管理後台隱藏 */
+        .admin-content { display: none; }
+        .admin-content.active { display: block; }
+        
         .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { font-size: 1.2rem; }
-        .header-btns { display: flex; gap: 8px; }
+        .header-btns { display: flex; gap: 8px; align-items: center; }
         .header-btns button, .header-btns a { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; text-decoration: none; }
+        .header-btns button:hover { background: rgba(255,255,255,0.3); }
+        .header-btns .user-info { background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; }
+        
         .stats { display: flex; gap: 10px; padding: 15px; background: white; overflow-x: auto; }
         .stat { min-width: 100px; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; flex: 1; }
         .stat .num { font-size: 1.5rem; font-weight: bold; color: #667eea; }
@@ -61,55 +82,54 @@
         .cat-item .count { color: #667eea; font-size: 0.9rem; }
         .cat-item .actions { display: flex; gap: 5px; }
         .cat-item .actions button { padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
-        
-        /* 固定框裁剪樣式 */
-        .crop-container { position: relative; display: inline-block; max-width: 100%; overflow: hidden; border-radius: 10px; background: #000; }
-        .crop-canvas { display: block; max-width: 100%; cursor: move; }
-        .crop-frame { 
-            position: absolute; 
-            border: 3px solid #667eea; 
-            background: transparent;
-            pointer-events: none;
-            box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);
-        }
-        .crop-frame::before, .crop-frame::after {
-            content: ''; position: absolute; width: 20px; height: 20px; border: 3px solid #fff;
-        }
-        .crop-frame::before { top: -3px; left: -3px; border-right: none; border-bottom: none; }
-        .crop-frame::after { bottom: -3px; right: -3px; border-left: none; border-top: none; }
-        .crop-info { text-align: center; margin-top: 10px; color: #666; font-size: 0.9rem; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🎛️ 商品管理</h1>
-        <div class="header-btns">
-            <a href="index.html">🏠 首頁</a>
-            <button onclick="editCategories()">🏷️ 分類</button>
-            <button onclick="editSiteContent()">📝 網站</button>
-            <button onclick="clearAll()">🗑️</button>
+    <!-- 登入頁面 -->
+    <div class="login-overlay active" id="login-overlay">
+        <div class="login-box">
+            <div class="icon">🐟</div>
+            <h1>Aquarium Studio</h1>
+            <p>請輸入管理密碼</p>
+            <input type="password" id="login-password" placeholder="密碼" onkeyup="if(event.key==='Enter')login()">
+            <button onclick="login()">登入</button>
+            <div class="error" id="login-error">密碼錯誤，請重試</div>
         </div>
     </div>
-    
-    <div class="stats">
-        <div class="stat">
-            <div class="num" id="count-products">0</div>
-            <div class="label">商品數</div>
+
+    <!-- 管理後台 -->
+    <div class="admin-content" id="admin-content">
+        <div class="header">
+            <h1>🎛️ 商品管理</h1>
+            <div class="header-btns">
+                <a href="index.html">🏠 首頁</a>
+                <button onclick="editCategories()">🏷️ 分類</button>
+                <button onclick="editSiteContent()">📝 網站</button>
+                <span class="user-info">👤 管理員</span>
+                <button onclick="logout()" style="background: rgba(255,107,107,0.8);">🚪 登出</button>
+            </div>
         </div>
-        <div class="stat">
-            <div class="num" id="count-stock">0</div>
-            <div class="label">總庫存</div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="num" id="count-products">0</div>
+                <div class="label">商品數</div>
+            </div>
+            <div class="stat">
+                <div class="num" id="count-stock">0</div>
+                <div class="label">總庫存</div>
+            </div>
         </div>
+        
+        <div class="section">
+            <h2>📦 商品列表 <button onclick="openModal()">➕ 新增</button></h2>
+            <div id="product-list">
+                <div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>
+            </div>
+        </div>
+        
+        <button class="fab" onclick="openModal()">+</button>
     </div>
-    
-    <div class="section">
-        <h2>📦 商品列表 <button onclick="openModal()">➕ 新增</button></h2>
-        <div id="product-list">
-            <div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>
-        </div>
-    </div>
-    
-    <button class="fab" onclick="openModal()">+</button>
     
     <!-- 商品 Modal -->
     <div class="modal" id="modal">
@@ -159,28 +179,6 @@
                         <button type="submit" class="btn-primary">💾 儲存</button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 固定框裁剪 Modal -->
-    <div class="modal" id="crop-modal">
-        <div class="modal-content modal-content-wide">
-            <div class="modal-header">
-                <h3>📐 裁剪 (600x600)</h3>
-                <button class="modal-close" onclick="closeCropModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p style="margin-bottom:15px; color:#666;">👆 拖動圖片調整位置，確保在框內</p>
-                <div class="crop-container" id="crop-container">
-                    <canvas id="crop-canvas" class="crop-canvas"></canvas>
-                    <div class="crop-frame" id="crop-frame"></div>
-                </div>
-                <p class="crop-info">📐 輸出尺寸：600 x 600 像素</p>
-                <div style="margin-top:15px; display:flex; gap:10px;">
-                    <button type="button" class="btn-secondary" style="flex:1; padding:12px;" onclick="skipCrop()">跳過裁剪</button>
-                    <button type="button" class="btn-primary" style="flex:1; padding:12px;" onclick="applyCrop()">✅ 確認</button>
-                </div>
             </div>
         </div>
     </div>
@@ -269,7 +267,42 @@
         const KEY = 'aquarium_products';
         const SITE_KEY = 'site_content';
         const CAT_KEY = 'aquarium_categories';
-        const CROP_SIZE = 600;
+        const LOGIN_KEY = 'aquarium_admin_logged';
+        const DEFAULT_PASSWORD = '1234';
+        
+        // 檢查登入狀態
+        function checkLogin() {
+            if (localStorage.getItem(LOGIN_KEY) === 'true') {
+                document.getElementById('login-overlay').classList.remove('active');
+                document.getElementById('admin-content').classList.add('active');
+                render();
+            } else {
+                document.getElementById('login-overlay').classList.add('active');
+                document.getElementById('admin-content').classList.remove('active');
+            }
+        }
+        
+        // 登入
+        function login() {
+            const pwd = document.getElementById('login-password').value;
+            if (pwd === DEFAULT_PASSWORD) {
+                localStorage.setItem(LOGIN_KEY, 'true');
+                document.getElementById('login-overlay').classList.remove('active');
+                document.getElementById('admin-content').classList.add('active');
+                document.getElementById('login-password').value = '';
+                document.getElementById('login-error').style.display = 'none';
+                render();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+        
+        // 登出
+        function logout() {
+            localStorage.removeItem(LOGIN_KEY);
+            document.getElementById('login-overlay').classList.add('active');
+            document.getElementById('admin-content').classList.remove('active');
+        }
         
         function load() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
         function saveAll(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
@@ -306,7 +339,7 @@
             
             list.innerHTML = p.map(i => `
                 <div class="product">
-                    <img src="${i.image||'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'">
+                    <img src="${i.image||'images/products/default-guppy.svg'}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'">
                     <div class="info">
                         <div class="name">${i.name}</div>
                         <div class="meta">${i.category} • 庫存: ${i.stock}</div>
@@ -362,7 +395,6 @@
             document.getElementById('modal').classList.remove('active');
         }
         
-        // ===== 分類管理 =====
         function editCategories() {
             const cats = loadCats();
             const products = load();
@@ -420,190 +452,39 @@
             document.getElementById('cat-modal').classList.remove('active');
         }
         
-        // ===== 固定框裁剪功能 =====
-        let cropImg, cropOffsetX = 0, cropOffsetY = 0;
-        let isDragging = false, startX, startY;
-        let imgScale = 1;
-        
         function handleImg(input) {
             if (!input.files[0]) return;
             const file = input.files[0];
             const r = new FileReader();
             r.onload = e => {
-                cropImg = new Image();
-                cropImg.onload = () => {
-                    openCropModal();
+                const img = new Image();
+                img.onload = () => {
+                    // 自動裁剪為 600x600 正方形
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 600;
+                    canvas.height = 600;
+                    const ctx = canvas.getContext('2d');
+                    
+                    // 計算裁剪區域
+                    let sx = 0, sy = 0, sw = img.width, sh = img.height;
+                    if (sw > sh) {
+                        sx = (sw - sh) / 2;
+                        sw = sh;
+                    } else {
+                        sy = (sh - sw) / 2;
+                        sh = sw;
+                    }
+                    
+                    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, 600, 600);
+                    
+                    const result = canvas.toDataURL('image/jpeg', 0.85);
+                    document.getElementById('preview-img').src = result;
+                    document.getElementById('preview-img').classList.add('show');
+                    document.getElementById('p-img').value = result;
                 };
-                cropImg.src = e.target.result;
+                img.src = e.target.result;
             };
             r.readAsDataURL(file);
-        }
-        
-        function openCropModal() {
-            const canvas = document.getElementById('crop-canvas');
-            const ctx = canvas.getContext('2d');
-            const container = document.getElementById('crop-container');
-            const frame = document.getElementById('crop-frame');
-            
-            // 容器寬度
-            const maxW = 450;
-            let w = cropImg.width, h = cropImg.height;
-            
-            if (w > maxW || h > maxW) {
-                if (w > h) { h = Math.round(h * maxW / w); w = maxW; }
-                else { w = Math.round(w * maxW / h); h = maxW; }
-            }
-            
-            canvas.width = w;
-            canvas.height = h;
-            
-            // 計算縮放比例（相對於原始圖片）
-            imgScale = w / cropImg.width;
-            
-            // 初始位置：置中
-            cropOffsetX = 0;
-            cropOffsetY = 0;
-            
-            // 設定裁剪框大小（300x300 比例）
-            const frameSize = 150; // 顯示大小（視覺上）
-            frame.style.width = frameSize + 'px';
-            frame.style.height = frameSize + 'px';
-            frame.style.left = (w/2 - frameSize/2) + 'px';
-            frame.style.top = (h/2 - frameSize/2) + 'px';
-            
-            drawCropImage();
-            document.getElementById('crop-modal').classList.add('active');
-        }
-        
-        function drawCropImage() {
-            const canvas = document.getElementById('crop-canvas');
-            const ctx = canvas.getContext('2d');
-            const w = canvas.width, h = canvas.height;
-            
-            ctx.clearRect(0, 0, w, h);
-            ctx.drawImage(cropImg, cropOffsetX, cropOffsetY, cropImg.width * imgScale, cropImg.height * imgScale);
-        }
-        
-        function getCanvasPos(e) {
-            const canvas = document.getElementById('crop-canvas');
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return {
-                x: (clientX - rect.left) * (canvas.width / rect.width),
-                y: (clientY - rect.top) * (canvas.height / rect.height)
-            };
-        }
-        
-        const canvasEl = document.getElementById('crop-canvas');
-        canvasEl.addEventListener('mousedown', e => {
-            isDragging = true;
-            const pos = getCanvasPos(e);
-            startX = pos.x - cropOffsetX * imgScale;
-            startY = pos.y - cropOffsetY * imgScale;
-            e.preventDefault();
-        });
-        
-        canvasEl.addEventListener('mousemove', e => {
-            if (!isDragging) return;
-            const pos = getCanvasPos(e);
-            cropOffsetX = (pos.x - startX) / imgScale;
-            cropOffsetY = (pos.y - startY) / imgScale;
-            drawCropImage();
-        });
-        
-        canvasEl.addEventListener('mouseup', () => isDragging = false);
-        canvasEl.addEventListener('mouseleave', () => isDragging = false);
-        
-        canvasEl.addEventListener('touchstart', e => {
-            isDragging = true;
-            const pos = getCanvasPos(e);
-            startX = pos.x - cropOffsetX * imgScale;
-            startY = pos.y - cropOffsetY * imgScale;
-            e.preventDefault();
-        });
-        
-        canvasEl.addEventListener('touchmove', e => {
-            if (!isDragging) return;
-            const pos = getCanvasPos(e);
-            cropOffsetX = (pos.x - startX) / imgScale;
-            cropOffsetY = (pos.y - startY) / imgScale;
-            drawCropImage();
-            e.preventDefault();
-        });
-        
-        canvasEl.addEventListener('touchend', () => isDragging = false);
-        
-        function applyCrop() {
-            const canvas = document.getElementById('crop-canvas');
-            const frame = document.getElementById('crop-frame');
-            const frameRect = frame.getBoundingClientRect();
-            const canvasRect = canvas.getBoundingClientRect();
-            
-            // 計算裁剪區域在 canvas 上的位置
-            const scaleX = canvas.width / canvasRect.width;
-            const scaleY = canvas.height / canvasRect.height;
-            const sx = (frameRect.left - canvasRect.left) * scaleX;
-            const sy = (frameRect.top - canvasRect.top) * scaleY;
-            const sw = frameRect.width * scaleX;
-            const sh = frameRect.height * scaleY;
-            
-            // 建立裁剪後的圖片
-            const c = document.createElement('canvas');
-            c.width = CROP_SIZE;
-            c.height = CROP_SIZE;
-            const cx = c.getContext('2d');
-            
-            // 從原圖裁剪
-            cx.drawImage(cropImg, 
-                (sx + cropOffsetX * imgScale) / imgScale, 
-                (sy + cropOffsetY * imgScale) / imgScale, 
-                sw / imgScale, 
-                sh / imgScale,
-                0, 0, CROP_SIZE, CROP_SIZE
-            );
-            
-            const result = c.toDataURL('image/jpeg', 0.85);
-            document.getElementById('preview-img').src = result;
-            document.getElementById('preview-img').classList.add('show');
-            document.getElementById('p-img').value = result;
-            closeCropModal();
-        }
-        
-        function skipCrop() {
-            const c = document.createElement('canvas');
-            c.width = CROP_SIZE;
-            c.height = CROP_SIZE;
-            const ctx = c.getContext('2d');
-            
-            // 計算縮放以符合 300x300
-            let sx = 0, sy = 0, sw = cropImg.width, sh = cropImg.height;
-            if (sw > sh) {
-                sx = (sw - sh) / 2;
-                sw = sh;
-            } else {
-                sy = (sh - sw) / 2;
-                sh = sw;
-            }
-            
-            ctx.drawImage(cropImg, sx, sy, sw, sh, 0, 0, CROP_SIZE, CROP_SIZE);
-            
-            c.toBlob(blob => {
-                const r = new FileReader();
-                r.onload = e => {
-                    document.getElementById('preview-img').src = e.target.result;
-                    document.getElementById('preview-img').classList.add('show');
-                    document.getElementById('p-img').value = e.target.result;
-                };
-                r.readAsDataURL(blob);
-            }, 'image/jpeg', 0.85);
-            
-            closeCropModal();
-        }
-        
-        function closeCropModal() {
-            document.getElementById('crop-modal').classList.remove('active');
-            cropImg = null;
         }
         
         function editSiteContent() {
@@ -670,9 +551,8 @@
             render();
         }
         
-        document.addEventListener('DOMContentLoaded', render);
+        document.addEventListener('DOMContentLoaded', checkLogin);
         document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
-        document.getElementById('crop-modal').addEventListener('click', e => { if (e.target === document.getElementById('crop-modal')) closeCropModal(); });
     </script>
 </body>
 </html>
