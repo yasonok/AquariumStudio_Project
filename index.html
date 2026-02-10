@@ -13,7 +13,20 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     
-    /* Stats Section */
+    /* Stats Section - Clean White Style */
+    .stats-simple { background: white; padding: 40px 20px; border-bottom: 1px solid #eee; }
+    .stats-container { max-width: 1000px; margin: 0 auto; }
+    .stats-row { display: flex; justify-content: center; gap: 0; flex-wrap: wrap; }
+    .stat-item { display: flex; align-items: center; gap: 12px; padding: 20px 35px; border-right: 1px solid #eee; }
+    .stat-item:last-child { border-right: none; }
+    .stat-emoji { font-size: 32px; }
+    .stat-info { color: #333; }
+    .stat-value { font-size: 20px; font-weight: bold; display: block; }
+    .stat-label { font-size: 13px; color: #888; }
+    @media (max-width: 768px) {
+      .stats-row { flex-direction: row; flex-wrap: wrap; }
+      .stat-item { border-right: none; border-bottom: 1px solid #eee; flex: 1 1 45%; justify-content: center; padding: 15px; }
+    }
     .stats-simple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 50px 20px; }
     .stats-container { max-width: 1000px; margin: 0 auto; }
     .stats-row { display: flex; justify-content: center; gap: 0; }
