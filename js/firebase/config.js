@@ -9,4 +9,4 @@ const firebaseConfig = {
 };
 
 // 啟用 Firebase 即時同步！
-const USE_FIREBASE = true;
+const USE_FIREBASE = false;
