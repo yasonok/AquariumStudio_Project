@@ -104,6 +104,15 @@ async function createAgentDashboard() {
       workspace: '/workspace/seo_agent',
       phase: '進行中',
       progress: 30
+    },
+    '-5242091244': {
+      name: 'NanoBanana',
+      agentSelect: 'NanoBanana',
+      project: 'Gemini 圖片生成',
+      task: '使用 Gemini 2.0 Flash 生成 AI 圖片',
+      workspace: '/workspace/nanobanana',
+      phase: '圖片生成中',
+      progress: 10
     }
   };
   

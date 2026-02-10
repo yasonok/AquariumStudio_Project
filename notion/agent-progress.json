@@ -11,7 +11,7 @@
       {"name": "功能測試", "status": "pending", "progress": 0},
       {"name": "上線部署", "status": "pending", "progress": 0}
     ],
-    "lastUpdated": "2026-02-10T02:15:00Z",
+    "lastUpdated": "2026-02-10T02:36:00Z",
     "notes": "Aquarium Studio 電商網站"
   },
   "-5144687626": {
@@ -25,7 +25,7 @@
       {"name": "每日排程測試", "status": "pending", "progress": 0},
       {"name": "正式上線", "status": "pending", "progress": 0}
     ],
-    "lastUpdated": "2026-02-10T02:15:00Z",
+    "lastUpdated": "2026-02-10T02:36:00Z",
     "notes": "每天早上 8 點自動發送"
   },
   "-5215480233": {
@@ -40,7 +40,20 @@
       {"name": "每日文章發布", "status": "in_progress", "progress": 45},
       {"name": "排名監測與優化", "status": "pending", "progress": 0}
     ],
-    "lastUpdated": "2026-02-10T02:15:00Z",
+    "lastUpdated": "2026-02-10T02:36:00Z",
     "notes": "已發布 7+ 篇 SEO 文章"
+  },
+  "-5242091244": {
+    "agentName": "NanoBanana",
+    "projectName": "Google 模型測試",
+    "currentPhase": "初始化",
+    "progress": 0,
+    "tasks": [
+      {"name": "環境設定", "status": "in_progress", "progress": 50},
+      {"name": "模型測試", "status": "pending", "progress": 0},
+      {"name": "功能驗證", "status": "pending", "progress": 0}
+    ],
+    "lastUpdated": "2026-02-10T02:36:00Z",
+    "notes": "使用 Google 模型"
   }
 }

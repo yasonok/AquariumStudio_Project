@@ -13,7 +13,7 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     
-    /* Stats Section - Clean & Simple */
+    /* Stats Section */
     .stats-simple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 50px 20px; }
     .stats-container { max-width: 1000px; margin: 0 auto; }
     .stats-row { display: flex; justify-content: center; gap: 0; }
@@ -31,37 +31,43 @@
     /* Care Guide Styles */
     .care-hero { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: white; padding: 50px 20px; text-align: center; }
     .care-hero h1 { font-size: 28px; margin-bottom: 10px; font-weight: 700; }
-    .care-hero p { font-size: 16px; opacity: 0.9; max-width: 600px; margin: 0 auto; }
-    .care-section { padding: 60px 20px; }
+    .care-hero p { font-size: 16px; opacity: 0.9; max-width: 700px; margin: 0 auto; line-height: 1.7; }
+    .care-section { padding: 70px 20px; }
     .care-section:nth-child(even) { background: #f9f9f9; }
     .care-container { max-width: 1000px; margin: 0 auto; }
     .care-header { text-align: center; margin-bottom: 40px; }
-    .care-header h2 { font-size: 24px; color: #333; margin-bottom: 10px; font-weight: 600; }
-    .care-header p { color: #666; font-size: 15px; max-width: 600px; margin: 0 auto; }
-    .care-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-    .care-card { background: white; border-radius: 12px; padding: 30px 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-align: center; transition: all 0.3s; border: 1px solid #eee; }
+    .care-header h2 { font-size: 26px; color: #333; margin-bottom: 12px; font-weight: 600; }
+    .care-header p { color: #666; font-size: 15px; max-width: 700px; margin: 0 auto; line-height: 1.7; }
+    .care-subtitle { color: #667eea; font-size: 14px; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .care-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
+    .care-card { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: all 0.3s; border: 1px solid #eee; }
     .care-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.12); }
-    .care-icon { font-size: 40px; margin-bottom: 15px; display: block; }
-    .care-card h3 { font-size: 18px; color: #333; margin-bottom: 10px; font-weight: 600; }
-    .care-card p { color: #666; font-size: 14px; line-height: 1.6; margin: 0; }
-    .care-list-box { background: white; border-radius: 12px; padding: 25px 30px; margin-top: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #eee; }
-    .care-list-box h4 { color: #667eea; font-size: 16px; margin-bottom: 15px; }
-    .care-list-box ul { list-style: none; padding: 0; margin: 0; }
-    .care-list-box li { padding: 10px 0; border-bottom: 1px solid #f0f0f0; color: #444; font-size: 14px; display: flex; align-items: center; gap: 10px; }
-    .care-list-box li:last-child { border-bottom: none; }
+    .care-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+    .care-icon { font-size: 32px; }
+    .care-card h3 { font-size: 18px; color: #333; margin: 0; font-weight: 600; }
+    .care-card p { color: #555; font-size: 14px; line-height: 1.8; margin: 0; }
+    .care-card ul { color: #555; font-size: 14px; line-height: 2; margin: 10px 0 0 0; padding-left: 20px; }
+    .care-card li { margin-bottom: 5px; }
+    .care-list-box { background: white; border-radius: 12px; padding: 30px; margin-top: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #eee; }
+    .care-list-box h4 { color: #667eea; font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .care-list-box ul { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 30px; list-style: none; padding: 0; margin: 0; }
+    .care-list-box li { padding: 10px 15px; background: #f8f9fa; border-radius: 8px; color: #444; font-size: 14px; display: flex; align-items: center; gap: 10px; }
     .care-list-box li::before { content: '✓'; color: #667eea; font-weight: bold; }
-    .care-warning { background: #fff8e1; border-left: 4px solid #ffc107; border-radius: 0 8px 8px 0; padding: 20px; margin: 25px 0; }
-    .care-warning h4 { color: #856404; font-size: 15px; margin-bottom: 8px; }
+    .care-warning { background: #fff8e1; border-left: 4px solid #ffc107; border-radius: 0 10px 10px 0; padding: 25px; margin: 25px 0; }
+    .care-warning h4 { color: #856404; font-size: 16px; margin-bottom: 12px; }
     .care-warning ul { padding-left: 20px; margin: 0; }
-    .care-warning li { color: #856404; font-size: 14px; margin-bottom: 5px; }
-    .care-tip { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 20px; margin: 25px 0; }
-    .care-tip h4 { color: #667eea; font-size: 15px; margin-bottom: 8px; }
-    .care-tip p { color: #555; font-size: 14px; margin: 0; }
-    .care-nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 20px; background: white; border-bottom: 1px solid #eee; margin-bottom: 40px; }
+    .care-warning li { color: #856404; font-size: 14px; margin-bottom: 8px; line-height: 1.6; }
+    .care-tip { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 25px; margin: 25px 0; }
+    .care-tip h4 { color: #667eea; font-size: 16px; margin-bottom: 12px; }
+    .care-tip p { color: #555; font-size: 14px; margin: 0; line-height: 1.8; }
+    .care-note { background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 0 10px 10px 0; padding: 25px; margin: 25px 0; }
+    .care-note h4 { color: #2e7d32; font-size: 16px; margin-bottom: 12px; }
+    .care-note p { color: #444; font-size: 14px; margin: 0; line-height: 1.8; }
+    .care-nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 20px; background: white; border-bottom: 1px solid #eee; margin-bottom: 50px; }
     .care-nav a { padding: 10px 20px; background: #f5f5f5; border-radius: 20px; color: #444; text-decoration: none; font-size: 14px; transition: all 0.3s; }
     .care-nav a:hover { background: #667eea; color: white; }
-    @media (max-width: 900px) { .care-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px) { .care-grid { grid-template-columns: 1fr; } }
+    .care-para { color: #555; font-size: 15px; line-height: 1.9; margin-bottom: 15px; }
+    @media (max-width: 900px) { .care-grid { grid-template-columns: 1fr; } .care-list-box ul { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -127,7 +133,7 @@
     <section class="care-hero">
       <div class="container">
         <h1>🐠 孔雀魚飼養指南</h1>
-        <p>從新手到專家，完整掌握孔雀魚飼養技巧，讓你的魚兒健康美麗！</p>
+        <p>從新手到專家，完整掌握孔雀魚飼養技巧。我們提供最專業、最詳細的養殖知識，讓您的孔雀魚健康美麗、繁殖順利！</p>
       </div>
     </section>
     
@@ -167,45 +173,114 @@
     </div>
 
     <nav class="care-nav">
-      <a href="#water">💧 水質管理</a>
-      <a href="#feeding">🍽️ 餵食建議</a>
-      <a href="#tank">🏠 魚缸環境</a>
-      <a href="#breeding">🧬 繁殖技巧</a>
-      <a href="#health">🏥 健康照護</a>
+      <a href="#intro">簡介</a>
+      <a href="#water">水質管理</a>
+      <a href="#feeding">餵食建議</a>
+      <a href="#tank">魚缸環境</a>
+      <a href="#breeding">繁殖技巧</a>
+      <a href="#health">健康照護</a>
     </nav>
+
+    <section class="care-section" id="intro">
+      <div class="care-container">
+        <div class="care-header">
+          <h2>🐟 孔雀魚簡介</h2>
+          <p>了解孔雀魚的基本特性，是成功飼養的第一步</p>
+        </div>
+        <p class="care-para">孔雀魚（學名：Poecilia reticulata），又名彩虹魚、百萬魚，原產於南美洲委內瑞拉、蓋亞那等地。牠們是最受歡迎的觀賞魚之一，因為色彩鮮艷、容易飼養、繁殖力強。</p>
+        <p class="care-para">孔雀魚的壽命一般為 2-3 年，雌魚壽命略長於雄魚。成年雄魚體長約 3-4 公分，雌魚可達 5-6 公分。牠們是卵胎生魚類，母魚直接產下活蹦亂跳的幼魚，非常適合初學者入門。</p>
+        <div class="care-grid" style="margin-top: 30px;">
+          <div class="care-card">
+            <div class="care-card-header"><span class="care-icon">🌈</span><h3>色彩繽紛</h3></div>
+            <p>孔雀魚擁有豐富多變的體色，從單一的紅、藍、黃，到複雜的混色、蛇紋、金屬光澤，變化無窮。</p>
+          </div>
+          <div class="care-card">
+            <div class="care-card-header"><span class="care-icon">👶</span><h3>繁殖容易</h3></div>
+            <p>孔雀魚繁殖週期約 28 天，一次可產下 20-100 尾幼魚。繁殖不需特別設備，是學習觀賞魚繁殖的最佳入門魚種。</p>
+          </div>
+          <div class="care-card">
+            <div class="care-card-header"><span class="care-icon">🤝</span><h3>性格溫和</h3></div>
+            <p>孔雀魚性格溫和，可以與其他小型觀賞魚混養，如霓虹燈魚、斑馬魚、鼠魚等，是非常和平的缸中居民。</p>
+          </div>
+          <div class="care-card">
+            <div class="care-card-header"><span class="care-icon">💪</span><h3>適應力強</h3></div>
+            <p>孔雀魚對水質的適應範圍廣泛，適合水溫 20-28°C，pH 6.5-8.0，是生命力強韌的魚種。</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section class="care-section" id="water">
       <div class="care-container">
         <div class="care-header">
           <h2>💧 水質管理</h2>
-          <p>水質是影響孔雀魚健康最重要的因素。</p>
+          <p>水質是影響孔雀魚健康的最重要因素。良好的水質能讓孔雀魚展現最美麗的體色，並延長壽命。</p>
         </div>
+        <div class="care-subtitle">為什麼水質如此重要？</div>
+        <p class="care-para">孔雀魚排泄物和殘餘飼料會在水中分解，產生氨氮和亞硝酸鹽，這些物質對魚類有毒。硝化細菌能將有毒物質轉化為毒性較低的硝酸鹽。定期換水可以稀釋硝酸鹽濃度，保持水質穩定。</p>
+        
         <div class="care-grid">
           <div class="care-card">
-            <span class="care-icon">🔬</span>
-            <h3>水質檢測</h3>
-            <p>定期檢測水溫、pH 值、氨氮、亞硝酸鹽。每週至少檢測一次。</p>
+            <div class="care-card-header"><span class="care-icon">🔬</span><h3>水質檢測</h3></div>
+            <p>建議每週至少檢測一次水質：</p>
+            <ul>
+              <li><strong>pH 值：</strong>7.0-7.5（弱鹼性）</li>
+              <li><strong>水溫：</strong>22-26°C</li>
+              <li><strong>氨氮：</strong>0 ppm（越低越好）</li>
+              <li><strong>亞硝酸鹽：</strong>0 ppm</li>
+              <li><strong>硝酸鹽：</strong>低於 20 ppm</li>
+            </ul>
           </div>
           <div class="care-card">
-            <span class="care-icon">🔄</span>
-            <h3>定期換水</h3>
-            <p>每週更換 20-30% 的水。新鮮的水能稀釋有害物質。</p>
+            <div class="care-card-header"><span class="care-icon">🔄</span><h3>定期換水</h3></div>
+            <p>換水是維持水質的核心工作：</p>
+            <ul>
+              <li><strong>頻率：</strong>每週 1-2 次</li>
+              <li><strong>換水量：</strong>每次 20-30%</li>
+              <li><strong>新水處理：</strong>先放置 24 小時</li>
+              <li><strong>水溫：</strong>新水溫差勿超過 2°C</li>
+              <li><strong>吸底：</strong>順便用虹吸管吸除殘渣</li>
+            </ul>
           </div>
           <div class="care-card">
-            <span class="care-icon">🌡️</span>
-            <h3>溫度穩定</h3>
-            <p>使用恒温器維持水溫在 22-26°C。避免溫差過大。</p>
+            <div class="care-card-header"><span class="care-icon">🌡️</span><h3>溫度控制</h3></div>
+            <p>孔雀魚對溫度變化敏感：</p>
+            <ul>
+              <li><strong>最佳溫度：</strong>24-26°C</li>
+              <li><strong>可容忍範圍：</strong>20-28°C</li>
+              <li><strong>使用加溫器：</strong>保持溫度穩定</li>
+              <li><strong>避免溫差：</strong>不要放在窗邊</li>
+              <li><strong>冬季保溫：</strong>使用加溫墊輔助</li>
+            </ul>
+          </div>
+          <div class="care-card">
+            <div class="care-card-header"><span class="care-icon">🧪</span><h3>水質處理</h3></div>
+            <p>自來水需要處理後才能使用：</p>
+            <ul>
+              <li><strong>除氯：</strong>使用水質穩定劑</li>
+              <li><strong>硝化系統：</strong>添加硝化菌</li>
+              <li><strong>軟硬度：</strong>適合中硬度水</li>
+              <li><strong>RO 水：</strong>水質過硬可考慮使用</li>
+            </ul>
           </div>
         </div>
+        
         <div class="care-list-box">
-          <h4>📋 水質標準值</h4>
+          <h4>📋 水質標準速查表</h4>
           <ul>
-            <li><strong>水溫：</strong>22-26°C（最佳 24°C）</li>
-            <li><strong>pH 值：</strong>7.0-7.5（弱鹼性）</li>
-            <li><strong>氨氮 (NH3)：</strong>0 ppm</li>
-            <li><strong>亞硝酸鹽 (NO2)：</strong>0 ppm</li>
-            <li><strong>硝酸鹽 (NO3)：</strong>低於 20 ppm</li>
+            <li><strong>水溫：</strong>22-26°C</li>
+            <li><strong>pH 值：</strong>7.0-7.5</li>
+            <li><strong>氨氮：</strong>0 ppm</li>
+            <li><strong>亞硝酸鹽：</strong>0 ppm</li>
+            <li><strong>硝酸鹽：</strong>低於 20 ppm</li>
+            <li><strong>總硬度：</strong>8-12 dGH</li>
+            <li><strong>碳酸鹽硬度：</strong>4-8 dKH</li>
           </ul>
+        </div>
+        
+        <div class="care-tip">
+          <h4>💡 專家建議</h4>
+          <p>新缸建立時，建議添加硝化菌液，約 2-4 週後硝化系統穩定再放入主要魚隻。可使用水質測試套件定期監控，發現異常立即處理。</p>
         </div>
       </div>
     </section>
@@ -214,31 +289,59 @@
       <div class="care-container">
         <div class="care-header">
           <h2>🍽️ 餵食建議</h2>
-          <p>正確的餵食方式是養出健康孔雀魚的關鍵。</p>
+          <p>正確的餵食是養出健康孔雀魚的關鍵。過度餵食是新手最常見的錯誤。</p>
         </div>
+        
         <div class="care-grid">
           <div class="care-card">
-            <span class="care-icon">🌾</span>
-            <h3>主食選擇</h3>
-            <p>選擇高品質的孔雀魚專用飼料。營養均衡且不易污染水質。</p>
+            <div class="care-card-header"><span class="care-icon">🌾</span><h3>主食選擇</h3></div>
+            <p><strong>推薦飼料：</strong></p>
+            <ul>
+              <li>孔雀魚專用顆粒飼料</li>
+              <li>小型熱帶魚薄片飼料</li>
+              <li>螺旋藻薄片（增色效果好）</li>
+              <li>選擇信譽品牌，注意保存期限</li>
+            </ul>
           </div>
           <div class="care-card">
-            <span class="care-icon">🦐</span>
-            <h3>營養副食</h3>
-            <p>每週餵食 2-3 次豐年蝦或紅蟲，提供優質蛋白質。</p>
+            <div class="care-card-header"><span class="care-icon">🦐</span><h3>營養副食</h3></div>
+            <p><strong>每週餵食 2-3 次：</strong></p>
+            <ul>
+              <li><strong>豐年蝦苗：</strong>蛋白質含量高</li>
+              <li><strong>乾燥豐年蝦：</strong>方便保存</li>
+              <li><strong>紅蟲/黑蟲：</strong>高蛋白來源</li>
+              <li><strong>水蚤：</strong>活體最佳</li>
+            </ul>
           </div>
           <div class="care-card">
-            <span class="care-icon">⏰</span>
-            <h3>餵食頻率</h3>
-            <p>成魚每天餵 1-2 次，幼魚可以增加到 3-4 次。</p>
+            <div class="care-card-header"><span class="care-icon">⏰</span><h3>餵食頻率</h3></div>
+            <p><strong>成魚：</strong>每天 1-2 次</p>
+            <ul>
+              <li>每次以 2-3 分鐘吃完為準</li>
+              <li>建議「少量多餐」原則</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>幼魚：</strong>每天 3-4 次</p>
+          </div>
+          <div class="care-card">
+            <div class="care-card-header"><span class="care-icon">🚫</span><h3>禁忌事項</h3></div>
+            <p><strong>千萬不要：</strong></p>
+            <ul>
+              <li>過度餵食（最常見錯誤！）</li>
+              <li>餵食人類食物</li>
+              <li>餵食變質或發霉飼料</li>
+              <li>一次餵食大量食物</li>
+              <li>忽略殘餘飼料</li>
+            </ul>
           </div>
         </div>
+        
         <div class="care-warning">
-          <h4>⚠️ 禁忌事項</h4>
+          <h4>⚠️ 過度餵食的後果</h4>
           <ul>
-            <li>千萬不要過度餵食！</li>
-            <li>不要餵食人類食物</li>
-            <li>變質飼料不可餵食</li>
+            <li><strong>水質惡化：</strong>殘餘飼料腐敗產生氨氮</li>
+            <li><strong>魚隻肥胖：</strong>導致脂肪肝、游動遲緩</li>
+            <li><strong>疾病增加：</strong>水質差易引發白點病</li>
+            <li><strong>藻類滋生：</strong>過多養分導致藻類爆發</li>
           </ul>
         </div>
       </div>
@@ -250,26 +353,63 @@
           <h2>🏠 魚缸環境</h2>
           <p>一個布置得當的魚缸是孔雀魚健康成長的基礎。</p>
         </div>
+        
         <div class="care-grid">
           <div class="care-card">
-            <span class="care-icon">📏</span>
-            <h3>缸體大小</h3>
-            <p>建議至少 20 公升水容量。空間越大，水質越穩定。</p>
+            <div class="care-card-header"><span class="care-icon">📏</span><h3>缸體大小</h3></div>
+            <p><strong>最低需求：</strong></p>
+            <ul>
+              <li>單獨飼養：20 公升以上</li>
+              <li>繁殖缸：30 公升以上</li>
+              <li>群養：每隻魚至少 4 公升</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>好處：</strong>水質更穩定、減少緊迫感</p>
           </div>
           <div class="care-card">
-            <span class="care-icon">🌿</span>
-            <h3>水草造景</h3>
-            <p>種植莫斯、水芙蓉等水草，提供躲藏處和休息空間。</p>
+            <div class="care-card-header"><span class="care-icon">🌿</span><h3>水草造景</h3></div>
+            <p><strong>推薦水草：</strong></p>
+            <ul>
+              <li><strong>莫斯類：</strong>爪哇莫斯、聖誕莫斯</li>
+              <li><strong>有莖水草：</strong>水芙蓉、綠菊</li>
+              <li><strong>浮水植物：</strong>水芙蓉、布袋蓮</li>
+            </ul>
           </div>
           <div class="care-card">
-            <span class="care-icon">🔧</span>
-            <h3>過濾系統</h3>
-            <p>選擇適合缸大小的過濾器。氣舉式或海綿式過濾器適合孔雀魚。</p>
+            <div class="care-card-header"><span class="care-icon">🔧</span><h3>過濾系統</h3></div>
+            <p><strong>推薦類型：</strong></p>
+            <ul>
+              <li><strong>海綿過濾器：</strong>最適合孔雀魚</li>
+              <li><strong>氣舉式過濾器：</strong>適合繁殖缸</li>
+              <li><strong>瀑布過濾器：</strong>美觀、適合小型缸</li>
+            </ul>
+          </div>
+          <div class="care-card">
+            <div class="care-card-header"><span class="care-icon">💡</span><h3>照明設備</h3></div>
+            <p><strong>照明建議：</strong></p>
+            <ul>
+              <li><strong>每天照明：</strong>8-10 小時</li>
+              <li><strong>燈具選擇：</strong>LED 水族燈</li>
+              <li><strong>定時器：</strong>使用定時器自動開關</li>
+            </ul>
           </div>
         </div>
+        
+        <div class="care-list-box">
+          <h4>📋 魚缸設備清單</h4>
+          <ul>
+            <li><strong>魚缸：</strong>20 公升以上</li>
+            <li><strong>過濾器：</strong>海綿式或氣舉式</li>
+            <li><strong>加溫器：</strong>100W 恒溫型</li>
+            <li><strong>溫度計：</strong>電子式或酒精式</li>
+            <li><strong>LED 燈：</strong>含定時功能</li>
+            <li><strong>底砂：</strong>中性底砂 2-3 公分</li>
+            <li><strong>水草：</strong>莫斯、浮水植物</li>
+          </ul>
+        </div>
+        
         <div class="care-tip">
-          <h4>💡 底砂選擇</h4>
-          <p>建議使用中性底砂（如陶瓷砂或溪砂），避免使用會改變水質的珊瑚砂。</p>
+          <h4>💡 底砂選擇指南</h4>
+          <p>建議使用中性底砂（如陶瓷砂、溪砂），避免使用珊瑚砂（會使水質偏鹼）。底砂厚度 2-3 公分即可。</p>
         </div>
       </div>
     </section>
@@ -280,30 +420,70 @@
           <h2>🧬 繁殖技巧</h2>
           <p>孔雀魚繁殖能力強大，是最適合新手練習繁殖的魚種。</p>
         </div>
+        
         <div class="care-grid">
           <div class="care-card">
-            <span class="care-icon">♀️♂️</span>
-            <h3>公母辨識</h3>
-            <p>公魚體色鮮艷、尾鰭大；母魚體色較淡、腹部較大。</p>
+            <div class="care-card-header"><span class="care-icon">♀️♂️</span><h3>公母辨識</h3></div>
+            <p><strong>雄魚特徵：</strong></p>
+            <ul>
+              <li>體色鮮艷、尾鰭大而華麗</li>
+              <li>臀鰭特化為交接器</li>
+              <li>體長 3-4 公分</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>雌魚特徵：</strong></p>
+            <ul>
+              <li>體色較淡、腹部圓潤</li>
+              <li>臀鰭呈扇形</li>
+              <li>體長可達 5-6 公分</li>
+            </ul>
           </div>
           <div class="care-card">
-            <span class="care-icon">🤰</span>
-            <h3>懷孕徵兆</h3>
-            <p>母魚腹部後方出現明顯黑斑（胎斑），且越來越大。</p>
+            <div class="care-card-header"><span class="care-icon">🤰</span><h3>懷孕徵兆</h3></div>
+            <p><strong>判斷方法：</strong></p>
+            <ul>
+              <li><strong>胎斑：</strong>腹部後方出現明顯黑斑</li>
+              <li><strong>腹部膨大：</strong>越來越大</li>
+              <li><strong>行為變化：</strong>躲在水草間</li>
+              <li><strong>食慾下降：</strong>接近生產時</li>
+            </ul>
           </div>
           <div class="care-card">
-            <span class="care-icon">👶</span>
-            <h3>分娩照護</h3>
-            <p>建議將待產母魚移到繁殖缸。小魚出生後要立即分離。</p>
+            <div class="care-card-header"><span class="care-icon">👶</span><h3>分娩照護</h3></div>
+            <p><strong>繁殖缸準備：</strong></p>
+            <ul>
+              <li>水溫維持 26°C</li>
+              <li>放置水草或繁殖隔離盒</li>
+              <li>保持環境安靜</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>產後處理：</strong></p>
+            <ul>
+              <li>小魚出生後立即分離母魚</li>
+              <li>母魚需休息 1-2 週</li>
+            </ul>
+          </div>
+          <div class="care-card">
+            <div class="care-card-header"><span class="care-icon">🐟</span><h3>幼魚培育</h3></div>
+            <p><strong>餵食：</strong></p>
+            <ul>
+              <li>初期餵食蛋黃水或豐年蝦苗</li>
+              <li>每天 3-4 次少量多餐</li>
+              <li>水溫維持 26°C 促進成長</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>移缸：</strong></p>
+            <ul>
+              <li>長到 1-2 公分可移出繁殖缸</li>
+              <li>避免與成魚混養</li>
+            </ul>
           </div>
         </div>
+        
         <div class="care-list-box">
           <h4>📋 繁殖黃金法則</h4>
           <ul>
             <li>公母比例 1:2 或 1:3 為佳</li>
             <li>繁殖缸水溫維持 26°C</li>
-            <li>母魚生產後需要休息 1-2 週</li>
-            <li>幼魚長到 1-2 公分時可移出</li>
+            <li>母魚產後休息 1-2 週</li>
+            <li>幼魚長到 1-2 公分時移出</li>
             <li>避免近親繁殖</li>
           </ul>
         </div>
@@ -314,32 +494,86 @@
       <div class="care-container">
         <div class="care-header">
           <h2>🏥 健康照護</h2>
-          <p>預防勝於治療！了解常見疾病症狀。</p>
+          <p>預防勝於治療！了解常見疾病症狀，及早發現及早治療。</p>
         </div>
+        
         <div class="care-grid">
           <div class="care-card">
-            <span class="care-icon">🦠</span>
-            <h3>白點病</h3>
-            <p>魚鰭和身體出現白色小點。提高水溫至 28-30°C 可抑制。</p>
+            <div class="care-card-header"><span class="care-icon">🦠</span><h3>白點病</h3></div>
+            <p><strong>症狀：</strong></p>
+            <ul>
+              <li>魚鰭和身體出現白色小點</li>
+              <li>魚隻摩擦物體</li>
+              <li>游動不正常</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>治療：</strong></p>
+            <ul>
+              <li>提高水溫至 28-30°C</li>
+              <li>使用白點病藥劑</li>
+              <li>隔離病魚            </ul>
           </div>
           <div class="care-card">
-            <span class="care-icon">🍄</span>
-            <h3>水黴病</h3>
-            <p>傷口出現白色棉絮狀物質。需要隔離治療。</p>
+            <div class="care-card-header"><span class="care-icon">🍄</span><h3>水黴病</h3></div>
+            <p><strong>症狀：</strong></p>
+            <ul>
+              <li>傷口出現白色棉絮狀物質</li>
+              <li>黴菌會逐漸擴散</li>
+              <li>魚隻食慾下降</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>治療：</strong></p>
+            <ul>
+              <li>立即隔離病魚</li>
+              <li>使用黴菌治療藥劑</li>
+              <li>改善水質</li>
+            </ul>
           </div>
           <div class="care-card">
-            <span class="care-icon">🏊</span>
-            <h3>鰭部腐爛</h3>
-            <p>鰭邊緣出現白色或透明化。改善水質是首要步驟。</p>
+            <div class="care-card-header"><span class="care-icon">🏊</span><h3>鰭部腐爛</h3></div>
+            <p><strong>症狀：</strong></p>
+            <ul>
+              <li>鰭邊緣出現白色或透明化</li>
+              <li>鰭膜逐漸溶解</li>
+              <li>嚴重時可見鰭條</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>治療：</strong></p>
+            <ul>
+              <li>改善水質是首要步驟</li>
+              <li>使用抗菌藥物</li>
+              <li>提高水溫促進新陈代谢</li>
+            </ul>
+          </div>
+          <div class="care-card">
+            <div class="care-card-header"><span class="care-icon">🤢</span><h3>腸炎</h3></div>
+            <p><strong>症狀：</strong></p>
+            <ul>
+              <li>腹部腫脹</li>
+              <li>肛門紅腫突出</li>
+              <li>排泄白色黏液</li>
+              <li>食慾不振</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>治療：</strong></p>
+            <ul>
+              <li>停止餵食 2-3 天</li>
+              <li>使用腸炎藥物</li>
+              <li>水溫提高至 28°C</li>
+            </ul>
           </div>
         </div>
+        
         <div class="care-warning">
           <h4>⚠️ 疾病預防原則</h4>
           <ul>
-            <li>新魚一定要隔離觀察 2 週</li>
-            <li>維持良好水質是根本</li>
-            <li>發現病魚立即隔離</li>
+            <li><strong>新魚隔離：</strong>一定要隔離觀察 2 週再放入主缸</li>
+            <li><strong>水質管理：</strong>維持良好水質是預防疾病的根本</li>
+            <li><strong>早期發現：</strong>發現病魚立即隔離，避免傳染</li>
+            <li><strong>用藥注意：</strong>使用任何藥物前請詳閱說明書</li>
+            <li><strong>定期觀察：</strong>每天花幾分鐘觀察魚隻狀況</li>
           </ul>
+        </div>
+        
+        <div class="care-note">
+          <h4>✅ 健康檢查清單</h4>
+          <p>每天觀察時注意以下項目：魚隻游姿是否正常、體色是否鮮艷、食慾是否良好、鰭是否完整、有無異常白點或黴菌、糞便是否正常、呼吸是否平穩。</p>
         </div>
       </div>
     </section>

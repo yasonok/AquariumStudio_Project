@@ -23,37 +23,37 @@
 
 | 模型 | 狀態 | 用途 | 每日限額 |
 |------|------|------|----------|
-| ✅ Gemini 2.0 Flash | 已設定 | Seo_agent 使用 | **100,000 tokens** |
-| ✅ MiniMax-M2.1 | 已設定 | 主 Agent 使用 | 無限制 |
+| ✅ Google (claude-opus-4-5-thinking) | 已設定 | 主 Agent / NanoBanana | **500,000 tokens** |
+| ✅ Gemini 2.0 Flash | 已設定 | 預備使用 | **1,000,000 tokens** |
+| ✅ MiniMax-M2.1 | 已設定 | SubAgents 使用 | 無限制 |
 
-### 🔐 Gemini 2.0 Flash 嚴格限額
+### 🔐 Google 模型免費額度
 
-| 項目 | 上限 | 說明 |
-|------|------|------|
-| 每日 Token | 100,000 | 輸入 + 輸出 |
-| 每日請求 | 10 次 | 每篇最多 8000 tokens |
-| 單次輸入 | 50,000 tokens | 避免超長 prompt |
-| 單次輸出 | 8,000 tokens | 避免過長回應 |
-| 警告閾值 | 80% | 超過 80,000 tokens 警告 |
+| 模型 | 每日 Tokens | 每日 Requests |
+|------|-------------|---------------|
+| gemini-2.0-flash | 1,000,000 | 1,500 |
+| gemini-1.5-flash | 1,000,000 | 1,500 |
+| gemini-1.5-pro | 32,000 | 50 |
+| claude-opus-4-5-thinking | 500,000 | 500 |
 
-**🔍 監控系統**：
-- 位置：`~/.openclaw/workspace/token-monitor.js`
-- 追蹤檔案：`~/.openclaw/workspace/token-usage.json`
-- 日誌檔案：`~/.openclaw/logs/token-usage.log`
+**🔍 Google Token 監控系統**：
+- 位置：`~/.openclaw/workspace/google-token-monitor.js`
+- 追蹤檔案：`~/.openclaw/workspace/google-token-usage.json`
+- 日誌檔案：`~/.openclaw/logs/google-token-usage.log`
 
 **監控指令**：
 ```bash
-node token-monitor.js status   # 查看當前使用量
-node token-monitor.js report   # 生成每日報告
-node token-monitor.js record <input> <output>  # 記錄使用量
+node google-token-monitor.js status   # 查看使用狀態
+node google-token-monitor.js report   # 生成每日報告
+node google-token-monitor.js record <model> <input> <output>  # 記錄使用量
+node google-token-monitor.js limits   # 顯示免費額度
 ```
 
-**使用建議**：
-- 每篇 SEO 文章約 2000-4000 tokens
-- 每天最多 10 篇 SEO 文章
-- 圖片生成提示約 500 tokens/張
+**警告閾值**：
+- ⚠️ 80%：發出警告
+- 🚨 95%：緊急警報
 
-詳細規範：見 `API_LIMITS.md`
+**每日監控**：每天晚上 10 點自動檢查並報告
 
 ---
 
