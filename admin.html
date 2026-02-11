@@ -6,9 +6,11 @@
     <title>商品管理 - Aquarium Studio</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; }
+        body { font-family: -apple-system, sans-serif; background: #f5f5f5; }
+        .page { display: none; }
+        .page.active { display: block; }
         
-        /* 登入頁面 */
+        /* 登入頁 */
         .login-page { 
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
             background: linear-gradient(135deg, #667eea, #764ba2); 
@@ -17,190 +19,106 @@
         .login-box { 
             background: white; border-radius: 20px; padding: 40px 30px; 
             width: 100%; max-width: 360px; text-align: center; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2); 
         }
-        .login-box .icon { font-size: 3.5rem; margin-bottom: 15px; }
-        .login-box h1 { font-size: 1.4rem; margin-bottom: 8px; color: #333; }
-        .login-box p { color: #888; font-size: 0.9rem; margin-bottom: 25px; }
-        
-        /* 大按鈕樣式 */
-        .login-btn {
-            width: 100%; padding: 18px; background: #667eea; color: white;
-            border: none; border-radius: 12px; font-size: 1.2rem; font-weight: 600;
-            cursor: pointer; display: block; margin-bottom: 15px;
+        .login-box h1 { font-size: 1.4rem; margin-bottom: 20px; color: #333; }
+        .login-box input { 
+            width: 100%; padding: 16px; border: 2px solid #667eea; 
+            border-radius: 12px; font-size: 1.2rem; text-align: center; margin-bottom: 15px;
         }
-        .login-btn:active { transform: scale(0.98); }
-        
-        /* 密碼顯示測試區 */
-        .test-area { 
-            background: #f0f0f0; padding: 15px; border-radius: 10px; 
-            margin-top: 20px; font-size: 0.85rem; text-align: left; 
+        .login-box button { 
+            width: 100%; padding: 16px; background: #667eea; color: white;
+            border: none; border-radius: 12px; font-size: 1.2rem; font-weight: bold;
         }
-        .test-area h4 { margin-bottom: 10px; color: #666; }
-        .test-result { 
-            padding: 8px; background: white; border-radius: 5px; 
-            margin-bottom: 5px; font-family: monospace;
+        .login-msg { 
+            padding: 15px; background: #fff3cd; border-radius: 10px; 
+            margin-top: 20px; font-size: 0.9rem; text-align: left;
         }
         
-        /* 調試日誌 */
-        .debug-log {
-            position: fixed; bottom: 10px; left: 10px; right: 10px;
-            background: rgba(0,0,0,0.8); color: #0f0; font-size: 12px;
-            padding: 10px; border-radius: 10px; max-height: 150px;
-            overflow-y: auto; display: none; z-index: 99999;
-            font-family: monospace;
-        }
-        .debug-log.show { display: block; }
-        
-        /* 管理後台 */
-        .admin-content { display: none; }
-        .admin-content.active { display: block; }
-        
-        .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .header h1 { font-size: 1.2rem; }
-        .header-btns { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .header-btns button, .header-btns a { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; text-decoration: none; }
-        .header-btns button:hover { background: rgba(255,255,255,0.3); }
-        .header-btns .btn-logout { background: rgba(255,107,107,0.8); }
-        
-        .stats { display: flex; gap: 10px; padding: 15px; background: white; overflow-x: auto; }
-        .stat { min-width: 100px; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; flex: 1; }
+        /* 後台 */
+        .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .stats { display: flex; gap: 10px; padding: 15px; background: white; }
+        .stat { flex: 1; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; }
         .stat .num { font-size: 1.5rem; font-weight: bold; color: #667eea; }
-        .stat .label { font-size: 0.8rem; color: #666; margin-top: 5px; }
         .section { padding: 15px; }
-        .section h2 { font-size: 1rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .section h2 button { background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
-        .product { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow-x: auto; }
-        .product img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background: #eee; flex-shrink: 0; }
-        .product .info { flex: 1; min-width: 0; }
-        .product .name { font-weight: 600; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .product .meta { font-size: 0.85rem; color: #666; }
-        .product .price { font-size: 1.1rem; font-weight: bold; color: #667eea; margin-top: 5px; }
-        .product .actions { display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
-        .product .actions button { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        .section h2 { font-size: 1rem; margin-bottom: 15px; }
+        .section h2 button { background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 8px; }
+        .product { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; gap: 15px; }
+        .product img { width: 60px; height: 60px; border-radius: 8px; background: #eee; }
+        .product .name { font-weight: 600; }
+        .product .price { color: #667eea; font-weight: bold; }
+        .product .actions button { padding: 8px 15px; border: none; border-radius: 8px; margin-left: 5px; }
         .btn-edit { background: #667eea; color: white; }
         .btn-delete { background: #ff6b6b; color: white; }
-        .fab { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102,126,234,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; }
+        .fab { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: #667eea; color: white; border: none; font-size: 1.8rem; }
         
-        /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-box { background: white; border-radius: 20px; padding: 25px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        .modal-box h2 { font-size: 1.2rem; margin-bottom: 20px; }
+        .modal-box { background: white; border-radius: 20px; padding: 25px; width: 90%; max-width: 400px; }
+        .modal-box h2 { margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; }
-        .form-group input:focus { outline: none; border-color: #667eea; }
-        .btn-row { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-row button { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; }
+        .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-row button { flex: 1; padding: 14px; border: none; border-radius: 10px; font-weight: bold; }
+        .btn-primary { background: #667eea; color: white; }
         .btn-secondary { background: #eee; color: #666; }
-        .empty { text-align: center; padding: 50px 20px; color: #999; }
-        .empty .icon { font-size: 3rem; margin-bottom: 15px; }
     </style>
 </head>
 <body>
-    <!-- 調試日誌 -->
-    <div class="debug-log" id="debug-log"></div>
-    
-    <!-- 登入頁面 -->
-    <div class="login-page" id="login-page">
-        <div class="login-box">
-            <div class="icon">🐟</div>
-            <h1>Aquarium Studio</h1>
-            <p>請輸入管理密碼</p>
-            
-            <!-- 大輸入框 -->
-            <input type="password" id="login-password" placeholder="輸入密碼" style="
-                width: 100%; padding: 18px; border: 2px solid #667eea; border-radius: 12px; 
-                font-size: 1.3rem; text-align: center; margin-bottom: 15px;
-            ">
-            
-            <!-- 大登入按鈕 -->
-            <button class="login-btn" id="login-btn">登 入</button>
-            
-            <!-- 錯誤訊息 -->
-            <div id="login-error" style="color: #ff6b6b; font-size: 0.9rem; display: none; margin-bottom: 10px;">
-                ❌ 密碼錯誤！正確密碼是 1234
+    <!-- 登入頁 -->
+    <div class="page active" id="login-page">
+        <div class="login-page">
+            <div class="login-box">
+                <h1>🐟 Aquarium Studio</h1>
+                <p style="color:#888;margin-bottom:15px;">管理後台</p>
+                
+                <!-- 測試連結 -->
+                <div style="background:#e3f2fd;padding:15px;border-radius:10px;margin-bottom:20px;">
+                    <p style="font-size:0.85rem;color:#1976d2;margin-bottom:10px;">🔧 快速測試：</p>
+                    <a href="?login=1234" style="display:block;padding:12px;background:#667eea;color:white;text-decoration:none;border-radius:8px;font-weight:bold;">👉 按這裡直接登入</a>
+                </div>
+                
+                <p style="margin:15px 0;color:#666;">或輸入密碼：</p>
+                <input type="password" id="pwd" placeholder="密碼" value="1234">
+                <button onclick="checkPwd()">登 入</button>
+                
+                <div class="login-msg" id="login-msg">
+                    <p>⏳ 請輸入密碼 1234</p>
+                </div>
             </div>
-            
-            <!-- 測試區 -->
-            <div class="test-area" id="test-area">
-                <h4>🔧 調試資訊</h4>
-                <div class="test-result" id="debug-1">狀態: 載入中...</div>
-                <div class="test-result" id="debug-2">localStorage: 檢查中...</div>
-                <div class="test-result" id="debug-3">按鈕: 待測試</div>
-            </div>
-            
-            <p style="margin-top: 15px; font-size: 0.8rem; color: #999;">預設密碼：1234</p>
         </div>
     </div>
 
     <!-- 管理後台 -->
-    <div class="admin-content" id="admin-content">
+    <div class="page" id="admin-page">
         <div class="header">
             <h1>🎛️ 商品管理</h1>
-            <div class="header-btns">
-                <a href="index.html">🏠 首頁</a>
-                <button onclick="syncToGitHub()" id="sync-btn">🔄 同步</button>
-                <button onclick="logout()" class="btn-logout">🚪 登出</button>
-            </div>
+            <button onclick="logout()" style="background:rgba(255,255,255,0.2);color:white;border:none;padding:8px 15px;border-radius:8px;">🚪 登出</button>
         </div>
         
         <div class="stats">
-            <div class="stat">
-                <div class="num" id="count-products">0</div>
-                <div class="label">商品數</div>
-            </div>
-            <div class="stat">
-                <div class="num" id="count-stock">0</div>
-                <div class="label">總庫存</div>
-            </div>
+            <div class="stat"><div class="num" id="count-products">0</div><div>商品</div></div>
+            <div class="stat"><div class="num" id="count-stock">0</div><div>庫存</div></div>
         </div>
         
         <div class="section">
             <h2>商品列表 <button onclick="openModal()">➕ 新增</button></h2>
-            <div id="product-list">
-                <div class="empty">
-                    <div class="icon">📦</div>
-                    <p>尚未有商品</p>
-                </div>
-            </div>
+            <div id="product-list"><p style="color:#999;text-align:center;padding:30px;">尚無商品</p></div>
         </div>
         
         <button class="fab" onclick="openModal()">➕</button>
     </div>
 
-    <!-- 新增/編輯商品 Modal -->
+    <!-- Modal -->
     <div class="modal" id="modal">
         <div class="modal-box">
             <h2 id="modal-title">新增商品</h2>
             <form onsubmit="saveProduct(event)">
                 <input type="hidden" id="p-id">
-                <div class="form-group">
-                    <label>名稱</label>
-                    <input type="text" id="p-name" required placeholder="商品名稱">
-                </div>
-                <div class="form-group">
-                    <label>分類</label>
-                    <select id="p-cat"></select>
-                </div>
-                <div class="form-group">
-                    <label>價格</label>
-                    <input type="number" id="p-price" required placeholder="0" min="0">
-                </div>
-                <div class="form-group">
-                    <label>庫存</label>
-                    <input type="number" id="p-stock" required placeholder="0" min="0">
-                </div>
-                <div class="form-group">
-                    <label>圖片網址</label>
-                    <input type="url" id="p-img" placeholder="https://...">
-                </div>
-                <div class="form-group">
-                    <label>描述</label>
-                    <textarea id="p-desc" rows="3" placeholder="商品描述"></textarea>
-                </div>
+                <div class="form-group"><label>名稱</label><input type="text" id="p-name" required></div>
+                <div class="form-group"><label>分類</label><select id="p-cat"></select></div>
+                <div class="form-group"><label>價格</label><input type="number" id="p-price" required></div>
+                <div class="form-group"><label>庫存</label><input type="number" id="p-stock" required></div>
+                <div class="form-group"><label>描述</label><textarea id="p-desc" rows="3"></textarea></div>
                 <div class="btn-row">
                     <button type="button" class="btn-secondary" onclick="closeModal()">取消</button>
                     <button type="submit" class="btn-primary">儲存</button>
@@ -210,222 +128,96 @@
     </div>
 
     <script>
-    // ========== 調試系統 ==========
-    var logHistory = [];
-    function log(msg) {
-        var time = new Date().toLocaleTimeString('zh-TW');
-        var entry = '[' + time + '] ' + msg;
-        logHistory.push(entry);
-        console.log(entry);
-        
-        var debugEl = document.getElementById('debug-log');
-        if (debugEl) {
-            debugEl.innerHTML = logHistory.slice(-20).join('<br>');
-            debugEl.classList.add('show');
-        }
-        
-        // 儲存到 localStorage
-        try {
-            var logs = JSON.parse(localStorage.getItem('admin_debug_log') || '[]');
-            logs.push(entry);
-            if (logs.length > 100) logs = logs.slice(-100);
-            localStorage.setItem('admin_debug_log', JSON.stringify(logs));
-        } catch(e) {}
+    // URL 參數解析
+    function getUrlParam(name) {
+        var url = new URL(window.location.href);
+        return url.searchParams.get(name);
     }
     
-    // ========== 初始化 ==========
-    log('🚀 程式啟動');
-    
-    (function init() {
-        log('📋 執行初始化');
+    function checkPwd() {
+        var pwd = document.getElementById('pwd').value;
+        var msg = document.getElementById('login-msg');
         
-        // 測試 localStorage
-        try {
-            localStorage.setItem('test', 'test');
-            localStorage.removeItem('test');
-            document.getElementById('debug-2').textContent = '✅ localStorage: 正常';
-            log('✅ localStorage 正常');
-        } catch(e) {
-            document.getElementById('debug-2').textContent = '❌ localStorage: 被阻擋';
-            log('❌ localStorage 被阻擋: ' + e.message);
-        }
-        
-        // 預設分類
-        try {
-            if (!localStorage.getItem('aquarium_categories')) {
-                localStorage.setItem('aquarium_categories', JSON.stringify([
-                    { id: '1', name: '孔雀魚', icon: '🐟' },
-                    { id: '2', name: '設備', icon: '⚙️' },
-                    { id: '3', name: '飼料', icon: '🦐' },
-                    { id: '4', name: '水質', icon: '💧' }
-                ]));
-                log('✅ 建立預設分類');
-            } else {
-                log('✅ 分類已存在');
-            }
-        } catch(e) {
-            log('❌ 分類建立失敗: ' + e.message);
-        }
-        
-        // 綁定登入按鈕
-        var loginBtn = document.getElementById('login-btn');
-        if (loginBtn) {
-            loginBtn.onclick = function() {
-                log('👆 按鈕被點擊');
-                doLogin();
-            };
-            document.getElementById('debug-3').textContent = '✅ 按鈕: 已綁定';
-            log('✅ 登入按鈕已綁定');
-        } else {
-            log('❌ 找不到登入按鈕！');
-            document.getElementById('debug-3').textContent = '❌ 按鈕: 未找到';
-        }
-        
-        // 密碼欄位 Enter 鍵
-        var pwdInput = document.getElementById('login-password');
-        if (pwdInput) {
-            pwdInput.onkeyup = function(e) {
-                log('⌨️ 輸入: ' + this.value.replace(/./g, '*'));
-                if (e.key === 'Enter') {
-                    log('⌨️ 按下 Enter');
-                    doLogin();
-                }
-            };
-        }
-        
-        // 檢查是否已登入
-        var logged = localStorage.getItem('aquarium_admin_logged');
-        if (logged === 'true') {
-            log('✅ 已有登入狀態，自動登入');
-            showAdmin();
-        } else {
-            log('⏳ 未登入，顯示登入頁');
-            document.getElementById('debug-1').textContent = '⏳ 等待登入...';
-        }
-    })();
-    
-    // ========== 登入功能 ==========
-    function doLogin() {
-        log('🔐 執行登入函數');
-        var pwdInput = document.getElementById('login-password');
-        var errorEl = document.getElementById('login-error');
-        
-        if (!pwdInput) {
-            log('❌ 找不到密碼輸入框');
-            return;
-        }
-        
-        var pwd = pwdInput.value;
-        log('📝 輸入的密碼長度: ' + pwd.length);
-        log('📝 輸入的密碼: ' + pwd);
-        log('📝 正確密碼: 1234');
-        log('📝 是否正確: ' + (pwd === '1234'));
+        console.log('輸入密碼:', pwd);
+        console.log('正確密碼: 1234');
         
         if (pwd === '1234') {
-            log('✅ 密碼正確，儲存登入狀態');
-            try {
-                localStorage.setItem('aquarium_admin_logged', 'true');
-                log('✅ 登入狀態已儲存');
-            } catch(e) {
-                log('❌ 儲存登入狀態失敗: ' + e.message);
-            }
-            showAdmin();
+            msg.innerHTML = '<p style="color:green;">✅ 密碼正確！登入中...</p>';
+            localStorage.setItem('admin_logged', 'true');
+            setTimeout(function() { location.href = location.pathname + '?logged=1'; }, 500);
         } else {
-            log('❌ 密碼錯誤');
-            errorEl.style.display = 'block';
-            errorEl.textContent = '❌ 密碼錯誤！正確密碼是 1234';
-            pwdInput.value = '';
-            pwdInput.focus();
+            msg.innerHTML = '<p style="color:red;">❌ 密碼錯誤！請輸入 1234</p>';
         }
-    }
-    
-    function showAdmin() {
-        log('🎉 顯示管理後台');
-        document.getElementById('login-page').style.display = 'none';
-        document.getElementById('admin-content').classList.add('active');
-        document.getElementById('debug-1').textContent = '✅ 已登入';
-        render();
     }
     
     function logout() {
-        log('🚪 執行登出');
-        localStorage.removeItem('aquarium_admin_logged');
-        location.reload();
+        localStorage.removeItem('admin_logged');
+        location.href = location.pathname;
     }
     
-    // ========== 商品功能 ==========
     function getProducts() {
         return JSON.parse(localStorage.getItem('aquarium_products') || '[]');
     }
     
     function getCategories() {
-        return JSON.parse(localStorage.getItem('aquarium_categories') || '[]');
+        return JSON.parse(localStorage.getItem('aquarium_categories') || '[{"id":"1","name":"孔雀魚","icon":"🐟"},{"id":"2","name":"設備","icon":"⚙️"},{"id":"3","name":"飼料","icon":"🦐"},{"id":"4","name":"水質","icon":"💧"}]');
     }
     
     function render() {
-        log('📦 渲染商品列表');
         var products = getProducts();
         var cats = getCategories();
         
         document.getElementById('count-products').textContent = products.length;
-        document.getElementById('count-stock').textContent = products.reduce(function(s, i) { return s + (i.stock || 0); }, 0);
+        document.getElementById('count-stock').textContent = products.reduce(function(s, i){return s+(i.stock||0);},0);
         
-        // 分類下拉
         var select = document.getElementById('p-cat');
-        select.innerHTML = cats.map(function(c) { 
+        select.innerHTML = cats.map(function(c){ 
             return '<option value="' + c.name + '">' + c.icon + ' ' + c.name + '</option>'; 
         }).join('');
         
-        // 商品列表
         var list = document.getElementById('product-list');
         if (products.length === 0) {
-            list.innerHTML = '<div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>';
+            list.innerHTML = '<p style="color:#999;text-align:center;padding:30px;">尚無商品</p>';
             return;
         }
         
-        list.innerHTML = products.map(function(i) {
+        list.innerHTML = products.map(function(i){
             return '<div class="product">' +
-                '<img src="' + (i.image || 'images/products/default-guppy.svg') + '">' +
-                '<div class="info"><div class="name">' + i.name + '</div>' +
-                '<div class="meta">' + i.category + ' • 庫存: ' + i.stock + '</div>' +
+                '<img src="' + (i.image||'images/products/default-guppy.svg') + '">' +
+                '<div><div class="name">' + i.name + '</div>' +
+                '<div style="color:#666;font-size:0.9rem;">' + i.category + ' • 庫存:' + i.stock + '</div>' +
                 '<div class="price">$' + i.price + '</div></div>' +
                 '<div class="actions"><button class="btn-edit" onclick="edit(' + i.id + ')">✏️</button>' +
                 '<button class="btn-delete" onclick="del(' + i.id + ')">🗑️</button></div></div>';
         }).join('');
-        
-        log('📦 渲染完成，共 ' + products.length + ' 項商品');
     }
     
     function openModal() {
         document.getElementById('modal-title').textContent = '新增商品';
-        ['p-id','p-name','p-price','p-stock','p-desc','p-img'].forEach(function(id) {
-            document.getElementById(id).value = '';
-        });
+        ['p-id','p-name','p-price','p-stock','p-desc'].forEach(function(id){ document.getElementById(id).value = ''; });
         render();
         document.getElementById('modal').classList.add('active');
     }
     
     function edit(id) {
-        var p = getProducts().find(function(x) { return x.id == id; });
-        if (!p) return;
+        var p = getProducts().find(function(x){return x.id==id;});
+        if(!p) return;
         document.getElementById('modal-title').textContent = '編輯商品';
-        ['p-id','p-name','p-price','p-stock','p-desc','p-img'].forEach(function(field) {
-            document.getElementById(field).value = p[field.replace('p-', '')] || '';
+        ['p-id','p-name','p-price','p-stock','p-desc'].forEach(function(field){
+            document.getElementById(field).value = p[field.replace('p-','')] || '';
         });
-        setTimeout(function() { document.getElementById('p-cat').value = p.category; }, 0);
+        setTimeout(function(){ document.getElementById('p-cat').value = p.category; },0);
         document.getElementById('modal').classList.add('active');
     }
     
     function del(id) {
-        if (!confirm('刪除這個商品？')) return;
-        var products = getProducts().filter(function(x) { return x.id != id; });
+        if(!confirm('刪除？')) return;
+        var products = getProducts().filter(function(x){return x.id!=id;});
         localStorage.setItem('aquarium_products', JSON.stringify(products));
         render();
     }
     
-    function closeModal() {
-        document.getElementById('modal').classList.remove('active');
-    }
+    function closeModal() { document.getElementById('modal').classList.remove('active'); }
     
     function saveProduct(e) {
         e.preventDefault();
@@ -436,78 +228,41 @@
             price: parseInt(document.getElementById('p-price').value),
             stock: parseInt(document.getElementById('p-stock').value),
             category: document.getElementById('p-cat').value,
-            description: document.getElementById('p-desc').value,
-            updated_at: new Date().toISOString()
+            description: document.getElementById('p-desc').value
         };
-        
         var products = getProducts();
-        var index = products.findIndex(function(x) { return x.id == product.id; });
-        if (index >= 0) { products[index] = product; }
-        else { products.push(product); }
-        
+        var idx = products.findIndex(function(x){return x.id==product.id;});
+        if(idx>=0) products[idx]=product; else products.push(product);
         localStorage.setItem('aquarium_products', JSON.stringify(products));
         closeModal();
         render();
-        alert(id ? '已更新！' : '已新增！');
+        alert(id?'已更新！':'已新增！');
     }
     
-    document.getElementById('modal').addEventListener('click', function(e) {
-        if (e.target === document.getElementById('modal')) closeModal();
+    document.getElementById('modal').addEventListener('click',function(e){
+        if(e.target===document.getElementById('modal')) closeModal();
     });
     
-    // ========== 同步功能 ==========
-    async function syncToGitHub() {
-        var btn = document.getElementById('sync-btn');
-        btn.disabled = true;
-        btn.textContent = '同步中...';
+    // 初始化
+    (function init(){
+        console.log('頁面載入完成');
+        console.log('URL login 參數:', getUrlParam('login'));
+        console.log('URL logged 參數:', getUrlParam('logged'));
         
-        try {
-            var products = getProducts();
-            var categories = getCategories();
-            var token = typeof GITHUB_TOKEN !== 'undefined' ? GITHUB_TOKEN : '';
-            
-            if (!token) { alert('錯誤：找不到 GitHub Token'); throw new Error('No token'); }
-            
-            var productsResp = await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/products.json', {
-                headers: { Authorization: 'token ' + token }
-            });
-            var productsData = await productsResp.json();
-            
-            await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/products.json', {
-                method: 'PUT',
-                headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: '更新商品：' + products.length + '項',
-                    content: btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))),
-                    sha: productsData.sha
-                })
-            });
-            
-            var catsResp = await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/categories.json', {
-                headers: { Authorization: 'token ' + token }
-            });
-            var catsData = await catsResp.json();
-            
-            await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/categories.json', {
-                method: 'PUT',
-                headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: '更新分類：' + categories.length + '個',
-                    content: btoa(unescape(encodeURIComponent(JSON.stringify(categories, null, 2))),
-                    sha: catsData.sha
-                })
-            });
-            
-            btn.textContent = '✅ 已同步！';
-            setTimeout(function() { btn.textContent = '🔄 同步'; }, 3000);
-            alert('已同步到 GitHub！Vercel 將自動部署');
-            
-        } catch (error) {
-            btn.disabled = false;
-            btn.textContent = '🔄 同步';
-            alert('同步失敗：' + error.message);
+        if (getUrlParam('login') === '1234') {
+            console.log('✅ URL 登入參數正確');
+            localStorage.setItem('admin_logged', 'true');
         }
-    }
+        
+        if (getUrlParam('logged') === '1' || localStorage.getItem('admin_logged') === 'true') {
+            console.log('✅ 顯示後台');
+            document.getElementById('login-page').classList.remove('active');
+            document.getElementById('admin-page').classList.add('active');
+            render();
+        } else {
+            console.log('⏳ 顯示登入頁');
+        }
+    })();
     </script>
 </body>
 </html>
