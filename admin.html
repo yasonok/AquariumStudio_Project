@@ -9,16 +9,48 @@
         body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; }
         
         /* 登入頁面 */
-        .login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #667eea, #764ba2); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .login-box { background: white; border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        .login-page { 
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+            background: linear-gradient(135deg, #667eea, #764ba2); 
+            display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+        .login-box { 
+            background: white; border-radius: 20px; padding: 40px 30px; 
+            width: 100%; max-width: 360px; text-align: center; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2); 
+        }
         .login-box .icon { font-size: 3.5rem; margin-bottom: 15px; }
         .login-box h1 { font-size: 1.4rem; margin-bottom: 8px; color: #333; }
         .login-box p { color: #888; font-size: 0.9rem; margin-bottom: 25px; }
-        .login-box input { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 12px; font-size: 1.1rem; text-align: center; margin-bottom: 15px; }
-        .login-box input:focus { outline: none; border-color: #667eea; }
-        .login-box button { width: 100%; padding: 16px; background: #667eea; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
-        .login-box .error { color: #ff6b6b; font-size: 0.85rem; margin-top: 10px; display: none; }
-        .login-box .hint { color: #888; font-size: 0.8rem; margin-top: 15px; }
+        
+        /* 大按鈕樣式 */
+        .login-btn {
+            width: 100%; padding: 18px; background: #667eea; color: white;
+            border: none; border-radius: 12px; font-size: 1.2rem; font-weight: 600;
+            cursor: pointer; display: block; margin-bottom: 15px;
+        }
+        .login-btn:active { transform: scale(0.98); }
+        
+        /* 密碼顯示測試區 */
+        .test-area { 
+            background: #f0f0f0; padding: 15px; border-radius: 10px; 
+            margin-top: 20px; font-size: 0.85rem; text-align: left; 
+        }
+        .test-area h4 { margin-bottom: 10px; color: #666; }
+        .test-result { 
+            padding: 8px; background: white; border-radius: 5px; 
+            margin-bottom: 5px; font-family: monospace;
+        }
+        
+        /* 調試日誌 */
+        .debug-log {
+            position: fixed; bottom: 10px; left: 10px; right: 10px;
+            background: rgba(0,0,0,0.8); color: #0f0; font-size: 12px;
+            padding: 10px; border-radius: 10px; max-height: 150px;
+            overflow-y: auto; display: none; z-index: 99999;
+            font-family: monospace;
+        }
+        .debug-log.show { display: block; }
         
         /* 管理後台 */
         .admin-content { display: none; }
@@ -59,44 +91,48 @@
         .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; }
         .form-group input:focus { outline: none; border-color: #667eea; }
-        .upload-box { border: 2px dashed #ddd; border-radius: 10px; padding: 25px; text-align: center; cursor: pointer; background: #f8f9fa; }
-        .upload-box:hover { border-color: #667eea; }
-        .preview { width: 100%; border-radius: 10px; margin-top: 10px; display: none; }
-        .preview.show { display: block; }
         .btn-row { display: flex; gap: 10px; margin-top: 15px; }
         .btn-row button { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; }
         .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
         .btn-secondary { background: #eee; color: #666; }
         .empty { text-align: center; padding: 50px 20px; color: #999; }
         .empty .icon { font-size: 3rem; margin-bottom: 15px; }
-        
-        .cat-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f8f9fa; border-radius: 10px; margin-bottom: 8px; }
-        .cat-item .icon { font-size: 1.5rem; }
-        .cat-item .name { flex: 1; font-weight: 500; }
-        .cat-item .count { color: #667eea; font-size: 0.9rem; }
-        .cat-item .actions { display: flex; gap: 5px; }
-        .cat-item .actions button { padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
-        
-        /* 分類 Modal */
-        #cat-modal .modal-box { max-width: 350px; }
-        
-        /* 網站內容 Modal */
-        #site-modal .modal-box { max-width: 450px; }
     </style>
 </head>
 <body>
+    <!-- 調試日誌 -->
+    <div class="debug-log" id="debug-log"></div>
+    
     <!-- 登入頁面 -->
-    <div class="login-overlay" id="login-overlay">
+    <div class="login-page" id="login-page">
         <div class="login-box">
             <div class="icon">🐟</div>
             <h1>Aquarium Studio</h1>
             <p>請輸入管理密碼</p>
-            <form action="javascript:void(0)" onsubmit="checkLogin()">
-                <input type="password" id="login-password" placeholder="密碼" required>
-                <button type="submit">登入</button>
-            </form>
-            <div class="error" id="login-error">密碼錯誤，請重試</div>
-            <div class="hint">預設密碼：1234</div>
+            
+            <!-- 大輸入框 -->
+            <input type="password" id="login-password" placeholder="輸入密碼" style="
+                width: 100%; padding: 18px; border: 2px solid #667eea; border-radius: 12px; 
+                font-size: 1.3rem; text-align: center; margin-bottom: 15px;
+            ">
+            
+            <!-- 大登入按鈕 -->
+            <button class="login-btn" id="login-btn">登 入</button>
+            
+            <!-- 錯誤訊息 -->
+            <div id="login-error" style="color: #ff6b6b; font-size: 0.9rem; display: none; margin-bottom: 10px;">
+                ❌ 密碼錯誤！正確密碼是 1234
+            </div>
+            
+            <!-- 測試區 -->
+            <div class="test-area" id="test-area">
+                <h4>🔧 調試資訊</h4>
+                <div class="test-result" id="debug-1">狀態: 載入中...</div>
+                <div class="test-result" id="debug-2">localStorage: 檢查中...</div>
+                <div class="test-result" id="debug-3">按鈕: 待測試</div>
+            </div>
+            
+            <p style="margin-top: 15px; font-size: 0.8rem; color: #999;">預設密碼：1234</p>
         </div>
     </div>
 
@@ -106,8 +142,6 @@
             <h1>🎛️ 商品管理</h1>
             <div class="header-btns">
                 <a href="index.html">🏠 首頁</a>
-                <button onclick="editCategories()">🏷️ 分類</button>
-                <button onclick="editSiteContent()">📝 網站</button>
                 <button onclick="syncToGitHub()" id="sync-btn">🔄 同步</button>
                 <button onclick="logout()" class="btn-logout">🚪 登出</button>
             </div>
@@ -175,144 +209,174 @@
         </div>
     </div>
 
-    <!-- 分類管理 Modal -->
-    <div class="modal" id="cat-modal">
-        <div class="modal-box">
-            <h2>🏷️ 分類管理</h2>
-            <div id="cat-list"></div>
-            <form onsubmit="addCategory(event)" style="margin-top: 15px;">
-                <div style="display: flex; gap: 10px;">
-                    <select id="cat-new-icon" style="width: 60px;">
-                        <option>🐟</option>
-                        <option>⚙️</option>
-                        <option>🦐</option>
-                        <option>💧</option>
-                        <option>🌿</option>
-                        <option>💊</option>
-                        <option>🔧</option>
-                        <option>🎨</option>
-                    </select>
-                    <input type="text" id="cat-new-name" placeholder="新分類名稱" style="flex: 1;" required>
-                    <button type="submit" class="btn-primary" style="width: auto;">新增</button>
-                </div>
-            </form>
-            <button class="btn-secondary" onclick="closeCatModal()" style="width: 100%; margin-top: 15px;">關閉</button>
-        </div>
-    </div>
-
-    <!-- 網站內容 Modal -->
-    <div class="modal" id="site-modal">
-        <div class="modal-box">
-            <h2>📝 網站內容</h2>
-            <form onsubmit="saveSiteContent(event)">
-                <div class="form-group">
-                    <label>標題</label>
-                    <input type="text" id="site-title" placeholder="Aquarium Studio">
-                </div>
-                <div class="form-group">
-                    <label>副標題</label>
-                    <input type="text" id="site-subtitle" placeholder="專業孔雀魚養殖">
-                </div>
-                <div class="form-group">
-                    <label>描述</label>
-                    <textarea id="site-desc" rows="3" placeholder="關於我們..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>電話</label>
-                    <input type="tel" id="site-phone" placeholder="0912-345-678">
-                </div>
-                <div class="form-group">
-                    <label>地址</label>
-                    <input type="text" id="site-address" placeholder="台北市...">
-                </div>
-                <div class="btn-row">
-                    <button type="button" class="btn-secondary" onclick="closeSiteModal()">取消</button>
-                    <button type="submit" class="btn-primary">儲存</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script>
-    // 儲存 key
-    var STORAGE_KEYS = {
-        products: 'aquarium_products',
-        categories: 'aquarium_categories',
-        login: 'aquarium_admin_logged'
-    };
-    
-    // 初始化
-    (function init() {
-        // 預設分類
-        if (!localStorage.getItem(STORAGE_KEYS.categories)) {
-            localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify([
-                { id: '1', name: '孔雀魚', icon: '🐟' },
-                { id: '2', name: '設備', icon: '⚙️' },
-                { id: '3', name: '飼料', icon: '🦐' },
-                { id: '4', name: '水質', icon: '💧' }
-            ]));
+    // ========== 調試系統 ==========
+    var logHistory = [];
+    function log(msg) {
+        var time = new Date().toLocaleTimeString('zh-TW');
+        var entry = '[' + time + '] ' + msg;
+        logHistory.push(entry);
+        console.log(entry);
+        
+        var debugEl = document.getElementById('debug-log');
+        if (debugEl) {
+            debugEl.innerHTML = logHistory.slice(-20).join('<br>');
+            debugEl.classList.add('show');
         }
         
-        // 檢查登入
-        checkLogin();
+        // 儲存到 localStorage
+        try {
+            var logs = JSON.parse(localStorage.getItem('admin_debug_log') || '[]');
+            logs.push(entry);
+            if (logs.length > 100) logs = logs.slice(-100);
+            localStorage.setItem('admin_debug_log', JSON.stringify(logs));
+        } catch(e) {}
+    }
+    
+    // ========== 初始化 ==========
+    log('🚀 程式啟動');
+    
+    (function init() {
+        log('📋 執行初始化');
+        
+        // 測試 localStorage
+        try {
+            localStorage.setItem('test', 'test');
+            localStorage.removeItem('test');
+            document.getElementById('debug-2').textContent = '✅ localStorage: 正常';
+            log('✅ localStorage 正常');
+        } catch(e) {
+            document.getElementById('debug-2').textContent = '❌ localStorage: 被阻擋';
+            log('❌ localStorage 被阻擋: ' + e.message);
+        }
+        
+        // 預設分類
+        try {
+            if (!localStorage.getItem('aquarium_categories')) {
+                localStorage.setItem('aquarium_categories', JSON.stringify([
+                    { id: '1', name: '孔雀魚', icon: '🐟' },
+                    { id: '2', name: '設備', icon: '⚙️' },
+                    { id: '3', name: '飼料', icon: '🦐' },
+                    { id: '4', name: '水質', icon: '💧' }
+                ]));
+                log('✅ 建立預設分類');
+            } else {
+                log('✅ 分類已存在');
+            }
+        } catch(e) {
+            log('❌ 分類建立失敗: ' + e.message);
+        }
+        
+        // 綁定登入按鈕
+        var loginBtn = document.getElementById('login-btn');
+        if (loginBtn) {
+            loginBtn.onclick = function() {
+                log('👆 按鈕被點擊');
+                doLogin();
+            };
+            document.getElementById('debug-3').textContent = '✅ 按鈕: 已綁定';
+            log('✅ 登入按鈕已綁定');
+        } else {
+            log('❌ 找不到登入按鈕！');
+            document.getElementById('debug-3').textContent = '❌ 按鈕: 未找到';
+        }
+        
+        // 密碼欄位 Enter 鍵
+        var pwdInput = document.getElementById('login-password');
+        if (pwdInput) {
+            pwdInput.onkeyup = function(e) {
+                log('⌨️ 輸入: ' + this.value.replace(/./g, '*'));
+                if (e.key === 'Enter') {
+                    log('⌨️ 按下 Enter');
+                    doLogin();
+                }
+            };
+        }
+        
+        // 檢查是否已登入
+        var logged = localStorage.getItem('aquarium_admin_logged');
+        if (logged === 'true') {
+            log('✅ 已有登入狀態，自動登入');
+            showAdmin();
+        } else {
+            log('⏳ 未登入，顯示登入頁');
+            document.getElementById('debug-1').textContent = '⏳ 等待登入...';
+        }
     })();
     
-    // 登入檢查
-    function checkLogin() {
-        var logged = localStorage.getItem(STORAGE_KEYS.login);
-        if (logged === 'true') {
-            document.getElementById('login-overlay').style.display = 'none';
-            document.getElementById('admin-content').classList.add('active');
-            render();
+    // ========== 登入功能 ==========
+    function doLogin() {
+        log('🔐 執行登入函數');
+        var pwdInput = document.getElementById('login-password');
+        var errorEl = document.getElementById('login-error');
+        
+        if (!pwdInput) {
+            log('❌ 找不到密碼輸入框');
+            return;
         }
-    }
-    
-    // 登入
-    function checkLogin() {
-        var pwd = document.getElementById('login-password').value;
+        
+        var pwd = pwdInput.value;
+        log('📝 輸入的密碼長度: ' + pwd.length);
+        log('📝 輸入的密碼: ' + pwd);
+        log('📝 正確密碼: 1234');
+        log('📝 是否正確: ' + (pwd === '1234'));
+        
         if (pwd === '1234') {
-            localStorage.setItem(STORAGE_KEYS.login, 'true');
-            document.getElementById('login-overlay').style.display = 'none';
-            document.getElementById('admin-content').classList.add('active');
-            document.getElementById('login-password').value = '';
-            document.getElementById('login-error').style.display = 'none';
-            render();
+            log('✅ 密碼正確，儲存登入狀態');
+            try {
+                localStorage.setItem('aquarium_admin_logged', 'true');
+                log('✅ 登入狀態已儲存');
+            } catch(e) {
+                log('❌ 儲存登入狀態失敗: ' + e.message);
+            }
+            showAdmin();
         } else {
-            document.getElementById('login-error').style.display = 'block';
+            log('❌ 密碼錯誤');
+            errorEl.style.display = 'block';
+            errorEl.textContent = '❌ 密碼錯誤！正確密碼是 1234';
+            pwdInput.value = '';
+            pwdInput.focus();
         }
     }
     
-    // 登出
+    function showAdmin() {
+        log('🎉 顯示管理後台');
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('admin-content').classList.add('active');
+        document.getElementById('debug-1').textContent = '✅ 已登入';
+        render();
+    }
+    
     function logout() {
-        localStorage.removeItem(STORAGE_KEYS.login);
+        log('🚪 執行登出');
+        localStorage.removeItem('aquarium_admin_logged');
         location.reload();
     }
     
-    // 取得商品
+    // ========== 商品功能 ==========
     function getProducts() {
-        return JSON.parse(localStorage.getItem(STORAGE_KEYS.products) || '[]');
+        return JSON.parse(localStorage.getItem('aquarium_products') || '[]');
     }
     
-    // 取得分類
     function getCategories() {
-        return JSON.parse(localStorage.getItem(STORAGE_KEYS.categories) || '[]');
+        return JSON.parse(localStorage.getItem('aquarium_categories') || '[]');
     }
     
-    // 渲染
     function render() {
+        log('📦 渲染商品列表');
         var products = getProducts();
         var cats = getCategories();
         
         document.getElementById('count-products').textContent = products.length;
         document.getElementById('count-stock').textContent = products.reduce(function(s, i) { return s + (i.stock || 0); }, 0);
         
-        // 渲染分類下拉選單
+        // 分類下拉
         var select = document.getElementById('p-cat');
         select.innerHTML = cats.map(function(c) { 
             return '<option value="' + c.name + '">' + c.icon + ' ' + c.name + '</option>'; 
         }).join('');
         
-        // 渲染商品列表
+        // 商品列表
         var list = document.getElementById('product-list');
         if (products.length === 0) {
             list.innerHTML = '<div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>';
@@ -321,154 +385,48 @@
         
         list.innerHTML = products.map(function(i) {
             return '<div class="product">' +
-                '<img src="' + (i.image || 'images/products/default-guppy.svg') + '" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>\">' +
+                '<img src="' + (i.image || 'images/products/default-guppy.svg') + '">' +
                 '<div class="info"><div class="name">' + i.name + '</div>' +
                 '<div class="meta">' + i.category + ' • 庫存: ' + i.stock + '</div>' +
                 '<div class="price">$' + i.price + '</div></div>' +
                 '<div class="actions"><button class="btn-edit" onclick="edit(' + i.id + ')">✏️</button>' +
                 '<button class="btn-delete" onclick="del(' + i.id + ')">🗑️</button></div></div>';
         }).join('');
+        
+        log('📦 渲染完成，共 ' + products.length + ' 項商品');
     }
     
-    // 開啟 Modal
     function openModal() {
         document.getElementById('modal-title').textContent = '新增商品';
-        document.getElementById('p-id').value = '';
-        document.getElementById('p-name').value = '';
-        document.getElementById('p-price').value = '';
-        document.getElementById('p-stock').value = '';
-        document.getElementById('p-desc').value = '';
-        document.getElementById('p-img').value = '';
-        document.getElementById('preview-img').classList.remove('show');
-        renderCategories();
+        ['p-id','p-name','p-price','p-stock','p-desc','p-img'].forEach(function(id) {
+            document.getElementById(id).value = '';
+        });
+        render();
         document.getElementById('modal').classList.add('active');
     }
     
-    // 編輯
     function edit(id) {
         var p = getProducts().find(function(x) { return x.id == id; });
         if (!p) return;
         document.getElementById('modal-title').textContent = '編輯商品';
-        document.getElementById('p-id').value = p.id;
-        document.getElementById('p-name').value = p.name;
-        document.getElementById('p-price').value = p.price;
-        document.getElementById('p-stock').value = p.stock;
-        document.getElementById('p-desc').value = p.description || '';
-        document.getElementById('p-img').value = p.image || '';
-        renderCategories();
+        ['p-id','p-name','p-price','p-stock','p-desc','p-img'].forEach(function(field) {
+            document.getElementById(field).value = p[field.replace('p-', '')] || '';
+        });
         setTimeout(function() { document.getElementById('p-cat').value = p.category; }, 0);
-        if (p.image) {
-            document.getElementById('preview-img').src = p.image;
-            document.getElementById('preview-img').classList.add('show');
-        }
         document.getElementById('modal').classList.add('active');
     }
     
-    // 刪除
     function del(id) {
         if (!confirm('刪除這個商品？')) return;
         var products = getProducts().filter(function(x) { return x.id != id; });
-        localStorage.setItem(STORAGE_KEYS.products, JSON.stringify(products));
+        localStorage.setItem('aquarium_products', JSON.stringify(products));
         render();
     }
     
-    // 關閉 Modal
     function closeModal() {
         document.getElementById('modal').classList.remove('active');
     }
     
-    // 渲染分類
-    function renderCategories() {
-        var select = document.getElementById('p-cat');
-        select.innerHTML = getCategories().map(function(c) { 
-            return '<option value="' + c.name + '">' + c.icon + ' ' + c.name + '</option>'; 
-        }).join('');
-    }
-    
-    // 分類管理
-    function editCategories() {
-        var cats = getCategories();
-        var products = getProducts();
-        document.getElementById('cat-list').innerHTML = cats.map(function(c) {
-            var count = products.filter(function(p) { return p.category === c.name; }).length;
-            return '<div class="cat-item"><span class="icon">' + c.icon + '</span>' +
-                '<span class="name">' + c.name + '</span>' +
-                '<span class="count">' + count + ' 項</span>' +
-                '<div class="actions"><button class="btn-secondary" onclick="editCat(\'' + c.id + '\')">✏️</button>' +
-                '<button class="btn-delete" onclick="delCat(\'' + c.id + '\')" ' + (count > 0 ? 'disabled' : '') + '>🗑️</button></div></div>';
-        }).join('') || '<p style="text-align:center;color:#999;">尚無分類</p>';
-        document.getElementById('cat-modal').classList.add('active');
-    }
-    
-    function editCat(id) {
-        var cat = getCategories().find(function(c) { return c.id == id; });
-        if (!cat) return;
-        var newName = prompt('輸入新名稱：', cat.name);
-        if (newName && newName.trim()) {
-            var cats = getCategories().map(function(c) { 
-                return c.id == id ? {id: c.id, name: newName.trim(), icon: c.icon} : c; 
-            });
-            localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(cats));
-            editCategories();
-        }
-    }
-    
-    function delCat(id) {
-        var cat = getCategories().find(function(c) { return c.id == id; });
-        if (!cat) return;
-        if (!confirm('刪除分類「' + cat.name + '」？')) return;
-        var cats = getCategories().filter(function(c) { return c.id != id; });
-        localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(cats));
-        editCategories();
-    }
-    
-    function addCategory(e) {
-        e.preventDefault();
-        var name = document.getElementById('cat-new-name').value.trim();
-        var icon = document.getElementById('cat-new-icon').value;
-        if (!name) return;
-        var cats = getCategories();
-        cats.push({ id: Date.now().toString(), name: name, icon: icon });
-        localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(cats));
-        document.getElementById('cat-new-name').value = '';
-        editCategories();
-    }
-    
-    function closeCatModal() {
-        document.getElementById('cat-modal').classList.remove('active');
-    }
-    
-    // 網站內容
-    function editSiteContent() {
-        var c = JSON.parse(localStorage.getItem('site_content') || '{}');
-        document.getElementById('site-title').value = c.title || '';
-        document.getElementById('site-subtitle').value = c.subtitle || '';
-        document.getElementById('site-desc').value = c.description || '';
-        document.getElementById('site-phone').value = c.phone || '';
-        document.getElementById('site-address').value = c.address || '';
-        document.getElementById('site-modal').classList.add('active');
-    }
-    
-    function saveSiteContent(e) {
-        e.preventDefault();
-        var c = {
-            title: document.getElementById('site-title').value,
-            subtitle: document.getElementById('site-subtitle').value,
-            description: document.getElementById('site-desc').value,
-            phone: document.getElementById('site-phone').value,
-            address: document.getElementById('site-address').value,
-            updated_at: new Date().toISOString()
-        };
-        localStorage.setItem('site_content', JSON.stringify(c));
-        document.getElementById('site-modal').classList.remove('active');
-        alert('已更新！');
-    }
-    
-    function closeSiteModal() {
-        document.getElementById('site-modal').classList.remove('active');
-    }
-    
-    // 儲存商品
     function saveProduct(e) {
         e.preventDefault();
         var id = document.getElementById('p-id').value;
@@ -482,22 +440,22 @@
             updated_at: new Date().toISOString()
         };
         
-        var img = document.getElementById('p-img').value;
         var products = getProducts();
-        var oldImg = products.find(function(x) { return x.id == id; })?.image;
-        product.image = img || oldImg || 'images/products/default-guppy.svg';
-        
-        var index = products.findIndex(function(x) { return x.id == id; });
+        var index = products.findIndex(function(x) { return x.id == product.id; });
         if (index >= 0) { products[index] = product; }
         else { products.push(product); }
         
-        localStorage.setItem(STORAGE_KEYS.products, JSON.stringify(products));
+        localStorage.setItem('aquarium_products', JSON.stringify(products));
         closeModal();
         render();
         alert(id ? '已更新！' : '已新增！');
     }
     
-    // 同步到 GitHub
+    document.getElementById('modal').addEventListener('click', function(e) {
+        if (e.target === document.getElementById('modal')) closeModal();
+    });
+    
+    // ========== 同步功能 ==========
     async function syncToGitHub() {
         var btn = document.getElementById('sync-btn');
         btn.disabled = true;
@@ -506,21 +464,16 @@
         try {
             var products = getProducts();
             var categories = getCategories();
-            var repo = 'yasonok/AquariumStudio_Project';
             var token = typeof GITHUB_TOKEN !== 'undefined' ? GITHUB_TOKEN : '';
             
-            if (!token) {
-                alert('錯誤：找不到 GitHub Token');
-                throw new Error('No token');
-            }
+            if (!token) { alert('錯誤：找不到 GitHub Token'); throw new Error('No token'); }
             
-            // 更新 products.json
-            var productsResp = await fetch('https://api.github.com/repos/' + repo + '/contents/products.json', {
+            var productsResp = await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/products.json', {
                 headers: { Authorization: 'token ' + token }
             });
             var productsData = await productsResp.json();
             
-            await fetch('https://api.github.com/repos/' + repo + '/contents/products.json', {
+            await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/products.json', {
                 method: 'PUT',
                 headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -530,13 +483,12 @@
                 })
             });
             
-            // 更新 categories.json
-            var catsResp = await fetch('https://api.github.com/repos/' + repo + '/contents/categories.json', {
+            var catsResp = await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/categories.json', {
                 headers: { Authorization: 'token ' + token }
             });
             var catsData = await catsResp.json();
             
-            await fetch('https://api.github.com/repos/' + repo + '/contents/categories.json', {
+            await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/categories.json', {
                 method: 'PUT',
                 headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -548,7 +500,7 @@
             
             btn.textContent = '✅ 已同步！';
             setTimeout(function() { btn.textContent = '🔄 同步'; }, 3000);
-            alert('已同步到 GitHub！\nVercel 將自動部署，幾分鐘後客戶看到更新！');
+            alert('已同步到 GitHub！Vercel 將自動部署');
             
         } catch (error) {
             btn.disabled = false;
@@ -556,11 +508,6 @@
             alert('同步失敗：' + error.message);
         }
     }
-    
-    // Modal 點擊關閉
-    document.getElementById('modal').addEventListener('click', function(e) {
-        if (e.target === document.getElementById('modal')) closeModal();
-    });
     </script>
 </body>
 </html>
