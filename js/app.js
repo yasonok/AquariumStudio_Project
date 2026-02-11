@@ -53,13 +53,26 @@ async function loadProducts() {
   }
 }
 
-function getProducts() {
+// 從 products.json 或 localStorage 取得商品
+async function getProducts() {
+  try {
+    // 嘗試從 products.json 讀取
+    const response = await fetch('products.json');
+    if (response.ok) {
+      const products = await response.json();
+      // 存到 localStorage 備用
+      localStorage.setItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS, JSON.stringify(products));
+      return products;
+    }
+  } catch (e) {
+    console.log('從 products.json 讀取失敗，使用 localStorage');
+  }
+  
+  // 從 localStorage 讀取
   const stored = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.PRODUCTS);
   if (!stored) return [];
   
   const products = JSON.parse(stored);
-  
-  // Remove video fields from cached products
   return products.map(p => {
     const { video, ...rest } = p;
     return rest;
