@@ -9,22 +9,16 @@
         body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; }
         
         /* 登入頁面 */
-        .login-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #667eea, #764ba2); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
-        .login-overlay.active { display: flex; }
+        .login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #667eea, #764ba2); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .login-box { background: white; border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
         .login-box .icon { font-size: 3.5rem; margin-bottom: 15px; }
         .login-box h1 { font-size: 1.4rem; margin-bottom: 8px; color: #333; }
         .login-box p { color: #888; font-size: 0.9rem; margin-bottom: 25px; }
-        .login-box input { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 12px; font-size: 1.1rem; text-align: center; margin-bottom: 15px; transition: all 0.3s; }
+        .login-box input { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 12px; font-size: 1.1rem; text-align: center; margin-bottom: 15px; }
         .login-box input:focus { outline: none; border-color: #667eea; }
-        .login-box button { width: 100%; padding: 16px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .login-box button:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .login-box button { width: 100%; padding: 16px; background: #667eea; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
         .login-box .error { color: #ff6b6b; font-size: 0.85rem; margin-top: 10px; display: none; }
         .login-box .hint { color: #888; font-size: 0.8rem; margin-top: 15px; }
-        
-        /* Firebase 狀態 */
-        .fb-status { background: #fff3cd; color: #856404; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; font-size: 0.85rem; display: none; }
-        .fb-status.show { display: block; }
         
         /* 管理後台 */
         .admin-content { display: none; }
@@ -32,10 +26,9 @@
         
         .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { font-size: 1.2rem; }
-        .header-btns { display: flex; gap: 8px; align-items: center; }
+        .header-btns { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
         .header-btns button, .header-btns a { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; text-decoration: none; }
         .header-btns button:hover { background: rgba(255,255,255,0.3); }
-        .header-btns .user-info { background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; }
         .header-btns .btn-logout { background: rgba(255,107,107,0.8); }
         
         .stats { display: flex; gap: 10px; padding: 15px; background: white; overflow-x: auto; }
@@ -57,15 +50,13 @@
         .btn-delete { background: #ff6b6b; color: white; }
         .fab { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102,126,234,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; }
         
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 16px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        .modal-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h3 { font-size: 1rem; }
-        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
-        .modal-body { padding: 15px; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-weight: 500; margin-bottom: 5px; font-size: 0.9rem; }
+        .modal-box { background: white; border-radius: 20px; padding: 25px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        .modal-box h2 { font-size: 1.2rem; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; }
         .form-group input:focus { outline: none; border-color: #667eea; }
         .upload-box { border: 2px dashed #ddd; border-radius: 10px; padding: 25px; text-align: center; cursor: pointer; background: #f8f9fa; }
@@ -85,41 +76,29 @@
         .cat-item .count { color: #667eea; font-size: 0.9rem; }
         .cat-item .actions { display: flex; gap: 5px; }
         .cat-item .actions button { padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+        
+        /* 分類 Modal */
+        #cat-modal .modal-box { max-width: 350px; }
+        
+        /* 網站內容 Modal */
+        #site-modal .modal-box { max-width: 450px; }
     </style>
 </head>
 <body>
     <!-- 登入頁面 -->
-    <div class="login-overlay active" id="login-overlay">
+    <div class="login-overlay" id="login-overlay">
         <div class="login-box">
             <div class="icon">🐟</div>
             <h1>Aquarium Studio</h1>
             <p>請輸入管理密碼</p>
-            <input type="password" id="login-password" placeholder="密碼">
-            <button id="login-btn">登入</button>
+            <form action="javascript:void(0)" onsubmit="checkLogin()">
+                <input type="password" id="login-password" placeholder="密碼" required>
+                <button type="submit">登入</button>
+            </form>
             <div class="error" id="login-error">密碼錯誤，請重試</div>
             <div class="hint">預設密碼：1234</div>
         </div>
     </div>
-
-    <script>
-    document.getElementById("login-btn").onclick = function() {
-        var pwd = document.getElementById("login-password").value;
-        if (pwd === "1234") {
-            localStorage.setItem("aquarium_admin_logged", "true");
-            document.getElementById("login-overlay").classList.remove("active");
-            document.getElementById("admin-content").classList.add("active");
-            if (typeof render === "function") render();
-        } else {
-            document.getElementById("login-error").style.display = "block";
-        }
-    };
-    document.getElementById("login-password").addEventListener("keyup", function(e) {
-        if (e.key === "Enter") document.getElementById("login-btn").click();
-    });
-    </script>
-
-    <!-- Firebase 狀態 -->
-    <div class="fb-status" id="fb-status"></div>
 
     <!-- 管理後台 -->
     <div class="admin-content" id="admin-content">
@@ -129,9 +108,8 @@
                 <a href="index.html">🏠 首頁</a>
                 <button onclick="editCategories()">🏷️ 分類</button>
                 <button onclick="editSiteContent()">📝 網站</button>
-                <span class="user-info" id="sync-status">📤 未同步</span>
-                <button class="btn-logout" onclick="syncToGitHub()" id="sync-btn">🔄 同步</button>
-                <button class="btn-logout" onclick="logout()">🚪 登出</button>
+                <button onclick="syncToGitHub()" id="sync-btn">🔄 同步</button>
+                <button onclick="logout()" class="btn-logout">🚪 登出</button>
             </div>
         </div>
         
@@ -147,528 +125,442 @@
         </div>
         
         <div class="section">
-            <h2>📦 商品列表 <button onclick="openModal()">➕ 新增</button></h2>
+            <h2>商品列表 <button onclick="openModal()">➕ 新增</button></h2>
             <div id="product-list">
-                <div class="empty"><div class="icon">📦</div><p>載入中...</p></div>
+                <div class="empty">
+                    <div class="icon">📦</div>
+                    <p>尚未有商品</p>
+                </div>
             </div>
         </div>
         
-        <button class="fab" onclick="openModal()">+</button>
+        <button class="fab" onclick="openModal()">➕</button>
     </div>
-    
-    <!-- 商品 Modal -->
+
+    <!-- 新增/編輯商品 Modal -->
     <div class="modal" id="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title">新增商品</h3>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <img id="preview-img" class="preview" alt="預覽">
-                <div class="upload-box" onclick="document.getElementById('img-input').click()">
-                    <div class="icon">📷</div>
-                    <p>點擊選擇圖片</p>
+        <div class="modal-box">
+            <h2 id="modal-title">新增商品</h2>
+            <form onsubmit="saveProduct(event)">
+                <input type="hidden" id="p-id">
+                <div class="form-group">
+                    <label>名稱</label>
+                    <input type="text" id="p-name" required placeholder="商品名稱">
                 </div>
-                <input type="file" id="img-input" accept="image/*" style="display:none" onchange="handleImg(this)">
-                
-                <form onsubmit="save(event)">
-                    <input type="hidden" id="p-id">
-                    <input type="hidden" id="p-img">
-                    
-                    <div class="form-group">
-                        <label>🐟 名稱 *</label>
-                        <input type="text" id="p-name" required placeholder="例如：紅色孔雀魚">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>💰 價格 *</label>
-                        <input type="number" id="p-price" required placeholder="200" min="0">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>📦 庫存 *</label>
-                        <input type="number" id="p-stock" required placeholder="10" min="0">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>🏷️ 分類 *</label>
-                        <select id="p-cat" required></select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>📝 描述</label>
-                        <textarea id="p-desc" rows="2" placeholder="商品特色"></textarea>
-                    </div>
-                    
-                    <div class="btn-row">
-                        <button type="submit" class="btn-primary">💾 儲存</button>
-                    </div>
-                </form>
-            </div>
+                <div class="form-group">
+                    <label>分類</label>
+                    <select id="p-cat"></select>
+                </div>
+                <div class="form-group">
+                    <label>價格</label>
+                    <input type="number" id="p-price" required placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>庫存</label>
+                    <input type="number" id="p-stock" required placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>圖片網址</label>
+                    <input type="url" id="p-img" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>描述</label>
+                    <textarea id="p-desc" rows="3" placeholder="商品描述"></textarea>
+                </div>
+                <div class="btn-row">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">取消</button>
+                    <button type="submit" class="btn-primary">儲存</button>
+                </div>
+            </form>
         </div>
     </div>
-    
-    <!-- 分類 Modal -->
+
+    <!-- 分類管理 Modal -->
     <div class="modal" id="cat-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>🏷️ 分類管理</h3>
-                <button class="modal-close" onclick="closeCatModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="cat-list"></div>
-                
-                <div style="margin-top:20px; padding-top:15px; border-top:1px solid #eee;">
-                    <h4 style="margin-bottom:15px; font-size:0.95rem;">➕ 新增分類</h4>
-                    <form onsubmit="addCategory(event)">
-                        <div class="form-group">
-                            <label>🏷️ 名稱 *</label>
-                            <input type="text" id="cat-new-name" required placeholder="例如：進口魚">
-                        </div>
-                        <div class="form-group">
-                            <label>🌈 圖示</label>
-                            <select id="cat-new-icon">
-                                <option value="🐟">🐟 魚</option>
-                                <option value="🐠">🐠 熱帶魚</option>
-                                <option value="🦐">🦐 蝦</option>
-                                <option value="🐚">🐚 貝類</option>
-                                <option value="⚙️">⚙️ 設備</option>
-                                <option value="💧">💧 水質</option>
-                                <option value="🌿">🌿 水草</option>
-                                <option value="📦">📦 其他</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn-primary" style="width:100%;">➕ 新增</button>
-                    </form>
+        <div class="modal-box">
+            <h2>🏷️ 分類管理</h2>
+            <div id="cat-list"></div>
+            <form onsubmit="addCategory(event)" style="margin-top: 15px;">
+                <div style="display: flex; gap: 10px;">
+                    <select id="cat-new-icon" style="width: 60px;">
+                        <option>🐟</option>
+                        <option>⚙️</option>
+                        <option>🦐</option>
+                        <option>💧</option>
+                        <option>🌿</option>
+                        <option>💊</option>
+                        <option>🔧</option>
+                        <option>🎨</option>
+                    </select>
+                    <input type="text" id="cat-new-name" placeholder="新分類名稱" style="flex: 1;" required>
+                    <button type="submit" class="btn-primary" style="width: auto;">新增</button>
                 </div>
-            </div>
+            </form>
+            <button class="btn-secondary" onclick="closeCatModal()" style="width: 100%; margin-top: 15px;">關閉</button>
         </div>
     </div>
-    
+
     <!-- 網站內容 Modal -->
     <div class="modal" id="site-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>📝 網站內容</h3>
-                <button class="modal-close" onclick="closeSiteModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form onsubmit="saveSiteContent(event)">
-                    <div class="form-group">
-                        <label>🏠 商店名稱</label>
-                        <input type="text" id="site-title" placeholder="例如：瑞安水族">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>📢 副標題</label>
-                        <input type="text" id="site-subtitle" placeholder="專業孔雀魚專賣店">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>📝 商店描述</label>
-                        <textarea id="site-desc" rows="3" placeholder="介紹你的商店..."></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>📞 聯絡電話</label>
-                        <input type="text" id="site-phone" placeholder="09xx-xxx-xxx">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>📍 地址</label>
-                        <input type="text" id="site-address" placeholder="縣市鄉鎮...">
-                    </div>
-                    
-                    <div class="btn-row">
-                        <button type="button" class="btn-secondary" onclick="closeSiteModal()">取消</button>
-                        <button type="submit" class="btn-primary">💾 儲存</button>
-                    </div>
-                </form>
-            </div>
+        <div class="modal-box">
+            <h2>📝 網站內容</h2>
+            <form onsubmit="saveSiteContent(event)">
+                <div class="form-group">
+                    <label>標題</label>
+                    <input type="text" id="site-title" placeholder="Aquarium Studio">
+                </div>
+                <div class="form-group">
+                    <label>副標題</label>
+                    <input type="text" id="site-subtitle" placeholder="專業孔雀魚養殖">
+                </div>
+                <div class="form-group">
+                    <label>描述</label>
+                    <textarea id="site-desc" rows="3" placeholder="關於我們..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>電話</label>
+                    <input type="tel" id="site-phone" placeholder="0912-345-678">
+                </div>
+                <div class="form-group">
+                    <label>地址</label>
+                    <input type="text" id="site-address" placeholder="台北市...">
+                </div>
+                <div class="btn-row">
+                    <button type="button" class="btn-secondary" onclick="closeSiteModal()">取消</button>
+                    <button type="submit" class="btn-primary">儲存</button>
+                </div>
+            </form>
         </div>
     </div>
-    
-    <script>const USE_FIREBASE = false;</script>
-    
+
     <script>
-        const LOGIN_KEY = 'aquarium_admin_logged';
-        const DEFAULT_PASSWORD = '1234';
-        const SITE_KEY = 'site_content';
-        
-        // 登入狀態檢查
-        function checkLogin() {
-            if (localStorage.getItem(LOGIN_KEY) === 'true') {
-                document.getElementById('login-overlay').classList.remove('active');
-                document.getElementById('admin-content').classList.add('active');
-                render();
-            } else {
-                document.getElementById('login-overlay').classList.add('active');
-                document.getElementById('admin-content').classList.remove('active');
-            }
+    // 儲存 key
+    var STORAGE_KEYS = {
+        products: 'aquarium_products',
+        categories: 'aquarium_categories',
+        login: 'aquarium_admin_logged'
+    };
+    
+    // 初始化
+    (function init() {
+        // 預設分類
+        if (!localStorage.getItem(STORAGE_KEYS.categories)) {
+            localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify([
+                { id: '1', name: '孔雀魚', icon: '🐟' },
+                { id: '2', name: '設備', icon: '⚙️' },
+                { id: '3', name: '飼料', icon: '🦐' },
+                { id: '4', name: '水質', icon: '💧' }
+            ]));
         }
         
-        // 登入
-        function login() {
-            const pwd = document.getElementById('login-password').value;
-            if (pwd === DEFAULT_PASSWORD) {
-                localStorage.setItem(LOGIN_KEY, 'true');
-                document.getElementById('login-overlay').classList.remove('active');
-                document.getElementById('admin-content').classList.add('active');
-                document.getElementById('login-password').value = '';
-                document.getElementById('login-error').style.display = 'none';
-                render();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-            }
+        // 檢查登入
+        checkLogin();
+    })();
+    
+    // 登入檢查
+    function checkLogin() {
+        var logged = localStorage.getItem(STORAGE_KEYS.login);
+        if (logged === 'true') {
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('admin-content').classList.add('active');
+            render();
         }
+    }
+    
+    // 登入
+    function checkLogin() {
+        var pwd = document.getElementById('login-password').value;
+        if (pwd === '1234') {
+            localStorage.setItem(STORAGE_KEYS.login, 'true');
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('admin-content').classList.add('active');
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-error').style.display = 'none';
+            render();
+        } else {
+            document.getElementById('login-error').style.display = 'block';
+        }
+    }
+    
+    // 登出
+    function logout() {
+        localStorage.removeItem(STORAGE_KEYS.login);
+        location.reload();
+    }
+    
+    // 取得商品
+    function getProducts() {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.products) || '[]');
+    }
+    
+    // 取得分類
+    function getCategories() {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.categories) || '[]');
+    }
+    
+    // 渲染
+    function render() {
+        var products = getProducts();
+        var cats = getCategories();
         
-        // 登出
-        function logout() {
-            localStorage.removeItem(LOGIN_KEY);
-            document.getElementById('login-overlay').classList.add('active');
-            document.getElementById('admin-content').classList.remove('active');
-        }
+        document.getElementById('count-products').textContent = products.length;
+        document.getElementById('count-stock').textContent = products.reduce(function(s, i) { return s + (i.stock || 0); }, 0);
         
-        // 載入分類
-        async function renderCategories() {
-            const cats = getCategories();
-            const select = document.getElementById('p-cat');
-            select.innerHTML = cats.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join('');
-        }
+        // 渲染分類下拉選單
+        var select = document.getElementById('p-cat');
+        select.innerHTML = cats.map(function(c) { 
+            return '<option value="' + c.name + '">' + c.icon + ' ' + c.name + '</option>'; 
+        }).join('');
         
         // 渲染商品列表
-        async function render() {
-            try {
-                const products = getProducts();
-                const cats = getCategories();
-                
-                document.getElementById('count-products').textContent = products.length;
-                document.getElementById('count-stock').textContent = products.reduce((s, i) => s + (i.stock||0), 0);
-                
-                await renderCategories();
-                
-                const list = document.getElementById('product-list');
-                if (products.length === 0) {
-                    list.innerHTML = '<div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>';
-                    return;
-                }
-                
-                list.innerHTML = products.map(i => `
-                    <div class="product">
-                        <img src="${i.image || 'images/products/default-guppy.svg'}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'">
-                        <div class="info">
-                            <div class="name">${i.name}</div>
-                            <div class="meta">${i.category} • 庫存: ${i.stock}</div>
-                            <div class="price">$${i.price}</div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn-edit" onclick="edit(${i.id})">✏️</button>
-                            <button class="btn-delete" onclick="del(${i.id})">🗑️</button>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('Render error:', error);
-            }
+        var list = document.getElementById('product-list');
+        if (products.length === 0) {
+            list.innerHTML = '<div class="empty"><div class="icon">📦</div><p>尚未有商品</p></div>';
+            return;
         }
         
-        // 開啟新增 Modal
-        function openModal() {
-            document.getElementById('modal-title').textContent = '新增商品';
-            document.getElementById('p-id').value = '';
-            document.getElementById('p-name').value = '';
-            document.getElementById('p-price').value = '';
-            document.getElementById('p-stock').value = '';
-            document.getElementById('p-desc').value = '';
-            document.getElementById('p-img').value = '';
-            document.getElementById('preview-img').classList.remove('show');
-            renderCategories();
-            document.getElementById('modal').classList.add('active');
+        list.innerHTML = products.map(function(i) {
+            return '<div class="product">' +
+                '<img src="' + (i.image || 'images/products/default-guppy.svg') + '" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>\">' +
+                '<div class="info"><div class="name">' + i.name + '</div>' +
+                '<div class="meta">' + i.category + ' • 庫存: ' + i.stock + '</div>' +
+                '<div class="price">$' + i.price + '</div></div>' +
+                '<div class="actions"><button class="btn-edit" onclick="edit(' + i.id + ')">✏️</button>' +
+                '<button class="btn-delete" onclick="del(' + i.id + ')">🗑️</button></div></div>';
+        }).join('');
+    }
+    
+    // 開啟 Modal
+    function openModal() {
+        document.getElementById('modal-title').textContent = '新增商品';
+        document.getElementById('p-id').value = '';
+        document.getElementById('p-name').value = '';
+        document.getElementById('p-price').value = '';
+        document.getElementById('p-stock').value = '';
+        document.getElementById('p-desc').value = '';
+        document.getElementById('p-img').value = '';
+        document.getElementById('preview-img').classList.remove('show');
+        renderCategories();
+        document.getElementById('modal').classList.add('active');
+    }
+    
+    // 編輯
+    function edit(id) {
+        var p = getProducts().find(function(x) { return x.id == id; });
+        if (!p) return;
+        document.getElementById('modal-title').textContent = '編輯商品';
+        document.getElementById('p-id').value = p.id;
+        document.getElementById('p-name').value = p.name;
+        document.getElementById('p-price').value = p.price;
+        document.getElementById('p-stock').value = p.stock;
+        document.getElementById('p-desc').value = p.description || '';
+        document.getElementById('p-img').value = p.image || '';
+        renderCategories();
+        setTimeout(function() { document.getElementById('p-cat').value = p.category; }, 0);
+        if (p.image) {
+            document.getElementById('preview-img').src = p.image;
+            document.getElementById('preview-img').classList.add('show');
         }
-        
-        // 編輯商品
-        async function edit(id) {
-            const products = getProducts();
-            const p = products.find(x => x.id == id || x.id === id);
-            if (!p) return;
-            
-            document.getElementById('modal-title').textContent = '編輯商品';
-            document.getElementById('p-id').value = p.id;
-            document.getElementById('p-name').value = p.name;
-            document.getElementById('p-price').value = p.price;
-            document.getElementById('p-stock').value = p.stock;
-            document.getElementById('p-desc').value = p.description || '';
-            document.getElementById('p-img').value = p.image || '';
-            
-            await renderCategories();
-            setTimeout(() => document.getElementById('p-cat').value = p.category, 0);
-            
-            if (p.image) {
-                document.getElementById('preview-img').src = p.image;
-                document.getElementById('preview-img').classList.add('show');
-            }
-            document.getElementById('modal').classList.add('active');
-        }
-        
-        // 刪除商品
-        async function del(id) {
-            if (!confirm('刪除這個商品？')) return;
-            del(id);
-            render();
-        }
-        
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-        
-        // 分類管理
-        async function editCategories() {
-            const cats = getCategories();
-            const products = getProducts();
-            
-            document.getElementById('cat-list').innerHTML = cats.map(c => {
-                const count = products.filter(p => p.category === c.name).length;
-                return `
-                    <div class="cat-item">
-                        <span class="icon">${c.icon}</span>
-                        <span class="name">${c.name}</span>
-                        <span class="count">${count} 項</span>
-                        <div class="actions">
-                            <button class="btn-secondary" onclick="editCat('${c.id}')">✏️</button>
-                            <button class="btn-delete" onclick="delCat('${c.id}')" ${count > 0 ? 'disabled' : ''}>🗑️</button>
-                        </div>
-                    </div>
-                `;
-            }).join('') || '<p style="text-align:center;color:#999;">尚無分類</p>';
-            
-            document.getElementById('cat-modal').classList.add('active');
-        }
-        
-        async function editCat(id) {
-            const cats = getCategories();
-            const cat = cats.find(c => c.id == id || c.id === id);
-            if (!cat) return;
-            
-            const newName = prompt('輸入新名稱：', cat.name);
-            if (newName && newName.trim()) {
-                cat.name = newName.trim();
-                saveCategory(cat);
-                editCategories();
-            }
-        }
-        
-        async function delCat(id) {
-            const cats = getCategories();
-            const cat = cats.find(c => c.id == id || c.id === id);
-            if (!cat) return;
-            
-            if (!confirm(`刪除分類「${cat.name」？`)) return;
-            deleteCategory(id);
+        document.getElementById('modal').classList.add('active');
+    }
+    
+    // 刪除
+    function del(id) {
+        if (!confirm('刪除這個商品？')) return;
+        var products = getProducts().filter(function(x) { return x.id != id; });
+        localStorage.setItem(STORAGE_KEYS.products, JSON.stringify(products));
+        render();
+    }
+    
+    // 關閉 Modal
+    function closeModal() {
+        document.getElementById('modal').classList.remove('active');
+    }
+    
+    // 渲染分類
+    function renderCategories() {
+        var select = document.getElementById('p-cat');
+        select.innerHTML = getCategories().map(function(c) { 
+            return '<option value="' + c.name + '">' + c.icon + ' ' + c.name + '</option>'; 
+        }).join('');
+    }
+    
+    // 分類管理
+    function editCategories() {
+        var cats = getCategories();
+        var products = getProducts();
+        document.getElementById('cat-list').innerHTML = cats.map(function(c) {
+            var count = products.filter(function(p) { return p.category === c.name; }).length;
+            return '<div class="cat-item"><span class="icon">' + c.icon + '</span>' +
+                '<span class="name">' + c.name + '</span>' +
+                '<span class="count">' + count + ' 項</span>' +
+                '<div class="actions"><button class="btn-secondary" onclick="editCat(\'' + c.id + '\')">✏️</button>' +
+                '<button class="btn-delete" onclick="delCat(\'' + c.id + '\')" ' + (count > 0 ? 'disabled' : '') + '>🗑️</button></div></div>';
+        }).join('') || '<p style="text-align:center;color:#999;">尚無分類</p>';
+        document.getElementById('cat-modal').classList.add('active');
+    }
+    
+    function editCat(id) {
+        var cat = getCategories().find(function(c) { return c.id == id; });
+        if (!cat) return;
+        var newName = prompt('輸入新名稱：', cat.name);
+        if (newName && newName.trim()) {
+            var cats = getCategories().map(function(c) { 
+                return c.id == id ? {id: c.id, name: newName.trim(), icon: c.icon} : c; 
+            });
+            localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(cats));
             editCategories();
         }
+    }
+    
+    function delCat(id) {
+        var cat = getCategories().find(function(c) { return c.id == id; });
+        if (!cat) return;
+        if (!confirm('刪除分類「' + cat.name + '」？')) return;
+        var cats = getCategories().filter(function(c) { return c.id != id; });
+        localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(cats));
+        editCategories();
+    }
+    
+    function addCategory(e) {
+        e.preventDefault();
+        var name = document.getElementById('cat-new-name').value.trim();
+        var icon = document.getElementById('cat-new-icon').value;
+        if (!name) return;
+        var cats = getCategories();
+        cats.push({ id: Date.now().toString(), name: name, icon: icon });
+        localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(cats));
+        document.getElementById('cat-new-name').value = '';
+        editCategories();
+    }
+    
+    function closeCatModal() {
+        document.getElementById('cat-modal').classList.remove('active');
+    }
+    
+    // 網站內容
+    function editSiteContent() {
+        var c = JSON.parse(localStorage.getItem('site_content') || '{}');
+        document.getElementById('site-title').value = c.title || '';
+        document.getElementById('site-subtitle').value = c.subtitle || '';
+        document.getElementById('site-desc').value = c.description || '';
+        document.getElementById('site-phone').value = c.phone || '';
+        document.getElementById('site-address').value = c.address || '';
+        document.getElementById('site-modal').classList.add('active');
+    }
+    
+    function saveSiteContent(e) {
+        e.preventDefault();
+        var c = {
+            title: document.getElementById('site-title').value,
+            subtitle: document.getElementById('site-subtitle').value,
+            description: document.getElementById('site-desc').value,
+            phone: document.getElementById('site-phone').value,
+            address: document.getElementById('site-address').value,
+            updated_at: new Date().toISOString()
+        };
+        localStorage.setItem('site_content', JSON.stringify(c));
+        document.getElementById('site-modal').classList.remove('active');
+        alert('已更新！');
+    }
+    
+    function closeSiteModal() {
+        document.getElementById('site-modal').classList.remove('active');
+    }
+    
+    // 儲存商品
+    function saveProduct(e) {
+        e.preventDefault();
+        var id = document.getElementById('p-id').value;
+        var product = {
+            id: id ? parseInt(id) : Date.now(),
+            name: document.getElementById('p-name').value,
+            price: parseInt(document.getElementById('p-price').value),
+            stock: parseInt(document.getElementById('p-stock').value),
+            category: document.getElementById('p-cat').value,
+            description: document.getElementById('p-desc').value,
+            updated_at: new Date().toISOString()
+        };
         
-        async function addCategory(e) {
-            e.preventDefault();
-            const name = document.getElementById('cat-new-name').value.trim();
-            const icon = document.getElementById('cat-new-icon').value;
-            if (!name) return;
+        var img = document.getElementById('p-img').value;
+        var products = getProducts();
+        var oldImg = products.find(function(x) { return x.id == id; })?.image;
+        product.image = img || oldImg || 'images/products/default-guppy.svg';
+        
+        var index = products.findIndex(function(x) { return x.id == id; });
+        if (index >= 0) { products[index] = product; }
+        else { products.push(product); }
+        
+        localStorage.setItem(STORAGE_KEYS.products, JSON.stringify(products));
+        closeModal();
+        render();
+        alert(id ? '已更新！' : '已新增！');
+    }
+    
+    // 同步到 GitHub
+    async function syncToGitHub() {
+        var btn = document.getElementById('sync-btn');
+        btn.disabled = true;
+        btn.textContent = '同步中...';
+        
+        try {
+            var products = getProducts();
+            var categories = getCategories();
+            var repo = 'yasonok/AquariumStudio_Project';
+            var token = typeof GITHUB_TOKEN !== 'undefined' ? GITHUB_TOKEN : '';
             
-            const cats = getCategories();
-            cats.push({ id: Date.now().toString(), name, icon });
-            await getCategories().filter(x => x.id != cat.id) ? (localStorage.setItem('aquarium_categories', JSON.stringify(getCategories().filter(x => x.id != cat.id)), true) : localStorage.setItem('aquarium_categories', JSON.stringify(cats));
-            
-            document.getElementById('cat-new-name').value = '';
-            editCategories();
-        }
-        
-        function closeCatModal() {
-            document.getElementById('cat-modal').classList.remove('active');
-        }
-        
-        // 圖片處理
-        function handleImg(input) {
-            if (!input.files[0]) return;
-            const file = input.files[0];
-            const r = new FileReader();
-            r.onload = e => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = 600;
-                    canvas.height = 600;
-                    const ctx = canvas.getContext('2d');
-                    
-                    let sx = 0, sy = 0, sw = img.width, sh = img.height;
-                    if (sw > sh) {
-                        sx = (sw - sh) / 2;
-                        sw = sh;
-                    } else {
-                        sy = (sh - sw) / 2;
-                        sh = sw;
-                    }
-                    
-                    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, 600, 600);
-                    const result = canvas.toDataURL('image/jpeg', 0.85);
-                    
-                    document.getElementById('preview-img').src = result;
-                    document.getElementById('preview-img').classList.add('show');
-                    document.getElementById('p-img').value = result;
-                };
-                img.src = e.target.result;
-            };
-            r.readAsDataURL(file);
-        }
-        
-        // 網站內容
-        function editSiteContent() {
-            const c = JSON.parse(localStorage.getItem(SITE_KEY) || '{}');
-            document.getElementById('site-title').value = c.title || '';
-            document.getElementById('site-subtitle').value = c.subtitle || '';
-            document.getElementById('site-desc').value = c.description || '';
-            document.getElementById('site-phone').value = c.phone || '';
-            document.getElementById('site-address').value = c.address || '';
-            document.getElementById('site-modal').classList.add('active');
-        }
-        
-        function saveSiteContent(e) {
-            e.preventDefault();
-            const c = {
-                title: document.getElementById('site-title').value,
-                subtitle: document.getElementById('site-subtitle').value,
-                description: document.getElementById('site-desc').value,
-                phone: document.getElementById('site-phone').value,
-                address: document.getElementById('site-address').value,
-                updated_at: new Date().toISOString()
-            };
-            localStorage.setItem(SITE_KEY, JSON.stringify(c));
-            document.getElementById('site-modal').classList.remove('alert('✅ 網站內容已更新！');
-        }
-        
-        function closeSiteModal() {
-            document.getElementById('site-modal').classList.remove('active');
-        }
-        
-        // 儲存商品
-        async function save(e) {
-            e.preventDefault();
-            
-            const id = document.getElementById('p-id').value;
-            const product = {
-                id: id ? parseInt(id) : Date.now(),
-                name: document.getElementById('p-name').value,
-                price: parseInt(document.getElementById('p-price').value),
-                stock: parseInt(document.getElementById('p-stock').value),
-                category: document.getElementById('p-cat').value,
-                description: document.getElementById('p-desc').value,
-                updated_at: new Date().toISOString()
-            };
-            
-            const img = document.getElementById('p-img').value;
-            const products = getProducts();
-            const oldImg = products.find(x => x.id == id || x.id === id)?.image;
-            product.image = img || oldImg || 'images/products/default-guppy.svg';
-            
-            saveProductToStorage(product);
-            
-            closeModal();
-            render();
-            alert(id ? '✅ 已更新！' : '✅ 已新增！');
-        }
-        
-        // 額外函數
-        function saveProductToStorage(p) {
-            const products = getProducts();
-            const idx = products.findIndex(x => x.id == p.id);
-            if (idx >= 0) { products[idx] = p; } else { products.push(p); }
-            localStorage.setItem('aquarium_products', JSON.stringify(products));
-        }
-        
-        function saveCategory(c) {
-            const cats = getCategories();
-            const idx = cats.findIndex(x => x.id == c.id);
-            if (idx >= 0) { cats[idx] = c; } else { cats.push(c); }
-            localStorage.setItem('aquarium_categories', JSON.stringify(cats));
-        }
-        
-        function deleteCategory(id) {
-            const cats = getCategories().filter(x => x.id != id);
-            localStorage.setItem('aquarium_categories', JSON.stringify(cats));
-        }
-        
-        // 初始化
-        document.addEventListener('DOMContentLoaded', checkLogin);
-        document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
-    </script>
-</body>
-</html>
-        // 同步到 GitHub
-        async function syncToGitHub() {
-            const btn = document.getElementById("sync-btn");
-            const status = document.getElementById("sync-status");
-            
-            btn.disabled = true;
-            btn.textContent = "🔄 同步中...";
-            
-            try {
-                const products = JSON.parse(localStorage.getItem("aquarium_products") || "[]");
-                const categories = JSON.parse(localStorage.getItem("aquarium_categories") || "[]");
-                
-                const repo = "yasonok/AquariumStudio_Project";
-                const token = typeof GITHUB_TOKEN !== "undefined" ? GITHUB_TOKEN : "";
-                
-                // 更新 products.json
-                const productsResp = await fetch("https://api.github.com/repos/" + repo + "/contents/products.json", {
-                    headers: { Authorization: "token " + token }
-                });
-                const productsData = await productsResp.json();
-                
-                await fetch("https://api.github.com/repos/" + repo + "/contents/products.json", {
-                    method: "PUT",
-                    headers: { Authorization: "token " + token, "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        message: "更新商品：" + products.length + "項",
-                        content: btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))),
-                        sha: productsData.sha
-                    })
-                });
-                
-                // 更新 categories.json
-                const catsResp = await fetch("https://api.github.com/repos/" + repo + "/contents/categories.json", {
-                    headers: { Authorization: "token " + token }
-                });
-                const catsData = await catsResp.json();
-                
-                await fetch("https://api.github.com/repos/" + repo + "/contents/categories.json", {
-                    method: "PUT",
-                    headers: { Authorization: "token " + token, "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        message: "更新分類：" + categories.length + "個",
-                        content: btoa(unescape(encodeURIComponent(JSON.stringify(categories, null, 2))),
-                        sha: catsData.sha
-                    })
-                });
-                
-                btn.textContent = "✅ 已同步！";
-                status.textContent = "✅ 已同步";
-                
-                setTimeout(function() {
-                    btn.textContent = "🔄 同步";
-                    status.textContent = "📤 未同步";
-                }, 3000);
-                
-                alert("✅ 已同步到 GitHub！\nVercel 將自動部署，幾分鐘後客戶看到更新！");
-                
-            } catch (error) {
-                console.error(error);
-                btn.disabled = false;
-                btn.textContent = "🔄 同步";
-                alert("❌ 同步失敗：" + error.message);
+            if (!token) {
+                alert('錯誤：找不到 GitHub Token');
+                throw new Error('No token');
             }
+            
+            // 更新 products.json
+            var productsResp = await fetch('https://api.github.com/repos/' + repo + '/contents/products.json', {
+                headers: { Authorization: 'token ' + token }
+            });
+            var productsData = await productsResp.json();
+            
+            await fetch('https://api.github.com/repos/' + repo + '/contents/products.json', {
+                method: 'PUT',
+                headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: '更新商品：' + products.length + '項',
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))),
+                    sha: productsData.sha
+                })
+            });
+            
+            // 更新 categories.json
+            var catsResp = await fetch('https://api.github.com/repos/' + repo + '/contents/categories.json', {
+                headers: { Authorization: 'token ' + token }
+            });
+            var catsData = await catsResp.json();
+            
+            await fetch('https://api.github.com/repos/' + repo + '/contents/categories.json', {
+                method: 'PUT',
+                headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: '更新分類：' + categories.length + '個',
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(categories, null, 2))),
+                    sha: catsData.sha
+                })
+            });
+            
+            btn.textContent = '✅ 已同步！';
+            setTimeout(function() { btn.textContent = '🔄 同步'; }, 3000);
+            alert('已同步到 GitHub！\nVercel 將自動部署，幾分鐘後客戶看到更新！');
+            
+        } catch (error) {
+            btn.disabled = false;
+            btn.textContent = '🔄 同步';
+            alert('同步失敗：' + error.message);
         }
-        
-        // 初始化
-        document.addEventListener('DOMContentLoaded', checkLogin);
-        document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+    }
+    
+    // Modal 點擊關閉
+    document.getElementById('modal').addEventListener('click', function(e) {
+        if (e.target === document.getElementById('modal')) closeModal();
+    });
     </script>
 </body>
 </html>
