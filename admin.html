@@ -71,18 +71,11 @@
                 <h1>🐟 Aquarium Studio</h1>
                 <p style="color:#888;margin-bottom:15px;">管理後台</p>
                 
-                <!-- 測試連結 -->
-                <div style="background:#e3f2fd;padding:15px;border-radius:10px;margin-bottom:20px;">
-                    <p style="font-size:0.85rem;color:#1976d2;margin-bottom:10px;">🔧 快速測試：</p>
-                    <a href="?login=1234" style="display:block;padding:12px;background:#667eea;color:white;text-decoration:none;border-radius:8px;font-weight:bold;">👉 按這裡直接登入</a>
-                </div>
-                
-                <p style="margin:15px 0;color:#666;">或輸入密碼：</p>
-                <input type="password" id="pwd" placeholder="密碼" value="1234">
+                <input type="password" id="pwd" placeholder="請輸入密碼">
                 <button onclick="checkPwd()">登 入</button>
                 
                 <div class="login-msg" id="login-msg">
-                    <p>⏳ 請輸入密碼 1234</p>
+                    <p>🔒 請輸入您的密碼</p>
                 </div>
             </div>
         </div>
@@ -128,25 +121,19 @@
     </div>
 
     <script>
-    // URL 參數解析
-    function getUrlParam(name) {
-        var url = new URL(window.location.href);
-        return url.searchParams.get(name);
-    }
+    var ADMIN_PASSWORD = 'Jason02061';
     
     function checkPwd() {
         var pwd = document.getElementById('pwd').value;
         var msg = document.getElementById('login-msg');
         
-        console.log('輸入密碼:', pwd);
-        console.log('正確密碼: 1234');
-        
-        if (pwd === '1234') {
-            msg.innerHTML = '<p style="color:green;">✅ 密碼正確！登入中...</p>';
+        if (pwd === ADMIN_PASSWORD) {
+            msg.innerHTML = '<p style="color:green;">✅ 登入成功！</p>';
             localStorage.setItem('admin_logged', 'true');
             setTimeout(function() { location.href = location.pathname + '?logged=1'; }, 500);
         } else {
-            msg.innerHTML = '<p style="color:red;">❌ 密碼錯誤！請輸入 1234</p>';
+            msg.innerHTML = '<p style="color:red;">❌ 密碼錯誤，請重新輸入</p>';
+            document.getElementById('pwd').value = '';
         }
     }
     
@@ -245,22 +232,10 @@
     
     // 初始化
     (function init(){
-        console.log('頁面載入完成');
-        console.log('URL login 參數:', getUrlParam('login'));
-        console.log('URL logged 參數:', getUrlParam('logged'));
-        
-        if (getUrlParam('login') === '1234') {
-            console.log('✅ URL 登入參數正確');
-            localStorage.setItem('admin_logged', 'true');
-        }
-        
-        if (getUrlParam('logged') === '1' || localStorage.getItem('admin_logged') === 'true') {
-            console.log('✅ 顯示後台');
+        if (localStorage.getItem('admin_logged') === 'true') {
             document.getElementById('login-page').classList.remove('active');
             document.getElementById('admin-page').classList.add('active');
             render();
-        } else {
-            console.log('⏳ 顯示登入頁');
         }
     })();
     </script>
