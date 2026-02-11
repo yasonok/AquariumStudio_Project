@@ -134,11 +134,10 @@
                 <div class="form-group"><label>價格</label><input type="number" id="p-price" required placeholder="0" min="0"></div>
                 <div class="form-group"><label>庫存</label><input type="number" id="p-stock" required placeholder="0" min="0"></div>
                 <div class="form-group">
-                    <label>圖片</label>
+                    <label>圖片網址</label>
                     <input type="url" id="p-img" placeholder="圖片網址 https://...">
-                    <div class="upload-box" onclick="document.getElementById('p-img-file').click()">📷 點擊上傳圖片</div>
-                    <input type="file" id="p-img-file" accept="image/*" style="display:none" onchange="handleImg(this)">
-                    <img id="preview-img" class="preview">
+                    <p style="font-size:0.8rem;color:#888;margin-top:5px;">💡 可用相簿或雲端圖片網址</p>
+                    <img id="preview-img" style="width:100%;border-radius:10px;margin-top:10px;display:none;">
                 </div>
                 <div class="form-group"><label>描述</label><textarea id="p-desc" rows="3" placeholder="商品描述"></textarea></div>
                 <div class="btn-row">
@@ -227,35 +226,10 @@
         }).join('');
     }
     
-    function handleImg(input) {
-        if (!input.files[0]) return;
-        var file = input.files[0];
-        var r = new FileReader();
-        r.onload = function(e) {
-            var img = new Image();
-            img.onload = function() {
-                var canvas = document.createElement('canvas');
-                canvas.width = 600;
-                canvas.height = 600;
-                var ctx = canvas.getContext('2d');
-                var sx = 0, sy = 0, sw = img.width, sh = img.height;
-                if (sw > sh) { sx = (sw - sh) / 2; sw = sh; }
-                else { sy = (sh - sw) / 2; sh = sw; }
-                ctx.drawImage(img, sx, sy, sw, sh, 0, 0, 600, 600);
-                var result = canvas.toDataURL('image/jpeg', 0.85);
-                document.getElementById('p-img').value = result;
-                document.getElementById('preview-img').src = result;
-                document.getElementById('preview-img').classList.add('show');
-            };
-            img.src = e.target.result;
-        };
-        r.readAsDataURL(file);
-    }
-    
     function openModal() {
         document.getElementById('modal-title').textContent = '新增商品';
         ['p-id','p-name','p-price','p-stock','p-desc','p-img'].forEach(function(id){ document.getElementById(id).value = ''; });
-        document.getElementById('preview-img').classList.remove('show');
+        
         render();
         document.getElementById('modal').classList.add('active');
     }
@@ -268,11 +242,14 @@
             document.getElementById(field).value = p[field.replace('p-','')] || '';
         });
         document.getElementById('p-img').value = p.image || '';
-        if (p.image) {
-            document.getElementById('preview-img').src = p.image;
-            document.getElementById('preview-img').classList.add('show');
+        var previewImg = document.getElementById('preview-img');
+        if (p.image && p.image.startsWith('http')) {
+            previewImg.src = p.image;
+            previewImg.style.display = 'block';
         } else {
-            document.getElementById('preview-img').classList.remove('show');
+            previewImg.style.display = 'none';
+        } else {
+            
         }
         setTimeout(function(){ document.getElementById('p-cat').value = p.category; }, 0);
         document.getElementById('modal').classList.add('active');
