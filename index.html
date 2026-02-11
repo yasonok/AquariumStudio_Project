@@ -71,6 +71,26 @@
     .care-para { color: #555; font-size: 15px; line-height: 1.9; margin-bottom: 15px; }
     @media (max-width: 900px) { .care-grid { grid-template-columns: 1fr; } .care-list-box ul { grid-template-columns: 1fr; } }
   </style>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKqU5f3CTEs4pZDpxs8F_sa1BalT0I0So",
+            authDomain: "aquariumshop-a4865.firebaseapp.com",
+            projectId: "aquariumshop-a4865",
+            storageBucket: "aquariumshop-a4865.firebasestorage.app",
+            messagingSenderId: "700272520078",
+            appId: "1:700272520078:web:35675baf0862d1a2f112df"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.FirebaseDB = { app, db, collection, getDocs, onSnapshot, doc, getDoc };
+        window.dispatchEvent(new Event('firebaseReady'));
+    </script>
 </head>
 <body>
   <header class="header">
