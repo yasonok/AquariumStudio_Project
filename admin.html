@@ -597,7 +597,7 @@
                 const categories = JSON.parse(localStorage.getItem("aquarium_categories") || "[]");
                 
                 const repo = "yasonok/AquariumStudio_Project";
-                const token = "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";
+                const token = typeof GITHUB_TOKEN !== "undefined" ? GITHUB_TOKEN : "";
                 
                 // 更新 products.json
                 const productsResp = await fetch("https://api.github.com/repos/" + repo + "/contents/products.json", {
@@ -648,3 +648,10 @@
                 alert("❌ 同步失敗：" + error.message);
             }
         }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', checkLogin);
+        document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+    </script>
+</body>
+</html>
