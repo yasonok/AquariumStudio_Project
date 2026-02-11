@@ -20,156 +20,161 @@
             background: white; border-radius: 20px; padding: 40px 30px; 
             width: 100%; max-width: 360px; text-align: center; 
         }
-        .login-box h1 { font-size: 1.4rem; margin-bottom: 20px; color: #333; }
+        .login-box h1 { font-size: 1.4rem; margin-bottom: 20px; }
         .login-box input { 
             width: 100%; padding: 16px; border: 2px solid #667eea; 
-            border-radius: 12px; font-size: 1.2rem; text-align: center; margin-bottom: 15px;
+            border-radius: 12px; font-size: ; text-align:1.2rem center; margin-bottom: 15px;
         }
         .login-box button { 
             width: 100%; padding: 16px; background: #667eea; color: white;
             border: none; border-radius: 12px; font-size: 1.2rem; font-weight: bold;
         }
-        .login-msg { 
-            padding: 15px; background: #fff3cd; border-radius: 10px; 
-            margin-top: 20px; font-size: 0.9rem; text-align: left;
-        }
+        .msg { padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 0.9rem; }
+        .msg.error { background: #fee; color: #c00; }
+        .msg.success { background: #efe; color: #060; }
         
         /* 後台 */
         .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .header h1 { font-size: 1.2rem; }
         .header-btns { display: flex; gap: 8px; flex-wrap: wrap; }
         .header-btns button, .header-btns a { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; text-decoration: none; }
-        .header-btns button:hover { background: rgba(255,255,255,0.3); }
         
-        .stats { display: flex; gap: 10px; padding: 15px; background: white; overflow-x: auto; }
-        .stat { min-width: 100px; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; flex: 1; }
+        .stats { display: flex; gap: 10px; padding: 15px; background: white; }
+        .stat { flex: 1; text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; }
         .stat .num { font-size: 1.5rem; font-weight: bold; color: #667eea; }
-        .stat .label { font-size: 0.8rem; color: #666; margin-top: 5px; }
         
         .section { padding: 15px; }
-        .section h2 { font-size: 1rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .section h2 { font-size: 1rem; margin-bottom: 15px; display: flex; justify-content: space-between; }
         .section h2 button { background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 8px; }
         
-        .product { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow-x: auto; }
-        .product img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background: #eee; flex-shrink: 0; }
-        .product .info { flex: 1; min-width: 0; }
+        .product { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; gap: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .product img { width: 60px; height: 60px; border-radius: 8px; background: #eee; object-fit: cover; }
+        .product .info { flex: 1; }
         .product .name { font-weight: 600; margin-bottom: 5px; }
         .product .meta { font-size: 0.85rem; color: #666; }
-        .product .price { font-size: 1.1rem; font-weight: bold; color: #667eea; margin-top: 5px; }
-        .product .actions { display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
-        .product .actions button { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        .product .price { color: #667eea; font-weight: bold; margin-top: 5px; }
+        .product .actions { display: flex; flex-direction: column; gap: 5px; }
+        .product .actions button { padding: 8px 12px; border: none; border-radius: 8px; font-size: 0.85rem; }
         .btn-edit { background: #667eea; color: white; }
         .btn-delete { background: #ff6b6b; color: white; }
         
-        .fab { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102,126,234,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; }
+        .fab { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 1.8rem; box-shadow: 0 4px 15px rgba(102,126,234,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; }
         
         /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
         .modal-box { background: white; border-radius: 20px; padding: 25px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        .modal-box h2 { font-size: 1.2rem; margin-bottom: 20px; }
+        .modal-box h2 { margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; }
         .form-group input:focus { outline: none; border-color: #667eea; }
-        .upload-box { border: 2px dashed #ddd; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; background: #f8f9fa; }
-        .upload-box:hover { border-color: #667eea; }
-        .btn-row { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-row button { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-row button { flex: 1; padding: 14px; border: none; border-radius: 10px; font-weight: bold; }
         .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
         .btn-secondary { background: #eee; color: #666; }
+        
         .empty { text-align: center; padding: 50px 20px; color: #999; }
         .empty .icon { font-size: 3rem; margin-bottom: 15px; }
         
-        /* Firebase 狀態 */
-        .fb-status { padding: 10px 15px; border-radius: 8px; margin: 10px 15px; font-size: 0.85rem; }
-        .fb-status.connected { background: #d4edda; color: #155724; }
-        .fb-status.offline { background: #fff3cd; color: #856404; }
+        .help { background: #e3f2fd; padding: 15px; border-radius: 10px; margin: 15px; font-size: 0.9rem; }
+        .help h4 { margin-bottom: 10px; color: #1976d2; }
     </style>
 </head>
 <body>
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCKqU5f3CTEs4pZDpxs8F_sa1BalT0I0So",
-            authDomain: "aquariumshop-a4865.firebaseapp.com",
-            projectId: "aquariumshop-a4865",
-            storageBucket: "aquariumshop-a4865.appspot.com",
-            messagingSenderId: "700272520078",
-            appId: "1:700272520078:web:35675baf0862d1a2f112df"
-        };
-
-        // 初始化 Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-
-        window.FirebaseApp = { app, db, storage, collection, doc, getDoc, getDocs, setDoc, deleteDoc, onSnapshot, serverTimestamp, ref, uploadBytes, getDownloadURL };
-        
-        // 通知主程式載入完成
-        window.dispatchEvent(new Event('firebaseReady'));
-    </script>
-
     <!-- 登入頁 -->
     <div class="page active" id="login-page">
         <div class="login-page">
             <div class="login-box">
                 <h1>🐟 Aquarium Studio</h1>
                 <p style="color:#888;margin-bottom:15px;">管理後台</p>
-                <input type="password" id="pwd" placeholder="請輸入密碼">
-                <button onclick="checkPwd()">登 入</button>
-                <div class="login-msg" id="login-msg"><p>🔒 請輸入您的密碼</p></div>
+                <input type="password" id="pwd" placeholder="密碼">
+                <button onclick="login()">登 入</button>
+                <div class="msg" id="login-msg">請輸入密碼</div>
             </div>
         </div>
     </div>
 
     <!-- 管理後台 -->
     <div class="page" id="admin-page">
-        <div class="fb-status connected" id="fb-status">✅ Firebase 已連線 - 資料即時同步</div>
-        
         <div class="header">
             <h1>🎛️ 商品管理</h1>
             <div class="header-btns">
                 <a href="index.html">🏠 首頁</a>
-                <button onclick="editSiteContent()">📝 網站</button>
-                <button onclick="logout()">🚪 登出</button>
+                <button onclick="showHelp()">❓ 說明</button>
+                <button onclick="syncProducts()">🔄 同步</button>
             </div>
         </div>
         
         <div class="stats">
-            <div class="stat"><div class="num" id="count-products">0</div><div class="label">商品數</div></div>
-            <div class="stat"><div class="num" id="count-stock">0</div><div class="label">總庫存</div></div>
+            <div class="stat"><div class="num" id="count-products">0</div><div>商品</div></div>
+            <div class="stat"><div class="num" id="count-stock">0</div><div>庫存</div></div>
         </div>
         
         <div class="section">
             <h2>商品列表 <button onclick="openModal()">➕ 新增</button></h2>
-            <div id="product-list"><div class="empty"><div class="icon">📦</div><p>載入中...</p></div></div>
+            <div id="product-list"><div class="empty"><div class="icon">📦</div><p>尚無商品</p></div></div>
         </div>
         
         <button class="fab" onclick="openModal()">➕</button>
     </div>
 
-    <!-- 新增/編輯商品 Modal -->
+    <!-- 說明 Modal -->
+    <div class="modal" id="help-modal">
+        <div class="modal-box">
+            <h2>❓ 使用說明</h2>
+            <div class="help">
+                <h4>新增商品</h4>
+                <p>1. 按 ➕ 新增商品<br>2. 填入名稱、價格、庫存<br>3. 輸入圖片網址（如 imgur 連結）<br>4. 按儲存</p>
+            </div>
+            <div class="help">
+                <h4>同步到網站</h4>
+                <p>按右上角 🔄 同步<br>Vercel 會自動部署<br>約 1-2 分鐘後客戶看得到</p>
+            </div>
+            <div class="help">
+                <h4>圖片網址</h4>
+                <p>可用 imgur、imgbb 等免費圖床<br>或手機相簿分享複製連結</p>
+            </div>
+            <button class="btn-primary" style="width:100%;margin-top:10px;" onclick="document.getElementById('help-modal').classList.remove('active')">知道了</button>
+        </div>
+    </div>
+
+    <!-- 新增/編輯 Modal -->
     <div class="modal" id="modal">
         <div class="modal-box">
             <h2 id="modal-title">新增商品</h2>
             <form onsubmit="saveProduct(event)">
                 <input type="hidden" id="p-id">
-                <div class="form-group"><label>名稱</label><input type="text" id="p-name" required placeholder="商品名稱"></div>
-                <div class="form-group"><label>分類</label><select id="p-cat"></select></div>
-                <div class="form-group"><label>價格</label><input type="number" id="p-price" required placeholder="0" min="0"></div>
-                <div class="form-group"><label>庫存</label><input type="number" id="p-stock" required placeholder="0" min="0"></div>
                 <div class="form-group">
-                    <label>圖片</label>
-                    <div class="upload-box" onclick="document.getElementById('p-img-file').click()">📷 點擊上傳圖片</div>
-                    <input type="file" id="p-img-file" accept="image/*" style="display:none" onchange="handleImg(this)">
-                    <img id="preview-img" style="width:100%;border-radius:10px;margin-top:10px;display:none;">
+                    <label>名稱</label>
+                    <input type="text" id="p-name" required placeholder="商品名稱">
                 </div>
-                <div class="form-group"><label>描述</label><textarea id="p-desc" rows="3" placeholder="商品描述"></textarea></div>
+                <div class="form-group">
+                    <label>分類</label>
+                    <select id="p-cat">
+                        <option value="孔雀魚">🐟 孔雀魚</option>
+                        <option value="設備">⚙️ 設備</option>
+                        <option value="飼料">🦐 飼料</option>
+                        <option value="水質">💧 水質</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>價格</label>
+                    <input type="number" id="p-price" required placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>庫存</label>
+                    <input type="number" id="p-stock" required placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>圖片網址（選填）</label>
+                    <input type="url" id="p-img" placeholder="https://imgur.com/...">
+                    <p style="font-size:0.8rem;color:#888;margin-top:5px;">可用 imgur、手機相簿連結</p>
+                </div>
+                <div class="form-group">
+                    <label>描述</label>
+                    <textarea id="p-desc" rows="2" placeholder="商品描述"></textarea>
+                </div>
                 <div class="btn-row">
                     <button type="button" class="btn-secondary" onclick="closeModal()">取消</button>
                     <button type="submit" class="btn-primary">儲存</button>
@@ -178,102 +183,26 @@
         </div>
     </div>
 
-    <!-- 網站內容 Modal -->
-    <div class="modal" id="site-modal">
-        <div class="modal-box">
-            <h2>📝 網站內容</h2>
-            <form onsubmit="saveSiteContent(event)">
-                <div class="form-group"><label>標題</label><input type="text" id="site-title" placeholder="Aquarium Studio"></div>
-                <div class="form-group"><label>副標題</label><input type="text" id="site-subtitle" placeholder="專業孔雀魚養殖"></div>
-                <div class="form-group"><label>描述</label><textarea id="site-desc" rows="3" placeholder="關於我們..."></textarea></div>
-                <div class="form-group"><label>電話</label><input type="tel" id="site-phone" placeholder="0912-345-678"></div>
-                <div class="form-group"><label>地址</label><input type="text" id="site-address" placeholder="台北市..."></div>
-                <div class="btn-row">
-                    <button type="button" class="btn-secondary" onclick="closeSiteModal()">取消</button>
-                    <button type="submit" class="btn-primary">儲存</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script>
-    var ADMIN_PASSWORD = 'Jason02061';
-    var products = [];
-    var categories = [
-        { id: '1', name: '孔雀魚', icon: '🐟' },
-        { id: '2', name: '設備', icon: '⚙️' },
-        { id: '3', name: '飼料', icon: '🦐' },
-        { id: '4', name: '水質', icon: '💧' }
-    ];
+    var ADMIN_PASS = 'Jason02061';
     
-    // 等待 Firebase 載入
-    function waitForFirebase() {
-        return new Promise((resolve) => {
-            if (window.FirebaseApp) {
-                resolve();
-            } else {
-                window.addEventListener('firebaseReady', resolve);
-            }
-        });
-    }
-    
-    // 從 Firebase 載入資料
-    async function loadFromFirebase() {
-        try {
-            const { getDocs, collection } = window.FirebaseApp;
-            
-            // 載入商品
-            const productsSnap = await getDocs(collection(window.FirebaseApp.db, 'products'));
-            products = productsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            
-            // 載入分類
-            const catsSnap = await getDocs(collection(window.FirebaseApp.db, 'categories'));
-            categories = catsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            
-            // 沒有分類就建立預設
-            if (categories.length === 0) {
-                for (const cat of [
-                    { id: '1', name: '孔雀魚', icon: '🐟' },
-                    { id: '2', name: '設備', icon: '⚙️' },
-                    { id: '3', name: '飼料', icon: '🦐' },
-                    { id: '4', name: '水質', icon: '💧' }
-                ]) {
-                    await setDoc(collection(window.FirebaseApp.db, 'categories', cat.id), cat);
-                }
-                categories = [
-                    { id: '1', name: '孔雀魚', icon: '🐟' },
-                    { id: '2', name: '設備', icon: '⚙️' },
-                    { id: '3', name: '飼料', icon: '🦐' },
-                    { id: '4', name: '水質', icon: '💧' }
-                ];
-            }
-            
-            render();
-        } catch (e) {
-            console.error('Firebase 載入失敗:', e);
-            document.getElementById('fb-status').className = 'fb-status offline';
-            document.getElementById('fb-status').textContent = '⚠️ Firebase 未連線，請重新整理';
-        }
-    }
-    
-    function checkPwd() {
+    function login() {
         var pwd = document.getElementById('pwd').value;
         var msg = document.getElementById('login-msg');
-        if (pwd === ADMIN_PASSWORD) {
+        if (pwd === ADMIN_PASS) {
             localStorage.setItem('admin_logged', 'true');
-            showAdmin();
+            document.getElementById('login-page').classList.remove('active');
+            document.getElementById('admin-page').classList.add('active');
+            render();
         } else {
-            msg.innerHTML = '<p style="color:red;">❌ 密碼錯誤，請重新輸入</p>';
+            msg.className = 'msg error';
+            msg.textContent = '❌ 密碼錯誤';
             document.getElementById('pwd').value = '';
         }
     }
     
-    function showAdmin() {
-        document.getElementById('login-page').classList.remove('active');
-        document.getElementById('admin-page').classList.add('active');
-        loadFromFirebase();
-        // 即時監聽變化
-        setupListeners();
+    function showHelp() {
+        document.getElementById('help-modal').classList.add('active');
     }
     
     function logout() {
@@ -281,224 +210,126 @@
         location.reload();
     }
     
-    // 設定即時監聽
-    function setupListeners() {
-        const { collection, onSnapshot } = window.FirebaseApp;
-        
-        // 監聽商品變化
-        onSnapshot(collection(window.FirebaseApp.db, 'products'), (snapshot) => {
-            products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            render();
-        });
-        
-        // 監聽分類變化
-        onSnapshot(collection(window.FirebaseApp.db, 'categories'), (snapshot) => {
-            categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        });
+    function getProducts() {
+        return JSON.parse(localStorage.getItem('products') || '[]');
+    }
+    
+    function saveProductsToLocal(products) {
+        localStorage.setItem('products', JSON.stringify(products));
     }
     
     function render() {
+        var products = getProducts();
         document.getElementById('count-products').textContent = products.length;
-        document.getElementById('count-stock').textContent = products.reduce((s, i) => s + (i.stock || 0), 0);
+        document.getElementById('count-stock').textContent = products.reduce(function(s, i){ return s + (i.stock || 0); }, 0);
         
-        // 分類下拉
-        var select = document.getElementById('p-cat');
-        select.innerHTML = categories.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join('');
-        
-        // 商品列表
         var list = document.getElementById('product-list');
         if (products.length === 0) {
             list.innerHTML = '<div class="empty"><div class="icon">📦</div><p>尚無商品</p></div>';
             return;
         }
         
-        list.innerHTML = products.map(i => `
-            <div class="product">
-                <img src="${i.image || 'images/products/default-guppy.svg'}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>'">
-                <div class="info">
-                    <div class="name">${i.name}</div>
-                    <div class="meta">${i.category} • 庫存: ${i.stock}</div>
-                    <div class="price">$${i.price}</div>
-                </div>
-                <div class="actions">
-                    <button class="btn-edit" onclick="edit('${i.id}')">✏️</button>
-                    <button class="btn-delete" onclick="del('${i.id}')">🗑️</button>
-                </div>
-            </div>
-        `).join('');
-    }
-    
-    // 處理圖片上傳
-    async function handleImg(input) {
-        if (!input.files[0]) return;
-        var file = input.files[0];
-        var preview = document.getElementById('preview-img');
-        
-        try {
-            // 壓縮圖片
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            var img = new Image();
-            img.src = URL.createObjectURL(file);
-            await new Promise(r => img.onload = r);
-            
-            var maxSize = 800;
-            var scale = Math.min(maxSize / img.width, maxSize / img.height);
-            canvas.width = img.width * scale;
-            canvas.height = img.height * scale;
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            
-            preview.src = canvas.toDataURL('image/jpeg', 0.7);
-            preview.style.display = 'block';
-            preview.dataset.base64 = canvas.toDataURL('image/jpeg', 0.7);
-        } catch (e) {
-            alert('圖片處理失敗：' + e.message);
-        }
-    }
-    
-    // 上傳圖片到 Firebase Storage
-    async function uploadImage(base64, productId) {
-        if (!base64 || !base64.startsWith('data:')) return base64;
-        
-        try {
-            const { ref, uploadBytes, getDownloadURL } = window.FirebaseApp;
-            const storageRef = ref(window.FirebaseApp.storage, `products/${productId}.jpg`);
-            const blob = await (await fetch(base64)).blob();
-            await uploadBytes(storageRef, blob);
-            return await getDownloadURL(storageRef);
-        } catch (e) {
-            console.error('圖片上傳失敗:', e);
-            return base64;
-        }
+        list.innerHTML = products.map(function(i){
+            return '<div class="product">' +
+                '<img src="' + (i.image || 'images/products/default-guppy.svg') + '" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22>🐟</text></svg>\')">' +
+                '<div class="info"><div class="name">' + i.name + '</div>' +
+                '<div class="meta">' + i.category + ' • 庫存:' + (i.stock || 0) + '</div>' +
+                '<div class="price">$' + (i.price || 0) + '</div></div>' +
+                '<div class="actions"><button class="btn-edit" onclick="edit(\'' + i.id + '\')">✏️</button>' +
+                '<button class="btn-delete" onclick="del(\'' + i.id + '\')">🗑️</button></div></div>';
+        }).join('');
     }
     
     function openModal() {
         document.getElementById('modal-title').textContent = '新增商品';
-        ['p-id','p-name','p-price','p-stock','p-desc'].forEach(id => document.getElementById(id).value = '');
-        document.getElementById('preview-img').style.display = 'none';
-        render();
+        ['p-id','p-name','p-price','p-stock','p-desc','p-img'].forEach(function(id){ document.getElementById(id).value = ''; });
         document.getElementById('modal').classList.add('active');
     }
     
-    async function edit(id) {
-        var p = products.find(x => x.id == id);
+    function edit(id) {
+        var p = getProducts().find(function(x){ return x.id == id; });
         if (!p) return;
         document.getElementById('modal-title').textContent = '編輯商品';
-        document.getElementById('p-id').value = p.id;
-        document.getElementById('p-name').value = p.name || '';
-        document.getElementById('p-price').value = p.price || '';
-        document.getElementById('p-stock').value = p.stock || '';
-        document.getElementById('p-desc').value = p.description || '';
-        
-        var preview = document.getElementById('preview-img');
-        if (p.image) {
-            preview.src = p.image;
-            preview.style.display = 'block';
-        } else {
-            preview.style.display = 'none';
-        }
-        
-        setTimeout(() => document.getElementById('p-cat').value = p.category || categories[0]?.name, 0);
+        ['p-id','p-name','p-price','p-stock','p-desc','p-img'].forEach(function(field){
+            document.getElementById(field).value = p[field.replace('p-','')] || '';
+        });
         document.getElementById('modal').classList.add('active');
     }
     
-    async function del(id) {
+    function del(id) {
         if (!confirm('刪除這個商品？')) return;
-        try {
-            const { deleteDoc, doc } = window.FirebaseApp;
-            await deleteDoc(doc(window.FirebaseApp.db, 'products', id));
-            alert('已刪除！');
-        } catch (e) {
-            alert('刪除失敗：' + e.message);
-        }
+        var products = getProducts().filter(function(x){ return x.id != id; });
+        saveProductsToLocal(products);
+        render();
     }
     
-    function closeModal() { document.getElementById('modal').classList.remove('active'); }
+    function closeModal() {
+        document.getElementById('modal').classList.remove('active');
+    }
     
-    async function saveProduct(e) {
+    function saveProduct(e) {
         e.preventDefault();
+        var id = document.getElementById('p-id').value;
+        var product = {
+            id: id || Date.now().toString(),
+            name: document.getElementById('p-name').value,
+            price: parseInt(document.getElementById('p-price').value) || 0,
+            stock: parseInt(document.getElementById('p-stock').value) || 0,
+            category: document.getElementById('p-cat').value,
+            image: document.getElementById('p-img').value,
+            description: document.getElementById('p-desc').value,
+            updated_at: new Date().toISOString()
+        };
+        
+        var products = getProducts();
+        var idx = products.findIndex(function(x){ return x.id == product.id; });
+        if (idx >= 0) { products[idx] = product; }
+        else { products.push(product); }
+        
+        saveProductsToLocal(products);
+        closeModal();
+        render();
+        alert(id ? '已更新！' : '已新增！');
+    }
+    
+    // 同步到 GitHub
+    async function syncProducts() {
+        var btn = event.target;
+        btn.disabled = true;
+        btn.textContent = '同步中...';
+        
         try {
-            const { setDoc, doc, serverTimestamp } = window.FirebaseApp;
+            var products = getProducts();
             
-            var id = document.getElementById('p-id').value || Date.now().toString();
-            var imageUrl = '';
+            var response = await fetch('/api/sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ products: products })
+            });
             
-            // 檢查是否有新圖片
-            var preview = document.getElementById('preview-img');
-            if (preview.dataset.base64) {
-                imageUrl = await uploadImage(preview.dataset.base64, id);
-            } else {
-                var existing = products.find(x => x.id == id);
-                imageUrl = existing?.image || '';
+            var result = await response.json();
+            
+            if (result.error) {
+                throw new Error(result.error);
             }
             
-            var product = {
-                name: document.getElementById('p-name').value,
-                price: parseInt(document.getElementById('p-price').value),
-                stock: parseInt(document.getElementById('p-stock').value),
-                category: document.getElementById('p-cat').value,
-                description: document.getElementById('p-desc').value,
-                image: imageUrl,
-                updated_at: new Date().toISOString()
-            };
+            btn.textContent = '✅ 已同步！';
+            alert('已同步到 GitHub！\nVercel 將自動部署，約 1-2 分鐘後客戶看得到！');
+            setTimeout(function(){ btn.textContent = '🔄 同步'; btn.disabled = false; }, 3000);
             
-            await setDoc(doc(window.FirebaseApp.db, 'products', id), product);
-            closeModal();
-            alert(document.getElementById('p-id').value ? '已更新！' : '已新增！');
-        } catch (e) {
-            alert('儲存失敗：' + e.message);
+        } catch (error) {
+            btn.disabled = false;
+            btn.textContent = '🔄 同步';
+            alert('同步失敗：' + error.message);
         }
     }
-    
-    // 網站內容
-    async function editSiteContent() {
-        try {
-            const { getDoc, doc } = window.FirebaseApp;
-            var c = { title: '', subtitle: '', description: '', phone: '', address: '' };
-            var snap = await getDoc(doc(window.FirebaseApp.db, 'site_content', 'config'));
-            if (snap.exists()) c = snap.data();
-            
-            document.getElementById('site-title').value = c.title || '';
-            document.getElementById('site-subtitle').value = c.subtitle || '';
-            document.getElementById('site-desc').value = c.description || '';
-            document.getElementById('site-phone').value = c.phone || '';
-            document.getElementById('site-address').value = c.address || '';
-            document.getElementById('site-modal').classList.add('active');
-        } catch (e) {
-            alert('載入失敗：' + e.message);
-        }
-    }
-    
-    async function saveSiteContent(e) {
-        e.preventDefault();
-        try {
-            const { setDoc, doc, serverTimestamp } = window.FirebaseApp;
-            var c = {
-                title: document.getElementById('site-title').value,
-                subtitle: document.getElementById('site-subtitle').value,
-                description: document.getElementById('site-desc').value,
-                phone: document.getElementById('site-phone').value,
-                address: document.getElementById('site-address').value,
-                updated_at: new Date().toISOString()
-            };
-            await setDoc(doc(window.FirebaseApp.db, 'site_content', 'config'), c);
-            document.getElementById('site-modal').classList.remove('active');
-            alert('已更新！');
-        } catch (e) {
-            alert('儲存失敗：' + e.message);
-        }
-    }
-    
-    function closeSiteModal() { document.getElementById('site-modal').classList.remove('active'); }
-    
-    document.getElementById('modal').addEventListener('click', e => {
-        if (e.target === document.getElementById('modal')) closeModal();
-    });
     
     // 初始化
-    (function init() {
+    (function init(){
         if (localStorage.getItem('admin_logged') === 'true') {
-            waitForFirebase().then(showAdmin);
+            document.getElementById('login-page').classList.remove('active');
+            document.getElementById('admin-page').classList.add('active');
+            render();
         }
     })();
     </script>
