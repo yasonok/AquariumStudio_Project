@@ -271,8 +271,8 @@
         </div>
     </div>
     
-    <script src="js/firebase/config.js"></script>
-    <script src="js/firebase/app.js"></script>
+    <script>const USE_FIREBASE = false;</script>
+    
     <script>
         const LOGIN_KEY = 'aquarium_admin_logged';
         const DEFAULT_PASSWORD = '1234';
@@ -314,7 +314,7 @@
         
         // 載入分類
         async function renderCategories() {
-            const cats = await AquariumFirebase.categories.getAll();
+            const cats = getCategories();
             const select = document.getElementById('p-cat');
             select.innerHTML = cats.map(c => `<option value="${c.name}">${c.icon} ${c.name}</option>`).join('');
         }
@@ -322,8 +322,8 @@
         // 渲染商品列表
         async function render() {
             try {
-                const products = await AquariumFirebase.products.getAll();
-                const cats = await AquariumFirebase.categories.getAll();
+                const products = getProducts();
+                const cats = getCategories();
                 
                 document.getElementById('count-products').textContent = products.length;
                 document.getElementById('count-stock').textContent = products.reduce((s, i) => s + (i.stock||0), 0);
@@ -371,7 +371,7 @@
         
         // 編輯商品
         async function edit(id) {
-            const products = await AquariumFirebase.products.getAll();
+            const products = getProducts();
             const p = products.find(x => x.id == id || x.id === id);
             if (!p) return;
             
@@ -396,7 +396,7 @@
         // 刪除商品
         async function del(id) {
             if (!confirm('刪除這個商品？')) return;
-            await AquariumFirebase.products.delete(id);
+            del(id);
             render();
         }
         
@@ -406,8 +406,8 @@
         
         // 分類管理
         async function editCategories() {
-            const cats = await AquariumFirebase.categories.getAll();
-            const products = await AquariumFirebase.products.getAll();
+            const cats = getCategories();
+            const products = getProducts();
             
             document.getElementById('cat-list').innerHTML = cats.map(c => {
                 const count = products.filter(p => p.category === c.name).length;
@@ -428,25 +428,25 @@
         }
         
         async function editCat(id) {
-            const cats = await AquariumFirebase.categories.getAll();
+            const cats = getCategories();
             const cat = cats.find(c => c.id == id || c.id === id);
             if (!cat) return;
             
             const newName = prompt('輸入新名稱：', cat.name);
             if (newName && newName.trim()) {
                 cat.name = newName.trim();
-                await AquariumFirebase.categories.save(cat);
+                saveCategory(cat);
                 editCategories();
             }
         }
         
         async function delCat(id) {
-            const cats = await AquariumFirebase.categories.getAll();
+            const cats = getCategories();
             const cat = cats.find(c => c.id == id || c.id === id);
             if (!cat) return;
             
             if (!confirm(`刪除分類「${cat.name」？`)) return;
-            await AquariumFirebase.categories.delete(id);
+            deleteCategory(id);
             editCategories();
         }
         
@@ -456,9 +456,9 @@
             const icon = document.getElementById('cat-new-icon').value;
             if (!name) return;
             
-            const cats = await AquariumFirebase.categories.getAll();
+            const cats = getCategories();
             cats.push({ id: Date.now().toString(), name, icon });
-            await AquariumFirebase.categories.saveAll ? cats : localStorage.setItem('aquarium_categories', JSON.stringify(cats));
+            await getCategories().filter(x => x.id != cat.id) ? (localStorage.setItem('aquarium_categories', JSON.stringify(getCategories().filter(x => x.id != cat.id)), true) : localStorage.setItem('aquarium_categories', JSON.stringify(cats));
             
             document.getElementById('cat-new-name').value = '';
             editCategories();
@@ -547,15 +547,35 @@
             };
             
             const img = document.getElementById('p-img').value;
-            const products = await AquariumFirebase.products.getAll();
+            const products = getProducts();
             const oldImg = products.find(x => x.id == id || x.id === id)?.image;
             product.image = img || oldImg || 'images/products/default-guppy.svg';
             
-            await AquariumFirebase.products.save(product);
+            saveProductToStorage(product);
             
             closeModal();
             render();
             alert(id ? '✅ 已更新！' : '✅ 已新增！');
+        }
+        
+        // 額外函數
+        function saveProductToStorage(p) {
+            const products = getProducts();
+            const idx = products.findIndex(x => x.id == p.id);
+            if (idx >= 0) { products[idx] = p; } else { products.push(p); }
+            localStorage.setItem('aquarium_products', JSON.stringify(products));
+        }
+        
+        function saveCategory(c) {
+            const cats = getCategories();
+            const idx = cats.findIndex(x => x.id == c.id);
+            if (idx >= 0) { cats[idx] = c; } else { cats.push(c); }
+            localStorage.setItem('aquarium_categories', JSON.stringify(cats));
+        }
+        
+        function deleteCategory(id) {
+            const cats = getCategories().filter(x => x.id != id);
+            localStorage.setItem('aquarium_categories', JSON.stringify(cats));
         }
         
         // 初始化
