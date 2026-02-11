@@ -179,8 +179,8 @@
       }
     }
 
-    function performSearchFilter(query) {
-      let products = AquariumApp.getProducts();
+    async function performSearchFilter(query) {
+      let products = await AquariumApp.getProducts();
       
       // Filter by search query
       products = products.filter(p => 
@@ -204,7 +204,7 @@
       document.getElementById('search-text').textContent = `搜尋結果：「${query}」找到 ${products.length} 項商品`;
     }
 
-    function clearSearch() {
+    async function clearSearch() {
       searchQuery = '';
       document.getElementById('search-input').value = '';
       document.getElementById('search-info').style.display = 'none';
@@ -213,8 +213,8 @@
       renderProducts(currentCategory, currentSort);
     }
 
-    function renderProducts(category, sort) {
-      let products = AquariumApp.getProducts();
+    async function renderProducts(category, sort) {
+      let products = await AquariumApp.getProducts();
       
       // Filter by category
       if (category !== 'all') {
