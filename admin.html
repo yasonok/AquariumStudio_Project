@@ -94,12 +94,29 @@
             <div class="icon">🐟</div>
             <h1>Aquarium Studio</h1>
             <p>請輸入管理密碼</p>
-            <input type="password" id="login-password" placeholder="密碼" onkeyup="if(event.key==='Enter')login()">
-            <button onclick="login()">登入</button>
+            <input type="password" id="login-password" placeholder="密碼">
+            <button id="login-btn">登入</button>
             <div class="error" id="login-error">密碼錯誤，請重試</div>
             <div class="hint">預設密碼：1234</div>
         </div>
     </div>
+
+    <script>
+    document.getElementById("login-btn").onclick = function() {
+        var pwd = document.getElementById("login-password").value;
+        if (pwd === "1234") {
+            localStorage.setItem("aquarium_admin_logged", "true");
+            document.getElementById("login-overlay").classList.remove("active");
+            document.getElementById("admin-content").classList.add("active");
+            if (typeof render === "function") render();
+        } else {
+            document.getElementById("login-error").style.display = "block";
+        }
+    };
+    document.getElementById("login-password").addEventListener("keyup", function(e) {
+        if (e.key === "Enter") document.getElementById("login-btn").click();
+    });
+    </script>
 
     <!-- Firebase 狀態 -->
     <div class="fb-status" id="fb-status"></div>
