@@ -345,6 +345,7 @@
     });
     
     // 同步
+    // 同步（使用 API）
     async function syncToGitHub() {
         var btn = document.getElementById('sync-btn');
         var originalText = btn.textContent;
@@ -355,39 +356,18 @@
             var products = JSON.parse(localStorage.getItem('aquarium_products') || '[]');
             var categories = JSON.parse(localStorage.getItem('aquarium_categories') || '[]');
             var siteContent = JSON.parse(localStorage.getItem('site_content') || '{}');
-            var token = typeof GITHUB_TOKEN !== 'undefined' ? GITHUB_TOKEN : '';
             
-            if (!token) { alert('錯誤：找不到 GitHub Token'); throw new Error('No token'); }
-            
-            // products.json
-            var pResp = await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/products.json', {
-                headers: { Authorization: 'token ' + token }
-            });
-            var pData = await pResp.json();
-            await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/products.json', {
-                method: 'PUT', headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: '更新商品：'+products.length+'項', content: btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2)))), sha: pData.sha })
+            var response = await fetch('/api/sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ products: products, categories: categories, siteContent: siteContent })
             });
             
-            // categories.json
-            var cResp = await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/categories.json', {
-                headers: { Authorization: 'token ' + token }
-            });
-            var cData = await cResp.json();
-            await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/categories.json', {
-                method: 'PUT', headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: '更新分類', content: btoa(unescape(encodeURIComponent(JSON.stringify(categories, null, 2)))), sha: cData.sha })
-            });
+            var result = await response.json();
             
-            // site_content.json
-            var sResp = await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/site_content.json', {
-                headers: { Authorization: 'token ' + token }
-            });
-            var sData = await sResp.json();
-            await fetch('https://api.github.com/repos/yasonok/AquariumStudio_Project/contents/site_content.json', {
-                method: 'PUT', headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: '更新網站內容', content: btoa(unescape(encodeURIComponent(JSON.stringify(siteContent, null, 2)))), sha: sData.sha })
-            });
+            if (result.error) {
+                throw new Error(result.error);
+            }
             
             btn.textContent = '✅ 已同步！';
             setTimeout(function() { btn.textContent = originalText; }, 3000);
