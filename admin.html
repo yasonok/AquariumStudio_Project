@@ -85,7 +85,10 @@
     <div class="page" id="admin-page">
         <div class="header">
             <h1>🎛️ 商品管理</h1>
-            <button onclick="logout()" style="background:rgba(255,255,255,0.2);color:white;border:none;padding:8px 15px;border-radius:8px;">🚪 登出</button>
+            <div style="display:flex;gap:8px;">
+                <button onclick="syncToGitHub()" id="sync-btn" style="background:rgba(255,255,255,0.3);color:white;border:none;padding:8px 15px;border-radius:8px;">🔄 同步</button>
+                <button onclick="logout()" style="background:rgba(255,255,255,0.2);color:white;border:none;padding:8px 15px;border-radius:8px;">🚪 登出</button>
+            </div>
         </div>
         
         <div class="stats">
