@@ -112,7 +112,8 @@
                 <a href="index.html">🏠 首頁</a>
                 <button onclick="editCategories()">🏷️ 分類</button>
                 <button onclick="editSiteContent()">📝 網站</button>
-                <span class="user-info">👤 管理員</span>
+                <span class="user-info" id="sync-status">📤 未同步</span>
+                <button class="btn-logout" onclick="syncToGitHub()" id="sync-btn">🔄 同步</button>
                 <button class="btn-logout" onclick="logout()">🚪 登出</button>
             </div>
         </div>
@@ -563,3 +564,67 @@
     </script>
 </body>
 </html>
+        // 同步到 GitHub
+        async function syncToGitHub() {
+            const btn = document.getElementById("sync-btn");
+            const status = document.getElementById("sync-status");
+            
+            btn.disabled = true;
+            btn.textContent = "🔄 同步中...";
+            
+            try {
+                const products = JSON.parse(localStorage.getItem("aquarium_products") || "[]");
+                const categories = JSON.parse(localStorage.getItem("aquarium_categories") || "[]");
+                
+                const repo = "yasonok/AquariumStudio_Project";
+                const token = "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";
+                
+                // 更新 products.json
+                const productsResp = await fetch("https://api.github.com/repos/" + repo + "/contents/products.json", {
+                    headers: { Authorization: "token " + token }
+                });
+                const productsData = await productsResp.json();
+                
+                await fetch("https://api.github.com/repos/" + repo + "/contents/products.json", {
+                    method: "PUT",
+                    headers: { Authorization: "token " + token, "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        message: "更新商品：" + products.length + "項",
+                        content: btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))),
+                        sha: productsData.sha
+                    })
+                });
+                
+                // 更新 categories.json
+                const catsResp = await fetch("https://api.github.com/repos/" + repo + "/contents/categories.json", {
+                    headers: { Authorization: "token " + token }
+                });
+                const catsData = await catsResp.json();
+                
+                await fetch("https://api.github.com/repos/" + repo + "/contents/categories.json", {
+                    method: "PUT",
+                    headers: { Authorization: "token " + token, "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        message: "更新分類：" + categories.length + "個",
+                        content: btoa(unescape(encodeURIComponent(JSON.stringify(categories, null, 2))),
+                        sha: catsData.sha
+                    })
+                });
+                
+                btn.textContent = "✅ 已同步！";
+                status.textContent = "✅ 已同步";
+                
+                setTimeout(function() {
+                    btn.textContent = "🔄 同步";
+                    status.textContent = "📤 未同步";
+                }, 3000);
+                
+                alert("✅ 已同步到 GitHub！\nVercel 將自動部署，幾分鐘後客戶看到更新！");
+                
+            } catch (error) {
+                console.error(error);
+                btn.disabled = false;
+                btn.textContent = "🔄 同步";
+                alert("❌ 同步失敗：" + error.message);
+            }
+        }
